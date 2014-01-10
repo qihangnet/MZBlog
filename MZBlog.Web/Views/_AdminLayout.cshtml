@@ -1,0 +1,80 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MZBlog</title>
+    <!--[if lt IE 9]>
+        <script src="~/scripts/html5shiv.js"></script>
+        <![endif]-->
+    <link href="~/content/bootstrap/bootstrap.min.css?v=3.0.3" rel="stylesheet" />
+    <link href="~/content/css/font-awesome.min.css?v=4.0.3" rel="stylesheet" />
+    <link href="~/content/css/sb-admin.min.css?v=20140101" rel="stylesheet" />
+    <link href="~/content/css/admin.min.css?v=20140101" rel="stylesheet" />
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="~/">MZBlog</a>
+            </div>
+            <ul class="nav navbar-nav side-nav">
+                <li><a href="~/mz-admin"><i class="fa fa-dashboard"></i> 控制面板</a></li>
+                <li><a href="~/mz-admin/posts/new"><i class="fa fa-edit"></i> 发表文章</a></li>
+                <li><a href="~/mz-admin/posts"><i class="fa fa-list"></i> 文章管理</a></li>
+                <li><a href="~/mz-admin/comments"><i class="fa fa-comments"></i> 评论管理</a></li>
+                <li><a href="~/mz-admin/tags"><i class="fa fa-tags"></i> 标签列表</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li class="dropdown messages-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> 消息 <span class="badge">1</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">1条新消息</li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <span class="avatar"><img src="https://secure.gravatar.com/avatar/cc8a18973bd499fb83d2e5de2c7e5a99.png?s=50&d=mm&r=g"></span>
+                                <span class="name">衣明志:</span>
+                                <span class="message">感谢您使用MZ-Blog</span>
+                                <span class="time"><i class="fa fa-clock-o"></i> 2014-01-08 8:38 PM</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="#">查看消息箱 <span class="badge">1</span></a></li>
+                    </ul>
+                </li>
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> @ViewBag.CurrentUser.Value.DisplayName <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="~/mz-admin/change-profile"><i class="fa fa-user"></i> 用户信息</a></li>
+                        <li><a href="~/mz-admin/change-password"><i class="fa fa-gear"></i> 修改密码</a></li>
+                        <li class="divider"></li>
+                        <li><a href="~/mz-logout"><i class="fa fa-power-off"></i> 退出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="page-wrapper">
+            @foreach (dynamic msg in ViewBag.Messages.Value)
+            {
+                <div class="alert alert-@msg.MsgType">
+                    @msg.Message
+                </div>
+            }
+
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/scripts/bootstrap.min.js?v=3.0.3"></script>
+    @RenderSection("PostScripts", false)
+</body>
+</html>

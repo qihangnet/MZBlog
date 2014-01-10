@@ -1,0 +1,40 @@
+﻿@using MZBlog.Core.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<MZBlog.Core.ViewProjections.Home.TaggedBlogPostsViewModel>
+@{
+    Layout = "_Layout.cshtml";
+}
+<ol class="breadcrumb">
+    <li><i class="glyphicon glyphicon-home"></i> <a href="~/">首页</a></li>
+    <li class="active"><i class="glyphicon glyphicon-tag"></i> @Model.Tag</li>
+</ol>
+
+@foreach (var blogPost in Model.Posts)
+{
+    <article class="panel panel-default">
+        <header class="panel-heading">
+            <h3 class="panel-title">
+                <a href="@blogPost.GetLink()">@blogPost.Title</a>
+            </h3>
+        </header>
+        <div class="panel-meta text-right">
+            <span class="author">@blogPost.AuthorDisplayName</span>
+            发表于
+            <time pubdate>@blogPost.PubDate.ToChineseTime().ToString("yyyy-MM-dd HH:mm")</time>
+            , 阅读
+            (<span class="viewcount">@blogPost.ViewCount</span>)
+        </div>
+        <div class="panel-body">
+            @Html.Raw(blogPost.Description)
+            <a href="@blogPost.GetLink()">阅读全文</a>
+        </div>
+        <div class="panel-footer">
+            <i class="glyphicon glyphicon-tags"></i>
+            @foreach (var tag in blogPost.Tags)
+            {
+                <text>[ <a href="~/tag/@tag.Slug">@tag.Name</a> ]</text>
+            }
+        </div>
+    </article>
+}
+
+

@@ -1,0 +1,80 @@
+﻿@using System
+@using MZBlog.Core.Documents
+@using MZBlog.Core.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<MZBlog.Core.Commands.Posts.NewPostCommand>
+
+@{
+    ViewBag.Title = "Add new Post";
+    Layout = "_AdminLayout.cshtml";
+}
+<div class="row">
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> <a href="~/mz-admin">控制面板</a> </li>
+        <li class="active"><i class="fa fa-edit"></i> 发表文章</li>
+    </ol>
+</div>
+<div class="row">
+    <article class="col-lg-6" style="padding-left:0;">
+        <form method="post" role="form" action="~/mz-admin/posts/new">
+            <div class="form-group">
+                <input id="post-title" type="text" class="form-control" name="Title" placeholder="标题" value="@Model.Title" required />
+            </div>
+            <div class="form-group">
+                <input id="post-slug" type="text" class="form-control" name="TitleSlug" placeholder="固定链接Key" value="@Model.TitleSlug" required />
+            </div>
+            <div class="form-group">
+                <textarea id="post-content" rows="30" name="MarkDown" class="form-control" placeholder="内容" required>@Model.MarkDown</textarea>
+            </div>
+            <div class="form-group">
+                <input name="Tags" id="tags" class="form-control" value="@Model.Tags" />
+            </div>
+            <div class="form-group">
+                <label for="pubdate">发布时间(UTC):</label>
+                <input id="pubdate" name="PubDate" value="@(Model.PubDate != DateTime.MinValue ? Model.PubDate : DateTime.UtcNow)" />
+                &loz;
+                <label for="published">发布</label>
+                <input id="published" name="Published" value="true" type="checkbox" />
+
+                <input type="submit" value="保存" class="btn btn-primary pull-right" />
+            </div>
+        </form>
+    </article>
+    <div class="col-lg-6" style="padding:0;">
+        <article class="panel panel-default">
+            <header class="panel-heading">
+                <h3 class="panel-title">
+                    <a id="post-title-preview" href="#">标题</a>
+                </h3>
+            </header>
+            <div class="panel-meta text-right">
+                <span class="author">@ViewBag.CurrentUser.Value.DisplayName</span>
+                发表于
+                <time>@DateTime.UtcNow.ToChineseTime().ToString("yyyy-MM-dd hh:mm")</time>
+            </div>
+            <div id="post-content-preview" class="panel-body">
+                内容...
+            </div>
+        </article>
+    </div>
+</div>
+@section PostScripts{
+    <script src="~/scripts/jquery.tagsinput.js"></script>
+    <script src="~/scripts/markdown.js"></script>
+    <script>
+        $('#tags').tagsInput({ 'width': '100%', 'defaultText': '添加标签' });
+        $('#post-title').on('change', function () {
+            var _title = $(this).val();
+            $('#post-title-preview').text(_title);
+            if ($("#post-slug").val() == "") {
+                $.get("/mz-admin/slug?w=" + _title, function (data) {
+                    $("#post-slug").val(data);
+                });
+            }
+        });
+        $('#post-content').on('keyup', function () {
+            var _contentHtml = markdown.toHTML($('#post-content').val());
+            $("#post-content-preview").html(_contentHtml);
+            $('pre code').each(function (i, e) { hljs.highlightBlock(e) });
+        });
+    </script>
+}

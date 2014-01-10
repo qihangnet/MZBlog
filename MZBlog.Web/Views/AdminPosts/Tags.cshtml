@@ -1,0 +1,38 @@
+﻿@using System
+@using MZBlog.Core.Documents
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<MZBlog.Core.ViewProjections.Home.TagCloudViewModel>
+@{
+    Layout = "_AdminLayout.cshtml";
+}
+<div class="row">
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> <a href="~/mz-admin">控制面板</a> </li>
+        <li class="active"><i class="fa fa-list"></i> 标签列表</li>
+    </ol>
+</div>
+<div class="row">
+    <table class="table table-bordered table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>标签名称</th>
+                <th>标签别名</th>
+                <th>文章数量</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tag in Model.Tags)
+            {
+                <tr>
+                    <td>
+                       @tag.Key.Name
+                    </td>
+                    <td>@tag.Key.Slug</td>
+                    <td>
+                        @tag.Value
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

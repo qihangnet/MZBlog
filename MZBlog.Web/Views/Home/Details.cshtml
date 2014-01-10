@@ -1,0 +1,131 @@
+﻿@using MZBlog.Core.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<MZBlog.Core.ViewProjections.Home.BlogPostDetailsViewModel>
+@{
+    Layout = "_Layout.cshtml";
+}
+<ol class="breadcrumb">
+    <li><i class="glyphicon glyphicon-home"></i> <a href="/">首页</a></li>
+    <li class="active"><i class="glyphicon glyphicon-file"></i> 正文</li>
+</ol>
+
+<article class="panel panel-default">
+    <header class="panel-heading">
+        <h3 class="panel-title">
+            <a href="@Model.BlogPost.GetLink()">@Model.BlogPost.Title</a>
+        </h3>
+    </header>
+    <div class="panel-meta text-right">
+        <span class="author">@Model.BlogPost.AuthorDisplayName</span>
+        发表于
+        <time pubdate>@Model.BlogPost.PubDate.ToChineseTime().ToString("yyyy-MM-dd HH:mm")</time>
+        , 阅读
+        (<span class="viewcount">@Model.BlogPost.ViewCount</span>)
+    </div>
+    <div class="panel-body">
+        @Html.Raw(Model.BlogPost.Content)
+    </div>
+    <div class="panel-footer">
+        <i class="glyphicon glyphicon-tags"></i>
+        @foreach (var tag in Model.BlogPost.Tags)
+        {
+            <text>[ <a href="/tag/@tag.Slug">@tag.Name</a> ]</text>
+        }
+    </div>
+</article>
+
+<div class="alert alert-warning copyright">
+    <a target="_blank" href="http://creativecommons.org/licenses/by/2.5/cn/" rel="license">
+        <img class="creativecommons" src="http://i.creativecommons.org/l/by/2.5/cn/88x31.png" alt="Creative Commons License" />
+    </a>
+    本文基于
+    <a target="_blank" title="Creative Commons Attribution 2.5 China Mainland License" href="http://creativecommons.org/licenses/by/2.5/cn/">署名 2.5 中国大陆</a>
+    许可协议发布，欢迎转载，演绎或用于商业目的，但必须保留本文署名
+    <a href="http://yimingzhi.net/">衣明志</a>
+    (包含链接）。
+</div>
+
+<a name="comments"></a>
+@if (Model.Comments.Length > 0)
+{
+    <div id="comments-caption"><i class="glyphicon glyphicon-comment"></i> @Model.Comments.Length 条评论</div>
+
+    <div class="list-group">
+        @foreach (var item in Model.Comments)
+        {
+            string siteUrl = item.SiteUrl;
+            if (!string.IsNullOrWhiteSpace(siteUrl) && !siteUrl.StartsWith("http://"))
+            {
+                siteUrl = "http://" + siteUrl;
+            }
+            <a name="comment_@(item.Id)"></a>
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-lg-1 text-center">
+                        <img src="@item.Avatar" alt="@item.NickName" title="@item.NickName" class="img-circle" />
+                    </div>
+                    <div class="col-lg-11">
+                        <div class="list-group-item-heading">
+                            <strong>
+                                @if (string.IsNullOrWhiteSpace(item.SiteUrl))
+                                {
+                                    @item.NickName
+                                }
+                                else
+                                {
+                                    <a href="@siteUrl" target="_blank">
+                                        @item.NickName
+                                    </a>
+                                }
+                            </strong>
+                            @item.CreatedTime.ToChineseTime().ToString("yyyy-MM-dd HH:mm")
+                            <div class="pull-right">
+                                <a href="#comment_@(item.Id)">链接</a>
+                            </div>
+                        </div>
+                        <div class="list-group-item-text">
+                            @item.Content
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+<a name="add_comment"></a>
+<div>
+    <form action="~/comment/@Model.BlogPost.TitleSlug" method="post" role="form">
+        <input id="_tick" type="hidden" name="tick" value="@ViewBag.Tick" />
+        <input id="_hash" type="hidden" name="hash" value="" />
+        <div class="form-group">
+            <input class="form-control" type="text" name="NickName" placeholder="昵称" value="@ViewBag.UserInfo_ScreenName" required />
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="Email" placeholder="邮箱，仅用于头像 (Gavatar)" value="@ViewBag.UserInfo_Email" required />
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="SiteUrl" placeholder="主页" value="@ViewBag.UserInfo_Url" />
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" rows="5" name="Content" placeholder="说两句吧" required></textarea>
+        </div>
+        <p>
+            <input type="submit" class="btn btn-primary" value="提交评论" disabled />
+        </p>
+    </form>
+</div>
+
+@section PostScripts{
+    <!-- for Highlight.js support -->
+<link href="~/content/Highlight/vs.css" rel="stylesheet" />
+<script src="~/scripts/Highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript">
+        $('pre code').each(function (i, e) { hljs.highlightBlock(e) });
+        setTimeout(function () {
+            $.post("/spam/hash/" + $("#_tick").val(), function (data) {
+                $("#_hash").val(data);
+                $("input[type=submit]").removeAttr("disabled");
+            })
+        }, 2000);
+    </script>
+}

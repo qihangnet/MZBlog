@@ -1,0 +1,83 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - @ViewBag.Settings.Value.SiteName</title>
+    <meta name="description" content="@ViewBag.Settings.Value.SiteDescription" />
+    <meta name="keywords" content="@ViewBag.Settings.Value.SiteKeywords" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="shortcut icon" href="~/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="alternate" title="RSS" type="application/rss+xml" href="~/rss" />
+    <!--[if lt IE 9]>
+        <script src="~/scripts/html5shiv.js"></script>
+        <![endif]-->
+    <link href="~/content/bootstrap/bootstrap.min.css?v=3.0.3" rel="stylesheet" />
+    <link href="~/content/css/mzblog.min.css?v=20140101" rel="stylesheet" />
+</head>
+<body>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="~/">@ViewBag.Settings.Value.SiteHeader</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container" id="main">
+        <div class="row">
+            <div class="col-lg-9">
+                @RenderBody()
+            </div>
+            <div class="col-lg-3 visible-lg sidebar">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-sort-by-order"></span>
+                        <strong>
+                            最近的文章
+                        </strong>
+                    </div>
+
+                    <div class="list-group">
+                        @foreach (var title in ViewBag.Recent.Value.BlogPostsSummaries)
+                        {
+                            <a href="@title.Link" class="list-group-item">@title.Title</a>
+                        }
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-tags"></span>
+                        <strong>
+                            标签云
+                        </strong>
+                    </div>
+                    <div class="list-group">
+                        @foreach (var tag in ViewBag.TagCould.Value.Tags)
+                        {
+                            <a href="~/tag/@tag.Key.Slug" class="list-group-item">
+                                <span class="badge">@tag.Value</span>
+                                @tag.Key.Name
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-center">Power by mzblog &copy; @DateTime.Now.Year</p>
+        </div>
+    </footer>
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/scripts/bootstrap.min.js?v=3.0.3"></script>
+    @RenderSection("PostScripts", false)
+</body>
+</html>

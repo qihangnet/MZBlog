@@ -1,0 +1,29 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+@{
+    Layout = "_LoginLayout.cshtml";
+    ViewBag.Title = "登录";
+}
+<div class="well col-md-6 col-md-offset-3">
+    <form action="~/mz-login" method="post" role="form">
+        <h2>登录</h2>
+        @if (Model != null && Model.Length > 0)
+        {
+            <div class="alert alert-warning">
+                <ul>
+                    @foreach (var err in Model)
+                    {
+                        <li>@err</li>
+                    }
+                </ul>
+            </div>
+        }
+        <div class="form-group">
+            <input type="email" class="form-control" name="Email" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="Password" placeholder="密码">
+        </div>
+        <input type="hidden" name="ReturnUrl" value="@Nancy.Helpers.HttpUtility.HtmlEncode(ViewBag.ReturnUrl.Value)" />
+        <button type="submit" class="btn btn-primary">登录</button>
+    </form>
+</div>
