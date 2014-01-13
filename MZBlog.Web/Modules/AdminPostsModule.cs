@@ -33,12 +33,13 @@ namespace MZBlog.Web.Modules
             Get["/mz-admin/comments/{page?1}"] = _ => ShowComments(_.page);
             Get["/mz-admin/comments/delete/{commentid}"] = _ => DeleteComment(this.Bind<DeleteCommentCommand>());
             Get["/mz-admin/tags"] = _ => ShowTags();
-            Get["/mz-admin/slug"] = _ => GetSlug(Request.Query.w);
+            Post["/mz-admin/slug"] = _ => GetSlug();
         }
 
-        private string GetSlug(string words)
+        private string GetSlug()
         {
-            return words.ToSlug();
+            string title = Request.Form["title"];
+            return title.ToSlug();
         }
 
         private dynamic ShowTags()
