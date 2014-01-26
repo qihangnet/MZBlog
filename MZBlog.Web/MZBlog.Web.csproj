@@ -175,11 +175,11 @@
     <Content Include="content\fonts\fontawesome-webfont.ttf" />
     <Content Include="content\fonts\fontawesome-webfont.eot" />
     <Content Include="content\fonts\FontAwesome.otf" />
-    <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\Highlight\highlight.pack.js" />
     <Content Include="scripts\html5shiv.js" />
-    <Content Include="scripts\jquery-1.10.2.js" />
-    <Content Include="scripts\jquery-1.10.2.min.js" />
+    <None Include="scripts\jquery-1.11.0.intellisense.js" />
+    <Content Include="scripts\jquery-1.11.0.js" />
+    <Content Include="scripts\jquery-1.11.0.min.js" />
     <Content Include="scripts\jquery.tagsinput.js" />
     <Content Include="scripts\less-1.5.1.js" />
     <Content Include="scripts\less-1.5.1.min.js" />
@@ -225,12 +225,12 @@
     <Content Include="Views\Account\LogoutPage.cshtml" />
     <Content Include="Views\AdminPosts\New.cshtml" />
     <Content Include="Views\Admin\ChangePassword.cshtml" />
-    <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\AdminPosts\Comments.cshtml" />
     <Content Include="Views\AdminPosts\Tags.cshtml" />
     <Content Include="Views\_LoginLayout.cshtml" />
     <Content Include="Views\Home\_AboutMe.cshtml" />
     <Content Include="Views\Admin\ChangeProfile.cshtml" />
+    <Content Include="scripts\jquery-1.11.0.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
