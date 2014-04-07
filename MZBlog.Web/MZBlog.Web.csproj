@@ -41,24 +41,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Bson.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\packages\mongocsharpdriver.1.8.3\lib\net35\MongoDB.Driver.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.0.21.1\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Hosting.Aspnet">
-      <HintPath>..\packages\Nancy.Hosting.Aspnet.0.21.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Validation.DataAnnotations">
-      <HintPath>..\packages\Nancy.Validation.DataAnnotations.0.21.1\lib\net40\Nancy.Validation.DataAnnotations.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.ViewEngines.Razor, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MongoDB.Bson, Version=1.9.0.200, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.Viewengines.Razor.0.21.1\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
+      <HintPath>..\packages\mongocsharpdriver.1.9.0\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.9.0.200, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\mongocsharpdriver.1.9.0\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy, Version=0.22.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Hosting.Aspnet, Version=0.22.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Hosting.Aspnet.0.22.2\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Validation.DataAnnotations, Version=0.22.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Validation.DataAnnotations.0.22.2\lib\net40\Nancy.Validation.DataAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.ViewEngines.Razor, Version=0.22.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Viewengines.Razor.0.22.2\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -72,12 +77,6 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="content\bootstrap\bootstrap.css">
-      <DependentUpon>bootstrap.less</DependentUpon>
-    </Content>
-    <Content Include="content\bootstrap\bootstrap.min.css">
-      <DependentUpon>bootstrap.less</DependentUpon>
-    </Content>
     <Content Include="content\css\admin.css" />
     <Content Include="content\css\admin.min.css">
       <DependentUpon>admin.css</DependentUpon>
@@ -94,6 +93,46 @@
     <Content Include="content\css\mzblog.css" />
     <Content Include="content\fonts\fontawesome-webfont.svg" />
     <Content Include="content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="content\Highlight\arta.css" />
+    <Content Include="content\Highlight\ascetic.css" />
+    <Content Include="content\Highlight\brown_paper.css" />
+    <Content Include="content\Highlight\brown_papersq.png" />
+    <Content Include="content\Highlight\dark.css" />
+    <Content Include="content\Highlight\default.css" />
+    <Content Include="content\Highlight\far.css" />
+    <Content Include="content\Highlight\github.css" />
+    <Content Include="content\Highlight\googlecode.css" />
+    <Content Include="content\Highlight\idea.css" />
+    <Content Include="content\Highlight\ir_black.css" />
+    <Content Include="content\Highlight\magula.css" />
+    <Content Include="content\Highlight\monokai.css" />
+    <Content Include="content\Highlight\pojoaque.css" />
+    <Content Include="content\Highlight\pojoaque.jpg" />
+    <Content Include="content\Highlight\rainbow.css" />
+    <Content Include="content\Highlight\school_book.css" />
+    <Content Include="content\Highlight\school_book.png" />
+    <Content Include="content\Highlight\solarized_dark.css" />
+    <Content Include="content\Highlight\solarized_light.css" />
+    <Content Include="content\Highlight\sunburst.css" />
+    <Content Include="content\Highlight\tomorrow-night-blue.css" />
+    <Content Include="content\Highlight\tomorrow-night-bright.css" />
+    <Content Include="content\Highlight\tomorrow-night-eighties.css" />
+    <Content Include="content\Highlight\tomorrow-night.css" />
+    <Content Include="content\Highlight\tomorrow.css" />
+    <Content Include="content\Highlight\vs.css" />
+    <Content Include="content\Highlight\xcode.css" />
+    <Content Include="content\Highlight\zenburn.css" />
+    <EmbeddedResource Include="ErrorHandling\Resources\404.html" />
+    <Content Include="content\images\ymz.jpg" />
+    <Content Include="favicon.ico" />
+    <Content Include="content\fonts\fontawesome-webfont.woff" />
+    <Content Include="content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="content\fonts\fontawesome-webfont.eot" />
+    <Content Include="content\fonts\FontAwesome.otf" />
+    <Content Include="scripts\bootstrap.js" />
+    <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="scripts\Highlight\highlight.pack.js" />
+    <Content Include="scripts\html5shiv.js" />
     <Content Include="content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="content\fonts\glyphicons-halflings-regular.eot" />
@@ -137,54 +176,12 @@
     <Content Include="content\bootstrap\bootstrap.less" />
     <Content Include="content\bootstrap\badges.less" />
     <Content Include="content\bootstrap\alerts.less" />
-    <Content Include="content\Highlight\arta.css" />
-    <Content Include="content\Highlight\ascetic.css" />
-    <Content Include="content\Highlight\brown_paper.css" />
-    <Content Include="content\Highlight\brown_papersq.png" />
-    <Content Include="content\Highlight\dark.css" />
-    <Content Include="content\Highlight\default.css" />
-    <Content Include="content\Highlight\far.css" />
-    <Content Include="content\Highlight\github.css" />
-    <Content Include="content\Highlight\googlecode.css" />
-    <Content Include="content\Highlight\idea.css" />
-    <Content Include="content\Highlight\ir_black.css" />
-    <Content Include="content\Highlight\magula.css" />
-    <Content Include="content\Highlight\monokai.css" />
-    <Content Include="content\Highlight\pojoaque.css" />
-    <Content Include="content\Highlight\pojoaque.jpg" />
-    <Content Include="content\Highlight\rainbow.css" />
-    <Content Include="content\Highlight\school_book.css" />
-    <Content Include="content\Highlight\school_book.png" />
-    <Content Include="content\Highlight\solarized_dark.css" />
-    <Content Include="content\Highlight\solarized_light.css" />
-    <Content Include="content\Highlight\sunburst.css" />
-    <Content Include="content\Highlight\tomorrow-night-blue.css" />
-    <Content Include="content\Highlight\tomorrow-night-bright.css" />
-    <Content Include="content\Highlight\tomorrow-night-eighties.css" />
-    <Content Include="content\Highlight\tomorrow-night.css" />
-    <Content Include="content\Highlight\tomorrow.css" />
-    <Content Include="content\Highlight\vs.css" />
-    <Content Include="content\Highlight\xcode.css" />
-    <Content Include="content\Highlight\zenburn.css" />
-    <EmbeddedResource Include="ErrorHandling\Resources\404.html" />
-    <Content Include="content\images\ymz.jpg" />
-    <Content Include="favicon.ico" />
-    <Content Include="scripts\bootstrap.js" />
-    <Content Include="scripts\bootstrap.min.js" />
-    <Content Include="content\fonts\fontawesome-webfont.woff" />
-    <Content Include="content\fonts\fontawesome-webfont.ttf" />
-    <Content Include="content\fonts\fontawesome-webfont.eot" />
-    <Content Include="content\fonts\FontAwesome.otf" />
-    <Content Include="scripts\Highlight\highlight.pack.js" />
-    <Content Include="scripts\html5shiv.js" />
     <None Include="scripts\jquery-1.11.0.intellisense.js" />
     <Content Include="scripts\jquery-1.11.0.js" />
     <Content Include="scripts\jquery-1.11.0.min.js" />
     <Content Include="scripts\jquery.tagsinput.js" />
-    <Content Include="scripts\less-1.5.1.js" />
-    <Content Include="scripts\less-1.5.1.min.js" />
     <Content Include="scripts\markdown.js" />
-    <Content Include="scripts\modernizr-2.7.1.js" />
+    <Content Include="scripts\modernizr-2.7.2.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -283,8 +280,8 @@
   <PropertyGroup>
     <PostBuildEvent>
 if $(ConfigurationName) == Debug (
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.21.1\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.21.1\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.22.2\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
+xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.22.2\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
 )</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

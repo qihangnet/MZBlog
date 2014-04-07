@@ -30,7 +30,7 @@ namespace MZBlog.Web.Modules
         {
             var author = _viewProjectionFactory.Get<string, Author>(ctx.CurrentUser.UserName);
             if (author == null)
-                return ctx.GetRedirect("/mz-login?returnUrl=" + Request.Url.Path).AddCookie(FormsAuthentication.CreateLogoutCookie());
+                return ctx.GetRedirect("/mz-login?returnUrl=" + Request.Url.Path).WithCookie(FormsAuthentication.CreateLogoutCookie());
 
             ViewBag.CurrentUser = author;
             return null;
@@ -46,7 +46,7 @@ namespace MZBlog.Web.Modules
             var username = FormsAuthentication.GetAuthUsernameFromCookie(ctx);
 
             if (username.IsNullOrWhitespace())
-                return ctx.GetRedirect("/mz-login?returnUrl=" + Request.Url.Path).AddCookie(FormsAuthentication.CreateLogoutCookie());
+                return ctx.GetRedirect("/mz-login?returnUrl=" + Request.Url.Path).WithCookie(FormsAuthentication.CreateLogoutCookie());
 
             ctx.CurrentUser = new BlogUserIdentity(username, new string[] {"admin" });
 
