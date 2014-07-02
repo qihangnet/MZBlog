@@ -41,13 +41,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MongoDB.Bson, Version=1.9.1.221, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+    <Reference Include="MongoDB.Bson, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\mongocsharpdriver.1.9.1\lib\net35\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver, Version=1.9.1.221, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+    <Reference Include="MongoDB.Driver, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\mongocsharpdriver.1.9.1\lib\net35\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Nancy, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -73,7 +73,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.2\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.0\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.XML" />
   </ItemGroup>
@@ -130,6 +130,10 @@
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\Highlight\highlight.pack.js" />
     <Content Include="scripts\html5shiv.js" />
+    <Content Include="content\fonts\fontawesome-webfont.woff" />
+    <Content Include="content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="content\fonts\fontawesome-webfont.eot" />
+    <Content Include="content\fonts\FontAwesome.otf" />
     <Content Include="content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="content\fonts\glyphicons-halflings-regular.eot" />
@@ -143,6 +147,7 @@
     <Content Include="content\bootstrap\tables.less" />
     <Content Include="content\bootstrap\scaffolding.less" />
     <Content Include="content\bootstrap\responsive-utilities.less" />
+    <Content Include="content\bootstrap\responsive-embed.less" />
     <Content Include="content\bootstrap\progress-bars.less" />
     <Content Include="content\bootstrap\print.less" />
     <Content Include="content\bootstrap\popovers.less" />
@@ -153,6 +158,35 @@
     <Content Include="content\bootstrap\navs.less" />
     <Content Include="content\bootstrap\navbar.less" />
     <Content Include="content\bootstrap\modals.less" />
+    <Content Include="content\bootstrap\mixins\vendor-prefixes.less" />
+    <Content Include="content\bootstrap\mixins\text-overflow.less" />
+    <Content Include="content\bootstrap\mixins\text-emphasis.less" />
+    <Content Include="content\bootstrap\mixins\table-row.less" />
+    <Content Include="content\bootstrap\mixins\tab-focus.less" />
+    <Content Include="content\bootstrap\mixins\size.less" />
+    <Content Include="content\bootstrap\mixins\responsive-visibility.less" />
+    <Content Include="content\bootstrap\mixins\resize.less" />
+    <Content Include="content\bootstrap\mixins\reset-filter.less" />
+    <Content Include="content\bootstrap\mixins\progress-bar.less" />
+    <Content Include="content\bootstrap\mixins\panels.less" />
+    <Content Include="content\bootstrap\mixins\pagination.less" />
+    <Content Include="content\bootstrap\mixins\opacity.less" />
+    <Content Include="content\bootstrap\mixins\nav-vertical-align.less" />
+    <Content Include="content\bootstrap\mixins\nav-divider.less" />
+    <Content Include="content\bootstrap\mixins\list-group.less" />
+    <Content Include="content\bootstrap\mixins\labels.less" />
+    <Content Include="content\bootstrap\mixins\image.less" />
+    <Content Include="content\bootstrap\mixins\hide-text.less" />
+    <Content Include="content\bootstrap\mixins\grid-framework.less" />
+    <Content Include="content\bootstrap\mixins\grid.less" />
+    <Content Include="content\bootstrap\mixins\gradients.less" />
+    <Content Include="content\bootstrap\mixins\forms.less" />
+    <Content Include="content\bootstrap\mixins\clearfix.less" />
+    <Content Include="content\bootstrap\mixins\center-block.less" />
+    <Content Include="content\bootstrap\mixins\buttons.less" />
+    <Content Include="content\bootstrap\mixins\border-radius.less" />
+    <Content Include="content\bootstrap\mixins\background-variant.less" />
+    <Content Include="content\bootstrap\mixins\alerts.less" />
     <Content Include="content\bootstrap\mixins.less" />
     <Content Include="content\bootstrap\media.less" />
     <Content Include="content\bootstrap\list-group.less" />
@@ -173,13 +207,9 @@
     <Content Include="content\bootstrap\bootstrap.less" />
     <Content Include="content\bootstrap\badges.less" />
     <Content Include="content\bootstrap\alerts.less" />
-    <Content Include="content\fonts\fontawesome-webfont.woff" />
-    <Content Include="content\fonts\fontawesome-webfont.ttf" />
-    <Content Include="content\fonts\fontawesome-webfont.eot" />
-    <Content Include="content\fonts\FontAwesome.otf" />
-    <None Include="scripts\jquery-1.11.0.intellisense.js" />
-    <Content Include="scripts\jquery-1.11.0.js" />
-    <Content Include="scripts\jquery-1.11.0.min.js" />
+    <None Include="scripts\jquery-1.11.1.intellisense.js" />
+    <Content Include="scripts\jquery-1.11.1.js" />
+    <Content Include="scripts\jquery-1.11.1.min.js" />
     <Content Include="scripts\jquery.tagsinput.js" />
     <Content Include="scripts\markdown.js" />
     <Content Include="scripts\modernizr-2.7.2.js" />
@@ -228,7 +258,7 @@
     <Content Include="Views\_LoginLayout.cshtml" />
     <Content Include="Views\Home\_AboutMe.cshtml" />
     <Content Include="Views\Admin\ChangeProfile.cshtml" />
-    <Content Include="scripts\jquery-1.11.0.min.map" />
+    <Content Include="scripts\jquery-1.11.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
