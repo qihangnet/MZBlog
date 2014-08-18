@@ -21,7 +21,7 @@ namespace MZBlog.Core.ViewProjections.Admin
 
         public AuthorProfileViewModel Project(string input)
         {
-            var author = _collections.AuthorCollection.AsQueryable().FirstOrDefault(w=>w.Id==input);
+            var author = _collections.AuthorCollection.AsQueryable().FirstOrDefault(w => w.Id == input);
 
             return new AuthorProfileViewModel
             {

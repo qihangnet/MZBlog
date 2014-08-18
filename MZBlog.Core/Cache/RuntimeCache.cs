@@ -8,6 +8,7 @@ namespace MZBlog.Core.Cache
     {
         private readonly MemoryCache _cache;
         private readonly CacheItemPolicy _defaultCacheItemPolicy;
+
         public RuntimeCache()
         {
             _cache = MemoryCache.Default;

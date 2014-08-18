@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace MZBlog.Core.ViewProjections.Home
 
             var query = Query<BlogPost>.Where(BlogPost.IsPublished);
 
-            var mr = blogPosts.MapReduce(query, map, reduce);
+            var mr = blogPosts.MapReduce(new MapReduceArgs { Query = query, MapFunction = map, ReduceFunction = reduce });
 
             var result = mr.GetResults().Select(el =>
                                                     {

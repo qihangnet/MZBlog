@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MZBlog.Core.Documents;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace MZBlog.Core.ViewProjections.Admin
 
             var query = Query<BlogPost>.Where(BlogPost.IsPublished);
 
-            var mr = postCol.MapReduce(query, map, reduce);
+            var mr = postCol.MapReduce(new MapReduceArgs { Query = query, MapFunction = map, ReduceFunction = reduce });
 
             var result = mr.GetResults().Select(el =>
             {
@@ -78,9 +79,9 @@ namespace MZBlog.Core.ViewProjections.Admin
 
                 return new { tag, counter };
             })
-                           .Where(k => k.counter >= input.TagThreshold)
-                           .OrderByDescending(k => k.counter)
-                           .ToDictionary(k => k.tag, v => v.counter);
+            .Where(k => k.counter >= input.TagThreshold)
+            .OrderByDescending(k => k.counter)
+            .ToDictionary(k => k.tag, v => v.counter);
             stat.TagsCount = result.Count;
 
             return stat;
