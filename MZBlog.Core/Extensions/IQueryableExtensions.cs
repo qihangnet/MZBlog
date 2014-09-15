@@ -6,7 +6,12 @@ namespace MZBlog.Core.Extensions
     {
         public static IQueryable<T> TakePage<T>(this IQueryable<T> queryable, int page = 1, int pageSize = 10)
         {
-            return queryable.Skip((page - 1) * pageSize - 1).Take(pageSize);
+            var countSkip = (page - 1) * pageSize - 1;
+            if (countSkip < 0)
+            {
+                countSkip = 0;
+            }
+            return queryable.Skip(countSkip).Take(pageSize);
         }
     }
 }

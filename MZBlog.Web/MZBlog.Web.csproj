@@ -78,6 +78,12 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="content\bootstrap\bootstrap.css">
+      <DependentUpon>bootstrap.less</DependentUpon>
+    </Content>
+    <Content Include="content\bootstrap\bootstrap.min.css">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
     <Content Include="content\css\admin.css" />
     <Content Include="content\css\admin.min.css">
       <DependentUpon>admin.css</DependentUpon>
@@ -207,6 +213,9 @@
     <Content Include="content\bootstrap\bootstrap.less" />
     <Content Include="content\bootstrap\badges.less" />
     <Content Include="content\bootstrap\alerts.less" />
+    <Content Include="content\bootstrap\bootstrap.css.map">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
     <None Include="scripts\jquery-1.11.1.intellisense.js" />
     <Content Include="scripts\jquery-1.11.1.js" />
     <Content Include="scripts\jquery-1.11.1.min.js" />
