@@ -33,19 +33,6 @@ namespace MZBlog.Core.Cache
             _cache.Set(cacheItem, cacheItemPolicy);
         }
 
-        public int Decrement(string key)
-        {
-            var cacheNumber = Get<int?>(key);
-            var number = 0;
-            if (cacheNumber.HasValue)
-            {
-                number = cacheNumber.Value;
-            }
-            Interlocked.Decrement(ref number);
-            Max(key, number);
-            return number;
-        }
-
         public bool Exists(string key)
         {
             return _cache.Get(key) != null;
@@ -56,18 +43,6 @@ namespace MZBlog.Core.Cache
             return (T)_cache.Get(key);
         }
 
-        public int Increment(string key)
-        {
-            var cacheNumber = Get<int?>(key);
-            var number = 0;
-            if (cacheNumber.HasValue)
-            {
-                number = cacheNumber.Value;
-            }
-            Interlocked.Increment(ref number);
-            Max(key, number);
-            return number;
-        }
 
         public void Max(string key, object obj)
         {

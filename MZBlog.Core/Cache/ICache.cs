@@ -28,13 +28,6 @@ namespace MZBlog.Core.Cache
         void Add(string key, object obj, TimeSpan slidingExpiration);
 
         /// <summary>
-        /// 对指定缓存Key的整数进行原子递减操作
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        /// <returns>递减增后的整数</returns>
-        int Decrement(string key);
-
-        /// <summary>
         /// 从Cache中判断指定的Key是否已经有缓存数据
         /// </summary>
         /// <param name="key">缓存Key</param>
@@ -48,13 +41,6 @@ namespace MZBlog.Core.Cache
         /// <param name="key">缓存Key</param>
         /// <returns>缓存的对象</returns>
         T Get<T>(string key);
-
-        /// <summary>
-        /// 对指定缓存Key的整数进行原子递增操作
-        /// </summary>
-        /// <param name="key">缓存Key</param>
-        /// <returns>递增后的整数</returns>
-        int Increment(string key);
 
         /// <summary>
         /// 向Cache中永久缓存对象
