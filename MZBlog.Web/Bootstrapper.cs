@@ -8,6 +8,7 @@ using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.TinyIoc;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -41,7 +42,7 @@ namespace MZBlog.Web
 
             RegisterIViewProjections(container);
             RegisterICommandInvoker(container);
-            container.Register<DB.AutoBox>((c, o) => Database);
+            container.Register<DB.AutoBox>(this.Database);
             //container.Register(typeof(MongoDatabase), (cContainer, overloads) => Database);
         }
 
@@ -52,19 +53,21 @@ namespace MZBlog.Web
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("content"));
         }
 
-        public virtual DB.AutoBox Database
+        public DB.AutoBox Database
         {
             get
             {
-                var server = new DB(@"..\App_Data\ibox");
-                server.GetConfig().EnsureTable<Author>(DBTableNames.Authors, "Id")
-                    .EnsureIndex<Author>(DBTableNames.Authors, "Email")
-                    .EnsureTable<BlogPost>(DBTableNames.BlogPosts, "Id")
-                    .EnsureTable<BlogPost>(DBTableNames.BlogPosts, "TitleSlug", "Status", "PubDate", "DateUTC")
-                    .EnsureTable<BlogComment>(DBTableNames.BlogComments, "Id")
-                    .EnsureTable<BlogComment>(DBTableNames.BlogComments,"PostId")
-                    .EnsureTable<SpamHash>(DBTableNames.SpamHashes, "Id")
-                    .EnsureTable<Tag>(DBTableNames.Tags, "Slug");
+                var dbPath = Path.Combine(this.RootPathProvider.GetRootPath(), "App_Data", "ibox");
+                var server = new DB(dbPath);
+                var config = server.GetConfig();
+                config.EnsureTable<Author>(DBTableNames.Authors, "Id");
+                //config.EnsureIndex<Author>(DBTableNames.Authors, "Email");
+                config.EnsureTable<BlogPost>(DBTableNames.BlogPosts, "Id");
+                //config.EnsureIndex<BlogPost>(DBTableNames.BlogPosts, "TitleSlug", "Status", "PubDate", "DateUTC");
+                config.EnsureTable<BlogComment>(DBTableNames.BlogComments, "Id");
+                //config.EnsureIndex<BlogComment>(DBTableNames.BlogComments, "PostId");
+                config.EnsureTable<SpamHash>(DBTableNames.SpamHashes, "Id");
+                config.EnsureTable<Tag>(DBTableNames.Tags, "Slug");
 
                 var db = server.Open();
                 return db;

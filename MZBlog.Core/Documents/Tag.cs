@@ -1,6 +1,7 @@
-﻿namespace MZBlog.Core.Documents
+﻿using System;
+namespace MZBlog.Core.Documents
 {
-    //this is just a helper
+    [Serializable]
     public class Tag
     {
         public string Name { get; set; }

@@ -33,13 +33,18 @@ namespace MZBlog.Core.ViewProjections.Home
 
         public RecentBlogPostSummaryViewModel Project(RecentBlogPostSummaryBindingModel input)
         {
-            var titles = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where IsPublished==true order by PubDate desc limit 0," + input.Page)
-                     .Select(b => new BlogPostSummary()
-                     {
-                         Title = b.Title,
-                         Link = b.GetLink()
-                     })
-                     .ToList().AsReadOnly();
+            var titles = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
+                          where p.IsPublished
+                          orderby p.PubDate descending
+                          select new BlogPostSummary
+                          {
+                              Title = p.Title,
+                              Link = p.GetLink()
+                          }
+                          )
+                .Take(input.Page)
+                .ToList()
+                .AsReadOnly();
 
             return new RecentBlogPostSummaryViewModel { BlogPostsSummaries = titles };
         }

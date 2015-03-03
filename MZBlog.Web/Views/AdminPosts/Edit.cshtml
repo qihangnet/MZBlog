@@ -26,7 +26,7 @@
                 <textarea id="post-content" rows="30" name="MarkDown" class="form-control" placeholder="内容" required>@Model.BlogPost.MarkDown</textarea>
             </div>
             <div class="form-group">
-                <input name="Tags" id="tags" class="form-control" value="@string.Join(",", Model.BlogPost.Tags.Select(t => t.Name))" />
+                <input name="Tags" id="tags" class="form-control" value="@(Model.BlogPost.Tags==null?string.Empty:string.Join(",", Model.BlogPost.Tags.Select(t => t.Name)))"  />
             </div>
             <div class="form-group">
                 <label for="pubdate">发布时间(UTC):</label>

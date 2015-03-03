@@ -45,9 +45,9 @@ namespace MZBlog.Core.Documents
 
         public string AuthorEmail { get; set; }
 
-        public static Expression<Func<BlogPost, bool>> IsPublished
+        public bool IsPublished
         {
-            get { return p => p.PubDate <= DateTime.UtcNow && p.Status == PublishStatus.Published; }
+            get { return PubDate <= DateTime.UtcNow && Status == PublishStatus.Published; }
         }
 
         public string GetLink()

@@ -33,10 +33,10 @@ namespace MZBlog.Core.ViewProjections.Home
 
         public IntervalBlogPostsViewModel Project(IntervalBlogPostsBindingModel input)
         {
-            var posts = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where IsPublished==true")
-                     .Where(b => b.PubDate < input.ToDate && b.PubDate > input.FromDate)
-                     .OrderByDescending(b => b.PubDate)
-                     .ToList();
+            var posts = from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
+                        where p.IsPublished && p.PubDate < input.ToDate && p.PubDate > input.FromDate
+                        orderby p.PubDate descending
+                        select p;
 
             return new IntervalBlogPostsViewModel
             {

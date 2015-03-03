@@ -25,9 +25,12 @@
         </div>
         <div class="panel-footer">
             <i class="glyphicon glyphicon-tags"></i>
-            @foreach (var tag in blogPost.Tags)
+            @if (blogPost.Tags != null)
             {
-                <text> [ <a href="~/tag/@tag.Slug">@tag.Name</a> ]</text>
+                foreach (var tag in blogPost.Tags)
+                {
+                    <text> [ <a href="~/tag/@tag.Slug">@tag.Name</a> ]</text>
+                }
             }
         </div>
     </article>

@@ -26,7 +26,7 @@ namespace MZBlog.Web.Modules
         {
             ViewBag.Recent =
                 _viewFactory.Get<RecentBlogPostSummaryBindingModel, RecentBlogPostSummaryViewModel>(
-                    new RecentBlogPostSummaryBindingModel());
+                    new RecentBlogPostSummaryBindingModel { Page = 10 });
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,8 +48,15 @@ namespace MZBlog.Core.ViewProjections.Home
         public RecentBlogPostsViewModel Project(RecentBlogPostsBindingModel input)
         {
             var skip = (input.Page - 1) * input.Take;
-            var posts = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where IsPublished==true order by PubDate desc limit " + skip + "," + input.Take + 1)
-                     .ToList().AsReadOnly();
+            var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
+                         where p.IsPublished
+                         orderby p.PubDate descending
+                         select p)
+                         .Skip(skip)
+                         .Take(input.Take)
+                         .ToList()
+                         .AsReadOnly();
+
             var pagedPosts = posts.Take(input.Take).ToList();
             var hasNextPage = posts.Count > input.Take;
 

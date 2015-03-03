@@ -26,9 +26,12 @@
     </div>
     <div class="panel-footer">
         <i class="glyphicon glyphicon-tags"></i>
-        @foreach (var tag in Model.BlogPost.Tags)
+        @if (Model.BlogPost.Tags != null)
         {
-            <text>[ <a href="/tag/@tag.Slug">@tag.Name</a> ]</text>
+            foreach (var tag in Model.BlogPost.Tags)
+            {
+                <text>[ <a href="/tag/@tag.Slug">@tag.Name</a> ]</text>
+            }
         }
     </div>
 </article>
@@ -116,9 +119,9 @@
 
 @section PostScripts{
     <!-- for Highlight.js support -->
-<link href="~/content/Highlight/vs.css" rel="stylesheet" />
-<script src="~/scripts/Highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+    <link href="~/content/Highlight/vs.css" rel="stylesheet" />
+    <script src="~/scripts/Highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
     <script type="text/javascript">
         $('pre code').each(function (i, e) { hljs.highlightBlock(e) });
         setTimeout(function () {

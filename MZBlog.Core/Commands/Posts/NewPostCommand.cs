@@ -38,6 +38,7 @@ namespace MZBlog.Core.Commands.Posts
             //TODO:应该验证TitleSlug是否唯一
             var post = new BlogPost
                            {
+                               Id = ObjectId.NewObjectId(),
                                AuthorEmail = command.Author.Email,
                                AuthorDisplayName = command.Author.DisplayName,
                                MarkDown = command.MarkDown,
