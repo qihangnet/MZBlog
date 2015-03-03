@@ -30,7 +30,7 @@ namespace MZBlog.Core.Extensions.Tests
                 .Should().Be("shu-ming");
 
             " 《书名》 是 ，、ViSual     STUdio 中国版！@￥%……&*（）——+【】[]$';,.".ToSlug()
-                .Should().Be("shu-ming-shi-visual-studio-zhong-guo-ban");
+                .Should().Be("shu-ming-shi-visual-studio-zhong-guo-ban-at-percent-and-dollar");
         }
     }
 }
