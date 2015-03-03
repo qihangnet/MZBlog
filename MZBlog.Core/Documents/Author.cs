@@ -1,12 +1,11 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
 namespace MZBlog.Core.Documents
 {
     public class Author
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+        public Author()
+        {
+            Id = ObjectId.NewObjectId();                
+        }
         public string Id { get; set; }
 
         public string HashedPassword { get; set; }

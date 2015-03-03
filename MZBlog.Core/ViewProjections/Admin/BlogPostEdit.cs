@@ -1,6 +1,5 @@
-﻿using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
-using System.Linq;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
@@ -16,18 +15,16 @@ namespace MZBlog.Core.ViewProjections.Admin
 
     public class BlogPostEditViewProjection : IViewProjection<BlogPostEditBindingModel, BlogPostEditViewModel>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public BlogPostEditViewProjection(MongoCollections collections)
+        public BlogPostEditViewProjection(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public BlogPostEditViewModel Project(BlogPostEditBindingModel input)
         {
-            var post = _collections.BlogPostCollection
-                                 .AsQueryable()
-                                 .FirstOrDefault(b => b.Id == input.PostId);
+            var post = _db.SelectKey<BlogPost>(DBTableNames.BlogPosts, input.PostId);
 
             return new BlogPostEditViewModel { BlogPost = post };
         }

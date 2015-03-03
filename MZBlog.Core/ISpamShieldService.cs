@@ -1,11 +1,7 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
-using System.Linq;
 
 namespace MZBlog.Core
 {
@@ -27,23 +23,23 @@ namespace MZBlog.Core
 
     public class SpamShieldService : ISpamShieldService
     {
-        private readonly MongoCollection<SpamHash> _spamCol;
+        private readonly DB.AutoBox _db;
 
-        public SpamShieldService(MongoCollections cols)
+        public SpamShieldService(DB.AutoBox db)
         {
-            _spamCol = cols.SpamHashCollection;
+            _db = db;
         }
 
         public string CreateTick(string key)
         {
-            var tick = ObjectId.GenerateNewId().ToString();
+            var tick = ObjectId.NewObjectId().ToString();
             var spamHash = new SpamHash
             {
                 Id = tick,
                 PostKey = key,
                 CreatedTime = DateTime.UtcNow
             };
-            _spamCol.Insert(spamHash);
+            _db.Insert(DBTableNames.SpamHashes, spamHash);
             return tick;
         }
 
@@ -53,13 +49,13 @@ namespace MZBlog.Core
             if (tick.IsNullOrWhitespace())
                 return nonhash;
 
-            var spamHash = _spamCol.AsQueryable().FirstOrDefault(w => w.Id == tick);
+            var spamHash = _db.SelectKey<SpamHash>(DBTableNames.SpamHashes, tick);
 
             if (spamHash == null || spamHash.Pass || !spamHash.Hash.IsNullOrWhitespace())
                 return nonhash;
 
             spamHash.Hash = new Random().NextDouble().ToString();
-            _spamCol.Save(spamHash);
+            _db.Update(DBTableNames.SpamHashes, spamHash);
 
             return spamHash.Hash;
         }
@@ -69,13 +65,13 @@ namespace MZBlog.Core
             if (command.Tick.IsNullOrWhitespace() || command.Hash.IsNullOrWhitespace())
                 return true;
 
-            var spamHash = _spamCol.AsQueryable().FirstOrDefault(w => w.Id == command.Tick);
+            var spamHash = _db.SelectKey<SpamHash>(DBTableNames.SpamHashes, command.Tick);
 
             if (spamHash == null || spamHash.Pass || spamHash.Hash != command.Hash)
                 return true;
 
             spamHash.Pass = true;
-            _spamCol.Save(spamHash);
+            _db.Update(DBTableNames.SpamHashes, spamHash);
             return false;
         }
     }

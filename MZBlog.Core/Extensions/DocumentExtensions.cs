@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-
-namespace MZBlog.Core.Extensions
+﻿namespace MZBlog.Core.Extensions
 {
     public static class DocumentExtensions
     {

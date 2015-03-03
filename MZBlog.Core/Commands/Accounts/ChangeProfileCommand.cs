@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using iBoxDB.LocalServer;
+using MZBlog.Core.Documents;
 
 namespace MZBlog.Core.Commands.Accounts
 {
@@ -13,23 +14,22 @@ namespace MZBlog.Core.Commands.Accounts
 
     public class ChangeProfileCommandInvoker : ICommandInvoker<ChangeProfileCommand, CommandResult>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public ChangeProfileCommandInvoker(MongoCollections collections)
+        public ChangeProfileCommandInvoker(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public CommandResult Execute(ChangeProfileCommand command)
         {
-            var authorCol = _collections.AuthorCollection;
-            var author = authorCol.FindOneById(new ObjectId(command.AuthorId));
-
+            var author = _db.SelectKey<Author>(DBTableNames.Authors, command.AuthorId);
+            if (author == null)
+                return new CommandResult("用户信息不存在");
             author.DisplayName = command.NewDisplayName;
             author.Email = command.NewEmail;
 
-            authorCol.Save(author);
-
+            _db.Update(DBTableNames.Authors, author);
             return CommandResult.SuccessResult;
         }
     }

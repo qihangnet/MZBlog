@@ -6,18 +6,20 @@ using Xunit;
 
 namespace MZBlog.Core.Tests.Accounts
 {
-    public class ChangePasswordCommandTests : MongoDBBackedTest
+    public class ChangePasswordCommandTests : iBoxDBBackedTest
     {
+        private string authorId = "mzyi";
         [Fact]
         public void change_password_fail_if_old_password_does_not_match()
         {
             var author = new Author()
             {
+                Id = authorId,
                 Email = "test@mz.yi",
                 HashedPassword = Hasher.GetMd5Hash("mzblog")
             };
-            Collections.AuthorCollection.Save(author);
-            new ChangePasswordCommandInvoker(Collections)
+            _db.Insert(DBTableNames.Authors, author);
+            new ChangePasswordCommandInvoker(_db)
                .Execute(new ChangePasswordCommand()
                {
                    AuthorId = author.Id,
@@ -37,9 +39,9 @@ namespace MZBlog.Core.Tests.Accounts
                 HashedPassword = Hasher.GetMd5Hash("mzblog")
             };
 
-            Collections.AuthorCollection.Save(author);
+            _db.Insert(DBTableNames.Authors, author);
 
-            new ChangePasswordCommandInvoker(Collections)
+            new ChangePasswordCommandInvoker(_db)
                 .Execute(new ChangePasswordCommand()
                 {
                     AuthorId = author.Id,
@@ -49,7 +51,12 @@ namespace MZBlog.Core.Tests.Accounts
                 })
                 .Success.Should().BeTrue();
 
-            Collections.AuthorCollection.FindOneById(author.Id.ToObjectId()).HashedPassword.Should().BeEquivalentTo(Hasher.GetMd5Hash("pswtest"));
+            _db.SelectKey<Author>(DBTableNames.Authors, author.Id).HashedPassword.Should().BeEquivalentTo(Hasher.GetMd5Hash("pswtest"));
+        }
+
+        ~ChangePasswordCommandTests()
+        {
+            _db.Delete(DBTableNames.Authors, authorId);
         }
     }
 }

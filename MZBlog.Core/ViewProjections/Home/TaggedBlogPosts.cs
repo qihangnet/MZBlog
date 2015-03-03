@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,20 +19,17 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class TaggedBlogPostsViewProjection : IViewProjection<TaggedBlogPostsBindingModel, TaggedBlogPostsViewModel>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public TaggedBlogPostsViewProjection(MongoCollections collections)
+        public TaggedBlogPostsViewProjection(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public TaggedBlogPostsViewModel Project(TaggedBlogPostsBindingModel input)
         {
-            var posts = _collections.BlogPostCollection.AsQueryable()
-                     .Where(BlogPost.IsPublished)
+            var posts = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where IsPublished==true order by PubDate desc")
                      .Where(b => b.Tags.Any(t => t.Slug == input.Tag))
-                     .OrderByDescending(b => b.PubDate)
-                     .Take(10)
                      .ToList();
             if (posts.Count == 0)
                 return null;

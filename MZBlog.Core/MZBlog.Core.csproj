@@ -41,6 +41,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="iBoxDB">
+      <HintPath>..\packages\iBoxDB.2.3.2\lib\iBoxDB.dll</HintPath>
+    </Reference>
     <Reference Include="MarkdownSharp">
       <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
     </Reference>
@@ -73,7 +76,7 @@
     <Compile Include="Commands\Posts\NewCommentCommand.cs" />
     <Compile Include="Commands\Posts\NewPostCommand.cs" />
     <Compile Include="Commands\Posts\EditPostCommand.cs" />
-    <Compile Include="MongoDB.cs" />
+    <Compile Include="DBTableNames.cs" />
     <Compile Include="Documents\Author.cs" />
     <Compile Include="Documents\BlogComment.cs" />
     <Compile Include="Documents\BlogPost.cs" />
@@ -85,6 +88,7 @@
     <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="ICommandInvoker.cs" />
+    <Compile Include="ObjectId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Hasher.cs" />
     <Compile Include="ISpamShieldService.cs" />

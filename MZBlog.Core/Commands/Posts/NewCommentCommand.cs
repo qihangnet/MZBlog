@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using System;
 
@@ -8,7 +8,7 @@ namespace MZBlog.Core.Commands.Posts
     {
         public NewCommentCommand()
         {
-            Id = ObjectId.GenerateNewId().ToString();
+            Id = ObjectId.NewObjectId();
         }
 
         public string Id { get; set; }
@@ -30,12 +30,12 @@ namespace MZBlog.Core.Commands.Posts
 
     public class NewCommentCommandInvoker : ICommandInvoker<NewCommentCommand, CommandResult>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
         private readonly ISpamShieldService _spamShield;
 
-        public NewCommentCommandInvoker(MongoCollections collections, ISpamShieldService spamShield)
+        public NewCommentCommandInvoker(DB.AutoBox db, ISpamShieldService spamShield)
         {
-            _collections = collections;
+            _db = db;
             _spamShield = spamShield;
         }
 
@@ -58,7 +58,7 @@ namespace MZBlog.Core.Commands.Posts
                 CreatedTime = DateTime.UtcNow
             };
 
-            var result = _collections.BlogCommentCollection.Insert(comment);
+            var result = _db.Insert(DBTableNames.BlogComments, comment);
 
             return CommandResult.SuccessResult;
         }

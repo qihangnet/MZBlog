@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using iBoxDB.LocalServer;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MZBlog.Core.Documents;
@@ -27,62 +28,28 @@ namespace MZBlog.Core.ViewProjections.Admin
 
     public class AllStatisticsViewProjection : IViewProjection<AllStatisticsBindingModel, AllStatisticsViewModel>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public AllStatisticsViewProjection(MongoCollections collections)
+        public AllStatisticsViewProjection(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public AllStatisticsViewModel Project(AllStatisticsBindingModel input)
         {
-            var postCol = _collections.BlogPostCollection;
-            var commentCol = _collections.BlogCommentCollection;
-            if (postCol.Count() == 0)
+            var postCount=_db.SelectCount("from " + DBTableNames.BlogPosts);
+            if (postCount == 0)
                 return new AllStatisticsViewModel();
 
             var stat = new AllStatisticsViewModel
             {
-                PostsCount = postCol.Count(),
-                CommentsCount = commentCol.Count()
+                PostsCount = postCount,
+                CommentsCount = _db.SelectCount("from " + DBTableNames.BlogComments)
             };
-
-            var map = @"function() {
-                        	for (var index in this.Tags) {
-                                emit(this.Tags[index], { count : 1 });
-                            }
-                        }";
-
-            var reduce = @"function(key, emits) {
-                            total = 0;
-                            for (var i in emits) {
-                                total += emits[i].count;
-                            }
-                            return { count : total };
-                        }";
-
-            var query = Query<BlogPost>.Where(BlogPost.IsPublished);
-
-            var mr = postCol.MapReduce(new MapReduceArgs { Query = query, MapFunction = map, ReduceFunction = reduce });
-
-            var result = mr.GetResults().Select(el =>
-            {
-                var tagDoc = el["_id"].AsBsonDocument;
-
-                var tag = new Tag
-                {
-                    Name = tagDoc["Name"] is BsonNull ? null : tagDoc["Name"].AsString,
-                    Slug = tagDoc["Slug"] is BsonNull ? null : tagDoc["Slug"].AsString
-                };
-
-                var counter = (int)el["value"]["count"].AsDouble;
-
-                return new { tag, counter };
-            })
-            .Where(k => k.counter >= input.TagThreshold)
-            .OrderByDescending(k => k.counter)
-            .ToDictionary(k => k.tag, v => v.counter);
-            stat.TagsCount = result.Count;
+            //TODO Tag统计
+            //var tags = from post in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
+            //           select post.Tags;
+            //stat.TagsCount = result.Count;
 
             return stat;
         }

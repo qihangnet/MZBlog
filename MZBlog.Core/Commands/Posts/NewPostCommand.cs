@@ -1,4 +1,5 @@
-﻿using MZBlog.Core.Documents;
+﻿using iBoxDB.LocalServer;
+using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
 using System.Linq;
@@ -24,11 +25,11 @@ namespace MZBlog.Core.Commands.Posts
 
     public class NewPostCommandInvoker : ICommandInvoker<NewPostCommand, CommandResult>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public NewPostCommandInvoker(MongoCollections collections)
+        public NewPostCommandInvoker(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public CommandResult Execute(NewPostCommand command)
@@ -56,7 +57,7 @@ namespace MZBlog.Core.Commands.Posts
             else
                 post.Tags = new Tag[] { };
 
-            var result = _collections.BlogPostCollection.Insert(post);
+            var result = _db.Insert(DBTableNames.BlogPosts, post);
 
             return CommandResult.SuccessResult;
         }

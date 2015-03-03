@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
+using iBoxDB.LocalServer.IO;
+using MongoDB.Driver.Linq;
 using MZBlog.Core.Documents;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -31,20 +33,19 @@ namespace MZBlog.Core.Commands.Accounts
 
     public class LoginCommandInvoker : ICommandInvoker<LoginCommand, LoginCommandResult>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public LoginCommandInvoker(MongoCollections collections)
+        public LoginCommandInvoker(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public LoginCommandResult Execute(LoginCommand loginCommand)
         {
             var hashedPassword = Hasher.GetMd5Hash(loginCommand.Password);
-            var authorCol = _collections.AuthorCollection;
-            if (authorCol.Count() == 0)
+            if (_db.SelectCount("from " + DBTableNames.Authors) == 0)
             {
-                authorCol.Insert(new Author
+                _db.Insert(DBTableNames.Authors, new Author
                 {
                     Email = "mz@bl.og",
                     DisplayName = "mzblog",
@@ -52,12 +53,12 @@ namespace MZBlog.Core.Commands.Accounts
                     HashedPassword = Hasher.GetMd5Hash("mzblog")
                 });
             }
-            var author = authorCol
-                            .AsQueryable<Author>()
-                            .FirstOrDefault(a => a.Email == loginCommand.Email && a.HashedPassword == hashedPassword);
+            var author = from u in _db.Select<Author>("from " + DBTableNames.Authors)
+                         where u.Email == loginCommand.Email && u.HashedPassword == hashedPassword
+                         select u;
 
-            if (author != null)
-                return new LoginCommandResult() { Author = author };
+            if (author.Count() > 0)
+                return new LoginCommandResult() { Author = author.FirstOrDefault() };
 
             return new LoginCommandResult(trrorMessage: "用户名或密码不正确") { };
         }

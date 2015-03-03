@@ -1,5 +1,5 @@
-﻿using MongoDB.Driver.Linq;
-using System.Linq;
+﻿using iBoxDB.LocalServer;
+using MZBlog.Core.Documents;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
@@ -12,17 +12,18 @@ namespace MZBlog.Core.ViewProjections.Admin
 
     public class AuthorProfileViewProjection : IViewProjection<string, AuthorProfileViewModel>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public AuthorProfileViewProjection(MongoCollections collections)
+        public AuthorProfileViewProjection(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public AuthorProfileViewModel Project(string input)
         {
-            var author = _collections.AuthorCollection.AsQueryable().FirstOrDefault(w => w.Id == input);
-
+            var author = _db.SelectKey<Author>(DBTableNames.Authors, input);
+            if (author == null)
+                return null;
             return new AuthorProfileViewModel
             {
                 DisplayName = author.DisplayName,

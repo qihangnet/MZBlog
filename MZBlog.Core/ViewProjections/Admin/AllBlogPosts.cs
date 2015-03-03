@@ -1,6 +1,5 @@
-﻿using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
-using MZBlog.Core.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,20 +37,20 @@ namespace MZBlog.Core.ViewProjections.Admin
 
     public class AllBlogPostViewProjection : IViewProjection<AllBlogPostsBindingModel, AllBlogPostsViewModel>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public AllBlogPostViewProjection(MongoCollections collections)
+        public AllBlogPostViewProjection(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public AllBlogPostsViewModel Project(AllBlogPostsBindingModel input)
         {
-            var posts = _collections.BlogPostCollection
-                     .AsQueryable()
-                     .OrderByDescending(b => b.DateUTC)
-                     .TakePage(input.Page, pageSize: input.Take + 1)
-                     .ToList();
+            var skip = (input.Page - 1) * input.Take;
+
+            var posts = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " order by DateUTC desc limit " + skip + "," + input.Take + 1)
+                .ToList().AsReadOnly();
+
             var pagedPosts = posts.Take(input.Take);
             var hasNextPage = posts.Count > input.Take;
 

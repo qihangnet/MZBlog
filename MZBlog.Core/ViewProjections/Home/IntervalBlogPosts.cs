@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using System;
 using System.Collections.Generic;
@@ -24,17 +24,16 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class IntervalBlogPostsViewProjection : IViewProjection<IntervalBlogPostsBindingModel, IntervalBlogPostsViewModel>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public IntervalBlogPostsViewProjection(MongoCollections collections)
+        public IntervalBlogPostsViewProjection(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public IntervalBlogPostsViewModel Project(IntervalBlogPostsBindingModel input)
         {
-            var posts = _collections.BlogPostCollection.AsQueryable()
-                     .Where(BlogPost.IsPublished)
+            var posts = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where IsPublished==true")
                      .Where(b => b.PubDate < input.ToDate && b.PubDate > input.FromDate)
                      .OrderByDescending(b => b.PubDate)
                      .ToList();

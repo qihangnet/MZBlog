@@ -1,22 +1,20 @@
-﻿using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
-using System.Linq;
 
 namespace MZBlog.Core.ViewProjections.Account
 {
     public class GetUserDetails : IViewProjection<string, Author>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public GetUserDetails(MongoCollections collections)
+        public GetUserDetails(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public Author Project(string input)
         {
-            return _collections.AuthorCollection.AsQueryable()
-                            .FirstOrDefault(a => a.Id == input);
+            return _db.SelectKey<Author>(DBTableNames.Authors, input);
         }
     }
 }

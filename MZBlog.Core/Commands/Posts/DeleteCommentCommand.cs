@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver.Builders;
-using MZBlog.Core.Extensions;
+﻿using iBoxDB.LocalServer;
 
 namespace MZBlog.Core.Commands.Posts
 {
@@ -10,16 +9,16 @@ namespace MZBlog.Core.Commands.Posts
 
     public class DeleteCommentCommandInvoker : ICommandInvoker<DeleteCommentCommand, CommandResult>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public DeleteCommentCommandInvoker(MongoCollections collections)
+        public DeleteCommentCommandInvoker(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public CommandResult Execute(DeleteCommentCommand command)
         {
-            _collections.BlogCommentCollection.Remove(Query.EQ("_id", command.CommentId.ToObjectId()));
+            _db.Delete(DBTableNames.BlogComments, command.CommentId);
 
             return CommandResult.SuccessResult;
         }

@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,25 +24,22 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class RecentBlogPostSummaryViewProjection : IViewProjection<RecentBlogPostSummaryBindingModel, RecentBlogPostSummaryViewModel>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public RecentBlogPostSummaryViewProjection(MongoCollections collections)
+        public RecentBlogPostSummaryViewProjection(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public RecentBlogPostSummaryViewModel Project(RecentBlogPostSummaryBindingModel input)
         {
-            var titles = _collections.BlogPostCollection.AsQueryable()
-                     .Where(BlogPost.IsPublished)
-                     .OrderByDescending(b => b.PubDate)
+            var titles = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where IsPublished==true order by PubDate desc limit 0," + input.Page)
                      .Select(b => new BlogPostSummary()
                      {
                          Title = b.Title,
                          Link = b.GetLink()
                      })
-                     .Take(10)
-                     .ToList();
+                     .ToList().AsReadOnly();
 
             return new RecentBlogPostSummaryViewModel { BlogPostsSummaries = titles };
         }

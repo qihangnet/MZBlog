@@ -1,13 +1,13 @@
-﻿using MongoDB.Driver;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core;
 using MZBlog.Core.Cache;
+using MZBlog.Core.Documents;
 using MZBlog.Web.Features;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.TinyIoc;
 using System;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
 
@@ -25,9 +25,9 @@ namespace MZBlog.Web
 
         private Response ErrorHandler(NancyContext ctx, Exception ex)
         {
-            if (ex is MongoDB.Driver.MongoConnectionException)
+            if (ex is iBoxDB.E.DatabaseShutdownException)
             {
-                return "MongoDB can't connect.";
+                return "DB can't connect.";
             }
             return null;
         }
@@ -41,8 +41,8 @@ namespace MZBlog.Web
 
             RegisterIViewProjections(container);
             RegisterICommandInvoker(container);
-
-            container.Register(typeof(MongoDatabase), (cContainer, overloads) => Database);
+            container.Register<DB.AutoBox>((c, o) => Database);
+            //container.Register(typeof(MongoDatabase), (cContainer, overloads) => Database);
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)
@@ -50,17 +50,16 @@ namespace MZBlog.Web
             base.ConfigureConventions(nancyConventions);
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("scripts"));
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("content"));
-
         }
 
-        public virtual MongoDatabase Database
+        public virtual DB.AutoBox Database
         {
             get
             {
-                var url = MongoUrl.Create(ConfigurationManager.ConnectionStrings["MZBlogDB"].ConnectionString);
-                var client = new MongoClient(url);
-                var server = client.GetServer();
-                return server.GetDatabase(url.DatabaseName);
+                var server = new DB(@"..\App_Data\ibox");
+                server.GetConfig().EnsureTable<Author>(DBTableNames.Authors);
+                var db = server.Open();
+                return db;
             }
         }
 

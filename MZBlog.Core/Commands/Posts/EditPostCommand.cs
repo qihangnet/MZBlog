@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
@@ -27,18 +27,16 @@ namespace MZBlog.Core.Commands.Posts
 
     public class EditPostCommandInvoker : ICommandInvoker<EditPostCommand, CommandResult>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public EditPostCommandInvoker(MongoCollections collections)
+        public EditPostCommandInvoker(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public CommandResult Execute(EditPostCommand command)
         {
-            var blogPostCol = _collections.BlogPostCollection;
-
-            var post = blogPostCol.AsQueryable().FirstOrDefault(p => p.Id == command.PostId);
+            var post = _db.SelectKey<BlogPost>(DBTableNames.BlogPosts, command.PostId);
 
             if (post == null)
                 throw new ApplicationException("Post with id: {0} was not found".FormatWith(command.PostId));
@@ -59,8 +57,7 @@ namespace MZBlog.Core.Commands.Posts
             }
             else
                 post.Tags = new Tag[] { };
-
-            blogPostCol.Save(post);
+            _db.Update(DBTableNames.BlogPosts, post);
 
             return CommandResult.SuccessResult;
         }

@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver.Builders;
-using MongoDB.Driver.Linq;
+﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using System.Linq;
 
@@ -19,27 +18,22 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class BlogPostDetailsViewProjection : IViewProjection<BlogPostDetailsBindingModel, BlogPostDetailsViewModel>
     {
-        private readonly MongoCollections _collections;
+        private readonly DB.AutoBox _db;
 
-        public BlogPostDetailsViewProjection(MongoCollections collections)
+        public BlogPostDetailsViewProjection(DB.AutoBox db)
         {
-            _collections = collections;
+            _db = db;
         }
 
         public BlogPostDetailsViewModel Project(BlogPostDetailsBindingModel input)
         {
-            var postsCollection = _collections.BlogPostCollection;
-            var post = postsCollection.AsQueryable()
-                                 .FirstOrDefault(b => b.TitleSlug == input.Permalink);
+            var post = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where TitleSlug==" + input.Permalink).FirstOrDefault();
             if (post == null)
                 return null;
+            post.ViewCount++;
+            _db.Update(DBTableNames.BlogPosts, post);
 
-            postsCollection.Update(Query.EQ("TitleSlug", input.Permalink), Update.Inc("ViewCount", 1));
-
-            var comments = _collections.BlogCommentCollection
-                                    .AsQueryable()
-                                    .Where(w => w.PostId == post.Id)
-                                    .ToList()
+            var comments = _db.Select<BlogComment>("from " + DBTableNames.BlogComments + " where PostId == " + post.Id)
                                     .OrderBy(o => o.CreatedTime)
                                     .ToArray();
 

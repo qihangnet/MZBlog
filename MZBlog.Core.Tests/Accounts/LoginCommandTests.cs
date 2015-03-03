@@ -5,19 +5,18 @@ using Xunit;
 
 namespace MZBlog.Core.Tests.Accounts
 {
-    public class LoginCommandTests : MongoDBBackedTest
+    public class LoginCommandTests : iBoxDBBackedTest
     {
         [Fact]
         public void login_should_success_if_user_in_database()
         {
-            Collections.AuthorCollection
-                    .Insert(new Author()
+            _db.Insert(DBTableNames.Authors, new Author()
                     {
                         Email = "test@mz.yi",
                         HashedPassword = Hasher.GetMd5Hash("test")
                     });
 
-            var loginCommandInvoker = new LoginCommandInvoker(Collections);
+            var loginCommandInvoker = new LoginCommandInvoker(_db);
 
             loginCommandInvoker.Execute(new LoginCommand
             {
@@ -35,9 +34,9 @@ namespace MZBlog.Core.Tests.Accounts
                 HashedPassword = Hasher.GetMd5Hash("psw1")
             };
 
-            Collections.AuthorCollection.Insert(documtnt);
+            _db.Insert(DBTableNames.Authors, documtnt);
 
-            var loginCommandInvoker = new LoginCommandInvoker(Collections);
+            var loginCommandInvoker = new LoginCommandInvoker(_db);
 
             loginCommandInvoker.Execute(new LoginCommand()
             {
