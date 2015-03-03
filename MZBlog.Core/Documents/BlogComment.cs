@@ -1,14 +1,10 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MZBlog.Core.Documents
 {
     public class BlogComment
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         [Required]
@@ -22,10 +18,8 @@ namespace MZBlog.Core.Documents
 
         public string SiteUrl { get; set; }
 
-        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreatedTime { get; set; }
 
-        [BsonRepresentation(BsonType.ObjectId)]
         public string PostId { get; set; }
 
         public string IPAddress { get; set; }

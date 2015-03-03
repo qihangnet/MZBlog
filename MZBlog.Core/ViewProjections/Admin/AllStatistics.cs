@@ -1,9 +1,4 @@
 ﻿using iBoxDB.LocalServer;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MZBlog.Core.Documents;
-using System.Linq;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
@@ -37,7 +32,7 @@ namespace MZBlog.Core.ViewProjections.Admin
 
         public AllStatisticsViewModel Project(AllStatisticsBindingModel input)
         {
-            var postCount=_db.SelectCount("from " + DBTableNames.BlogPosts);
+            var postCount = _db.SelectCount("from " + DBTableNames.BlogPosts);
             if (postCount == 0)
                 return new AllStatisticsViewModel();
 

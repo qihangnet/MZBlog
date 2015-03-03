@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Caching;
-using System.Threading;
 
 namespace MZBlog.Core.Cache
 {
@@ -42,7 +41,6 @@ namespace MZBlog.Core.Cache
         {
             return (T)_cache.Get(key);
         }
-
 
         public void Max(string key, object obj)
         {

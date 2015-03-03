@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using MZBlog.Core.Extensions;
+﻿using MZBlog.Core.Extensions;
 using System;
 using System.Globalization;
 using System.Linq.Expressions;
@@ -10,8 +8,6 @@ namespace MZBlog.Core.Documents
 {
     public class BlogPost
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         public string Title { get; set; }

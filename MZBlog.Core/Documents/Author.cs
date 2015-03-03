@@ -4,8 +4,9 @@ namespace MZBlog.Core.Documents
     {
         public Author()
         {
-            Id = ObjectId.NewObjectId();                
+            Id = ObjectId.NewObjectId();
         }
+
         public string Id { get; set; }
 
         public string HashedPassword { get; set; }

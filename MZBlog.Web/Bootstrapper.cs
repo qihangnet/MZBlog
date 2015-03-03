@@ -57,7 +57,15 @@ namespace MZBlog.Web
             get
             {
                 var server = new DB(@"..\App_Data\ibox");
-                server.GetConfig().EnsureTable<Author>(DBTableNames.Authors);
+                server.GetConfig().EnsureTable<Author>(DBTableNames.Authors, "Id")
+                    .EnsureIndex<Author>(DBTableNames.Authors, "Email")
+                    .EnsureTable<BlogPost>(DBTableNames.BlogPosts, "Id")
+                    .EnsureTable<BlogPost>(DBTableNames.BlogPosts, "TitleSlug", "Status", "PubDate", "DateUTC")
+                    .EnsureTable<BlogComment>(DBTableNames.BlogComments, "Id")
+                    .EnsureTable<BlogComment>(DBTableNames.BlogComments,"PostId")
+                    .EnsureTable<SpamHash>(DBTableNames.SpamHashes, "Id")
+                    .EnsureTable<Tag>(DBTableNames.Tags, "Slug");
+
                 var db = server.Open();
                 return db;
             }
