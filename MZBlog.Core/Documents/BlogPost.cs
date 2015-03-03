@@ -1,5 +1,6 @@
 ﻿using MZBlog.Core.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -39,7 +40,7 @@ namespace MZBlog.Core.Documents
 
         public DateTime DateUTC { get; set; }
 
-        public Tag[] Tags { get; set; }
+        public string[] Tags { get; set; }
 
         public string AuthorDisplayName { get; set; }
 

@@ -40,6 +40,20 @@ namespace MZBlog.Core.Commands.Posts
 
             if (post == null)
                 throw new ApplicationException("Post with id: {0} was not found".FormatWith(command.PostId));
+            if (post.Tags != null)
+            {
+                foreach (var tag in post.Tags)
+                {
+                    var slug = tag.ToSlug();
+                    var tagEntry = _db.SelectKey<Tag>(DBTableNames.Tags, slug);
+                    if (tagEntry != null)
+                    {
+                        tagEntry.PostsCount--;
+                        _db.Update(DBTableNames.Tags, tagEntry);
+                    }
+                }
+            }
+
             var markdown = new MarkdownSharp.Markdown();
             //TODO:应该验证TitleSlug是否是除了本文外唯一的
 
@@ -51,12 +65,31 @@ namespace MZBlog.Core.Commands.Posts
             post.TitleSlug = command.TitleSlug.Trim().ToSlug();
             if (!command.Tags.IsNullOrWhitespace())
             {
-                post.Tags = command.Tags.Trim().Split(',')
-                .Select(t => new Tag { Name = t.Trim(), Slug = t.Trim().ToSlug() })
-                .ToArray();
+                var tags = command.Tags.Trim().Split(',').Select(s => s.Trim());
+                post.Tags = tags.Select(s => s.ToSlug()).ToArray();
+                foreach (var tag in tags)
+                {
+                    var slug = tag.ToSlug();
+                    var tagEntry = _db.SelectKey<Tag>(DBTableNames.Tags, slug);
+                    if (tagEntry == null)
+                    {
+                        tagEntry = new Tag
+                        {
+                            Slug = slug,
+                            Name = tag,
+                            PostsCount = 1
+                        };
+                        _db.Insert(DBTableNames.Tags, tagEntry);
+                    }
+                    else
+                    {
+                        tagEntry.PostsCount++;
+                        _db.Update(DBTableNames.Tags, tagEntry);
+                    }
+                }
             }
             else
-                post.Tags = new Tag[] { };
+                post.Tags = new string[] { };
             _db.Update(DBTableNames.BlogPosts, post);
 
             return CommandResult.SuccessResult;

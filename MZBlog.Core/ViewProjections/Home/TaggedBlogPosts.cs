@@ -28,12 +28,14 @@ namespace MZBlog.Core.ViewProjections.Home
 
         public TaggedBlogPostsViewModel Project(TaggedBlogPostsBindingModel input)
         {
-            var posts = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where IsPublished==true order by PubDate desc")
-                     .Where(b => b.Tags.Any(t => t.Slug == input.Tag))
+            var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
+                         where p.IsPublished && p.Tags.Contains(input.Tag)
+                         orderby p.PubDate descending
+                         select p)
                      .ToList();
             if (posts.Count == 0)
                 return null;
-            var tagName = posts.First().Tags.First(w => w.Slug == input.Tag).Name;
+            var tagName = _db.SelectKey<Tag>(DBTableNames.Tags, posts.First().Tags[0]).Name;
             return new TaggedBlogPostsViewModel
             {
                 Posts = posts,

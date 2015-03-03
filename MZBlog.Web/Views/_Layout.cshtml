@@ -1,4 +1,5 @@
-﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+﻿@using MZBlog.Core.Extensions
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -59,11 +60,11 @@
                         </strong>
                     </div>
                     <div class="list-group">
-                        @foreach (var tag in ViewBag.TagCould.Value.Tags)
+                        @foreach (MZBlog.Core.Documents.Tag tag in ViewBag.TagCould.Value.Tags)
                         {
-                            <a href="~/tag/@tag.Key.Slug" class="list-group-item">
-                                <span class="badge">@tag.Value</span>
-                                @tag.Key.Name
+                            <a href="~/tag/@tag.Slug" class="list-group-item">
+                                <span class="badge">@tag.PostsCount</span>
+                                @tag.Name
                             </a>
                         }
                     </div>

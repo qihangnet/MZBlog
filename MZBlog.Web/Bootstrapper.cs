@@ -2,6 +2,7 @@
 using MZBlog.Core;
 using MZBlog.Core.Cache;
 using MZBlog.Core.Documents;
+using MZBlog.Core.Extensions;
 using MZBlog.Web.Features;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -41,6 +42,7 @@ namespace MZBlog.Web
             container.Register(typeof(ICache), typeof(RuntimeCache));
 
             RegisterIViewProjections(container);
+            TagExtension.SetupViewProjectionFactory(container.Resolve<IViewProjectionFactory>());
             RegisterICommandInvoker(container);
             container.Register<DB.AutoBox>(this.Database);
             //container.Register(typeof(MongoDatabase), (cContainer, overloads) => Database);

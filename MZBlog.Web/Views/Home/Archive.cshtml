@@ -31,7 +31,7 @@
             <i class="glyphicon glyphicon-tags"></i>
             @foreach (var tag in blogPost.Tags)
             {
-                <text> [ <a href="~/tag/@tag.Slug">@tag.Name</a> ]</text>
+                <text> [ <a href="~/tag/@tag">@tag.AsTag().Name</a> ]</text>
             }
         </div>
     </article>

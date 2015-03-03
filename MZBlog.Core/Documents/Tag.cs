@@ -1,11 +1,11 @@
-﻿using System;
-namespace MZBlog.Core.Documents
+﻿namespace MZBlog.Core.Documents
 {
-    [Serializable]
     public class Tag
     {
+        public string Slug { get; set; }
+
         public string Name { get; set; }
 
-        public string Slug { get; set; }
+        public int PostsCount { get; set; }
     }
 }

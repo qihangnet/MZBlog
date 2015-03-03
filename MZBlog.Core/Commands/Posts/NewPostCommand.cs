@@ -2,6 +2,7 @@
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MZBlog.Core.Commands.Posts
@@ -51,12 +52,31 @@ namespace MZBlog.Core.Commands.Posts
                            };
             if (!command.Tags.IsNullOrWhitespace())
             {
-                post.Tags = command.Tags.Trim().Split(',')
-                .Select(t => new Tag { Name = t.Trim(), Slug = t.Trim().ToSlug() })
-                .ToArray();
+                var tags = command.Tags.Trim().Split(',').Select(s => s.Trim());
+                post.Tags = tags.Select(s => s.ToSlug()).ToArray();
+                foreach (var tag in tags)
+                {
+                    var slug = tag.ToSlug();
+                    var tagEntry = _db.SelectKey<Tag>(DBTableNames.Tags, slug);
+                    if (tagEntry == null)
+                    {
+                        tagEntry = new Tag
+                        {
+                            Slug = slug,
+                            Name = tag,
+                            PostsCount = 1
+                        };
+                        _db.Insert(DBTableNames.Tags, tagEntry);
+                    }
+                    else
+                    {
+                        tagEntry.PostsCount++;
+                        _db.Update(DBTableNames.Tags, tagEntry);
+                    }
+                }
             }
             else
-                post.Tags = new Tag[] { };
+                post.Tags = new string[] { };
 
             var result = _db.Insert(DBTableNames.BlogPosts, post);
 

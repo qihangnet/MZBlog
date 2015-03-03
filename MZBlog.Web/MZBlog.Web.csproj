@@ -273,10 +273,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\MZBlog.Core\MZBlog.Core.csproj">
-      <Project>{D6DB6C53-3F52-4850-9FA1-80127CE45BB4}</Project>
+      <Project>{d6db6c53-3f52-4850-9fa1-80127ce45bb4}</Project>
       <Name>MZBlog.Core</Name>
     </ProjectReference>
   </ItemGroup>

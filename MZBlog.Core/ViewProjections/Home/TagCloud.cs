@@ -1,7 +1,6 @@
 ﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
@@ -20,7 +19,7 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class TagCloudViewModel
     {
-        public Dictionary<Tag, int> Tags { get; set; }
+        public IEnumerable<Tag> Tags { get; set; }
     }
 
     public class TagCloudViewProjection : IViewProjection<TagCloudBindingModel, TagCloudViewModel>
@@ -36,14 +35,10 @@ namespace MZBlog.Core.ViewProjections.Home
         {
             var result = new Dictionary<Tag, int>();
             var tags = _db.Select<Tag>("from " + DBTableNames.Tags);
-            var blogPosts = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts);
-            foreach (var tag in tags)
-            {
-                result.Add(tag, blogPosts.Count(w => w.Tags.Select(s => s.Slug).Contains(tag.Slug)));
-            }
+
             return new TagCloudViewModel
             {
-                Tags = result
+                Tags = tags
             };
         }
     }

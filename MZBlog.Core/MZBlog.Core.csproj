@@ -79,6 +79,7 @@
     <Compile Include="Documents\Tag.cs" />
     <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TagExtension.cs" />
     <Compile Include="ICommandInvoker.cs" />
     <Compile Include="ObjectId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="ViewProjections\Home\RecentBlogPosts.cs" />
     <Compile Include="ViewProjections\Home\IntervalBlogPosts.cs" />
     <Compile Include="ViewProjections\Home\TagCloud.cs" />
+    <Compile Include="ViewProjections\Home\TagDetail.cs" />
     <Compile Include="ViewProjections\Home\TaggedBlogPosts.cs" />
     <Compile Include="ViewProjections\Home\RecentBlogPostsSummary.cs" />
     <Compile Include="IViewProjectionFactory.cs" />
