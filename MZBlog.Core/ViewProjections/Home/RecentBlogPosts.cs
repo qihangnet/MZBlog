@@ -53,7 +53,7 @@ namespace MZBlog.Core.ViewProjections.Home
                          orderby p.PubDate descending
                          select p)
                          .Skip(skip)
-                         .Take(input.Take)
+                         .Take(input.Take+1)
                          .ToList()
                          .AsReadOnly();
 
