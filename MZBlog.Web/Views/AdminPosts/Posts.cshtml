@@ -52,29 +52,28 @@
                 </tr>
             }
         </tbody>
-        @if (Model.Page > 1)
-        {
-            <tfoot>
-                <tr>
-                    <td colspan="2">
-                        @if (Model.HasPrevPage)
-                        {
-                            if (Model.Page == 2)
-                            {
-                                <a href="~/mz-admin/posts/" title="较新的"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                            }
-                            else
-                            {
-                                <a href="~/mz-admin/posts/@(Model.Page - 1)" title="较新的"><i class="glyphicon glyphicon-arrow-left"></i></a>
-                            }
-                        }
-                        @if (Model.HasNextPage)
-                        {
-                            <a href="~/mz-admin/posts/@(Model.Page + 1)" title="较旧的"><i class="glyphicon glyphicon-arrow-right"></i></a>
-                        }
-                    </td>
-                </tr>
-            </tfoot>
-        }
     </table>
+    <ul class="pager">
+
+        @if (Model.HasPrevPage)
+        {
+            <li class="previous">
+                @if (Model.Page == 2)
+                {
+                    <a href="~/mz-admin/posts/" title="较新的"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                }
+                else
+                {
+                    <a href="~/mz-admin/posts/@(Model.Page - 1)" title="较新的"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                }
+            </li>
+        }
+        @if (Model.HasNextPage)
+        {
+            <li class="next">
+                <a href="~/mz-admin/posts/@(Model.Page + 1)" title="较旧的"><i class="glyphicon glyphicon-arrow-right"></i></a>
+            </li>
+        }
+    </ul>
+
 </div>

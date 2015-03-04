@@ -41,10 +41,8 @@ namespace MZBlog.Core.ViewProjections.Admin
                 PostsCount = postCount,
                 CommentsCount = _db.SelectCount("from " + DBTableNames.BlogComments)
             };
-            //TODO Tag统计
-            //var tags = from post in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
-            //           select post.Tags;
-            //stat.TagsCount = result.Count;
+
+            stat.TagsCount = (int)_db.SelectCount("from " + DBTableNames.Tags);
 
             return stat;
         }

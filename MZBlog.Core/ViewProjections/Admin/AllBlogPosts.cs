@@ -48,8 +48,13 @@ namespace MZBlog.Core.ViewProjections.Admin
         {
             var skip = (input.Page - 1) * input.Take;
 
-            var posts = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " order by DateUTC desc limit " + skip + "," + input.Take + 1)
-                .ToList().AsReadOnly();
+            var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
+                         orderby p.DateUTC descending
+                         select p)
+                        .Skip(skip)
+                        .Take(input.Take + 1)
+                        .ToList()
+                        .AsReadOnly();
 
             var pagedPosts = posts.Take(input.Take);
             var hasNextPage = posts.Count > input.Take;
