@@ -48,7 +48,7 @@ namespace MZBlog.Core.Commands.Posts
                     var tagEntry = _db.SelectKey<Tag>(DBTableNames.Tags, slug);
                     if (tagEntry != null)
                     {
-                        tagEntry.PostsCount--;
+                        tagEntry.PostCount--;
                         _db.Update(DBTableNames.Tags, tagEntry);
                     }
                 }
@@ -77,13 +77,13 @@ namespace MZBlog.Core.Commands.Posts
                         {
                             Slug = slug,
                             Name = tag,
-                            PostsCount = 1
+                            PostCount = 1
                         };
                         _db.Insert(DBTableNames.Tags, tagEntry);
                     }
                     else
                     {
-                        tagEntry.PostsCount++;
+                        tagEntry.PostCount++;
                         _db.Update(DBTableNames.Tags, tagEntry);
                     }
                 }

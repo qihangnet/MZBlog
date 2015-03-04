@@ -63,7 +63,7 @@
                         @foreach (MZBlog.Core.Documents.Tag tag in ViewBag.TagCould.Value.Tags)
                         {
                             <a href="~/tag/@tag.Slug" class="list-group-item">
-                                <span class="badge">@tag.PostsCount</span>
+                                <span class="badge">@tag.PostCount</span>
                                 @tag.Name
                             </a>
                         }
