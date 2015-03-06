@@ -37,7 +37,9 @@
                 @RenderBody()
             </div>
             <div class="col-lg-3 visible-lg sidebar">
+                @Html.Partial("_AboutMe")
                 <div class="panel panel-default">
+
                     <div class="panel-heading">
                         <span class="glyphicon glyphicon-sort-by-order"></span>
                         <strong>
@@ -69,6 +71,7 @@
                         }
                     </div>
                 </div>
+                @Html.Partial("_Links")
             </div>
         </div>
     </div>

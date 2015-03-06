@@ -276,6 +276,7 @@
     <Content Include="Views\Home\_AboutMe.cshtml" />
     <Content Include="Views\Admin\ChangeProfile.cshtml" />
     <Content Include="scripts\jquery-1.11.2.min.map" />
+    <Content Include="Views\Home\_Links.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
