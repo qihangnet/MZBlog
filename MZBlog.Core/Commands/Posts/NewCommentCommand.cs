@@ -16,7 +16,6 @@ namespace MZBlog.Core.Commands.Posts
 
         public SpamShield SpamShield { get; set; }
 
-        [Required]
         public string PostId { get; set; }
 
         [Required]
@@ -29,7 +28,7 @@ namespace MZBlog.Core.Commands.Posts
         public string SiteUrl { get; set; }
 
         [Required]
-        [MinLength(2)]
+        [MinLength(3)]
         public string Content { get; set; }
 
         public string IPAddress { get; set; }
