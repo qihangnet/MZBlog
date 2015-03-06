@@ -1,6 +1,7 @@
 ﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MZBlog.Core.Commands.Posts
 {
@@ -15,14 +16,20 @@ namespace MZBlog.Core.Commands.Posts
 
         public SpamShield SpamShield { get; set; }
 
+        [Required]
         public string PostId { get; set; }
 
+        [Required]
         public string NickName { get; set; }
 
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         public string SiteUrl { get; set; }
 
+        [Required]
+        [MinLength(2)]
         public string Content { get; set; }
 
         public string IPAddress { get; set; }

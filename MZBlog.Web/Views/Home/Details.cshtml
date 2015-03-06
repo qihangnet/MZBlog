@@ -97,19 +97,22 @@
 <a name="add_comment"></a>
 <div>
     <form action="~/comment/@Model.BlogPost.TitleSlug" method="post" role="form">
+        <div class="validation-summary-valid" data-valmsg-summary="true">
+            <ul><li style="display:none"></li></ul>
+        </div>
         <input id="_tick" type="hidden" name="tick" value="@ViewBag.Tick" />
         <input id="_hash" type="hidden" name="hash" value="" />
         <div class="form-group">
-            <input class="form-control" type="text" name="NickName" placeholder="昵称" value="@ViewBag.UserInfo_ScreenName" required />
+            <input class="form-control" type="text" name="NickName" placeholder="昵称" value="@ViewBag.UserInfo_ScreenName" data-val="true" data-val-required="人过总得留个名不是？" />
         </div>
         <div class="form-group">
-            <input class="form-control" type="text" name="Email" placeholder="邮箱，仅用于头像 (Gavatar)" value="@ViewBag.UserInfo_Email" required />
+            <input class="form-control" type="email" name="Email" placeholder="邮箱，仅用于头像 (Gavatar)" value="@ViewBag.UserInfo_Email" data-val="true" data-val-required="添邮箱就可以显示你的头像啦，不填是不行的哦~~" />
         </div>
         <div class="form-group">
             <input class="form-control" type="text" name="SiteUrl" placeholder="主页" value="@ViewBag.UserInfo_Url" />
         </div>
         <div class="form-group">
-            <textarea class="form-control" rows="5" name="Content" placeholder="说两句吧" required></textarea>
+            <textarea class="form-control" rows="5" name="Content" placeholder="说两句吧" data-val="true" data-val-required="雁过留声，总得说点什么吧？" data-val-length-min="3" data-val-length="怎么着也得说3个字以上吧，:D"></textarea>
         </div>
         <p>
             <input type="submit" class="btn btn-primary" value="提交评论" disabled />
@@ -118,6 +121,8 @@
 </div>
 
 @section PostScripts{
+<script src="~/scripts/jquery.validate.min.js"></script>
+<script src="~/scripts/jquery.validate.unobtrusive.min.js"></script>
     <!-- for Highlight.js support -->
     <link href="~/content/Highlight/vs.css" rel="stylesheet" />
     <script src="~/scripts/Highlight/highlight.pack.js"></script>

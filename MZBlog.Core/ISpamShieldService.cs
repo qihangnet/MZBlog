@@ -2,13 +2,15 @@
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MZBlog.Core
 {
     public class SpamShield
     {
+        [Required]
         public string Tick { get; set; }
-
+        [Required]
         public string Hash { get; set; }
     }
 
