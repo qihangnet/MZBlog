@@ -60,6 +60,11 @@ namespace MZBlog.Web
             get
             {
                 var dbPath = Path.Combine(this.RootPathProvider.GetRootPath(), "App_Data", "ibox");
+                if (!Directory.Exists(dbPath))
+                {
+                    Directory.CreateDirectory(dbPath);
+                }
+
                 var server = new DB(dbPath);
                 var config = server.GetConfig();
                 config.EnsureTable<Author>(DBTableNames.Authors, "Id");
