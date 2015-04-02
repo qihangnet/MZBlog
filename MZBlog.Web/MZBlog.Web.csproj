@@ -240,6 +240,7 @@
     <Compile Include="ErrorHandling\MZBlog404Handler.cs" />
     <Compile Include="Features\CommandInvokerFactory.cs" />
     <Compile Include="Features\AppConfiguration.cs" />
+    <Compile Include="Features\NancyCompressionExtenstion.cs" />
     <Compile Include="Features\ViewProjectionFactory.cs" />
     <Compile Include="Responses\RssResponse.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />

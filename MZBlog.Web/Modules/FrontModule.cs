@@ -1,5 +1,6 @@
 ﻿using MZBlog.Core;
 using MZBlog.Core.ViewProjections.Home;
+using MZBlog.Web.Features;
 using Nancy;
 
 namespace MZBlog.Web.Modules
@@ -14,6 +15,7 @@ namespace MZBlog.Web.Modules
 
             After.AddItemToEndOfPipeline(SetRecentBlogPosts);
             After.AddItemToEndOfPipeline(SetTagCloud);
+            After.AddItemToEndOfPipeline(NancyCompressionExtenstion.CheckForCompression);
         }
 
         private void SetTagCloud(NancyContext obj)
