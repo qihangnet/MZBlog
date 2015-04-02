@@ -14,7 +14,6 @@
 </div>
 
 <div class="row">
-    <article class="col-lg-6" style="padding-left:0;">
         <form method="post" role="form" action="~/mz-admin/posts/edit/@Model.BlogPost.Id">
             <div class="form-group">
                 <input id="post-title" type="text" class="form-control" name="Title" placeholder="标题" value="@Model.BlogPost.Title" required />
@@ -23,7 +22,7 @@
                 <input type="text" class="form-control" name="TitleSlug" placeholder="固定链接Key" value="@Model.BlogPost.TitleSlug" required />
             </div>
             <div class="form-group">
-                <textarea id="post-content" rows="30" name="MarkDown" class="form-control" placeholder="内容" required>@Model.BlogPost.MarkDown</textarea>
+                <textarea id="post-content" data-provide="markdown" rows="30" name="MarkDown" placeholder="内容" required>@Model.BlogPost.MarkDown</textarea>
             </div>
             <div class="form-group">
                 <input name="Tags" id="tags" class="form-control" value="@(Model.BlogPost.Tags==null?string.Empty:string.Join(",", Model.BlogPost.Tags.Select(s=>s.AsTag().Name)))" />
@@ -37,38 +36,11 @@
                 <input type="submit" value="保存" class="btn btn-primary pull-right" />
             </div>
         </form>
-    </article>
-    <div class="col-lg-6" style="padding:0;">
-        <article class="panel panel-default">
-            <header class="panel-heading">
-                <h3 class="panel-title">
-                    <a id="post-title-preview" href="@Model.BlogPost.GetLink()">@Model.BlogPost.Title</a>
-                </h3>
-            </header>
-            <div class="panel-meta text-right">
-                <span class="author">@ViewBag.CurrentUser.Value.DisplayName</span>
-                发表于
-                <time>@DateTime.UtcNow.ToChineseTime().ToString("yyyy-MM-dd hh:mm")</time>
-            </div>
-            <div id="post-content-preview" class="panel-body">
-                @Html.Raw(Model.BlogPost.Content)
-            </div>
-        </article>
-    </div>
 </div>
 @section PostScripts{
     <script src="~/scripts/jquery.tagsinput.js"></script>
     <script src="~/scripts/markdown.js"></script>
     <script>
         $('#tags').tagsInput({ 'width': '100%', 'defaultText': '添加标签' });
-        $('#post-title').on('change', function () {
-            var _title = $(this).val();
-            $('#post-title-preview').text(_title);
-        });
-        $('#post-content').on('keyup', function () {
-            var _contentHtml = markdown.toHTML($('#post-content').val());
-            $("#post-content-preview").html(_contentHtml);
-            $('pre code').each(function (i, e) { hljs.highlightBlock(e) });
-        });
     </script>
 }

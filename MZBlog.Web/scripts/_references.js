@@ -9,3 +9,5 @@
 /// <reference path="jquery.unobtrusive-ajax.js" />
 /// <reference path="bootstrap.min.js" />
 /// <reference path="jquery.validate.js" />
+/// <reference path="bootstrap-markdown.js" />
+/// <reference path="bootstrap-markdown.zh.js" />

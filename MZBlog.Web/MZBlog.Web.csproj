@@ -76,20 +76,28 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="content\css\admin.css" />
-    <Content Include="content\css\admin.min.css">
-      <DependentUpon>admin.css</DependentUpon>
-    </Content>
     <Content Include="content\css\font-awesome.css" />
     <Content Include="content\css\font-awesome.min.css" />
+    <Content Include="content\css\mzblog.css">
+      <DependentUpon>mzblog.less</DependentUpon>
+    </Content>
     <Content Include="content\css\mzblog.min.css">
       <DependentUpon>mzblog.css</DependentUpon>
     </Content>
-    <Content Include="content\css\sb-admin.css" />
-    <Content Include="content\css\sb-admin.min.css">
-      <DependentUpon>sb-admin.css</DependentUpon>
+    <Content Include="content\css\mz-admin.css.map">
+      <DependentUpon>mz-admin.css</DependentUpon>
     </Content>
-    <Content Include="content\css\mzblog.css" />
+    <None Include="content\css\mz-admin.less" />
+    <Content Include="content\css\mzblog.css.map">
+      <DependentUpon>mzblog.css</DependentUpon>
+    </Content>
+    <None Include="content\css\mzblog.less" />
+    <Content Include="content\css\mz-admin.css">
+      <DependentUpon>mz-admin.less</DependentUpon>
+    </Content>
+    <Content Include="content\css\mz-admin.min.css">
+      <DependentUpon>mz-admin.css</DependentUpon>
+    </Content>
     <Content Include="content\fonts\fontawesome-webfont.svg" />
     <Content Include="content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="content\Highlight\arta.css" />
@@ -124,6 +132,8 @@
     <EmbeddedResource Include="ErrorHandling\Resources\404.html" />
     <Content Include="content\images\ymz.jpg" />
     <Content Include="favicon.ico" />
+    <Content Include="scripts\bootstrap-markdown.js" />
+    <Content Include="scripts\bootstrap-markdown.zh.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\Highlight\highlight.pack.js" />
@@ -207,6 +217,7 @@
     <Content Include="content\bootstrap\bootstrap.less" />
     <Content Include="content\bootstrap\badges.less" />
     <Content Include="content\bootstrap\alerts.less" />
+    <Content Include="content\bootstrap-markdown\bootstrap-markdown.less" />
     <None Include="scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="scripts\jquery-1.11.2.js" />
     <Content Include="scripts\jquery-1.11.2.min.js" />
