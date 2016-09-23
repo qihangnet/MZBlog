@@ -152,6 +152,4 @@ $RECYCLE.BIN/
 
 packages/
 
-Itmeze.Web/uploads/*
-
-Itmeze.Web/Web.Publish.config
+*.userprefs
