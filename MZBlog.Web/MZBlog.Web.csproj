@@ -74,8 +74,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="content\css\font-awesome.css" />
-    <Content Include="content\css\font-awesome.min.css" />
     <Content Include="content\css\mzblog.css">
       <DependentUpon>mzblog.less</DependentUpon>
     </Content>
@@ -216,12 +214,16 @@
     <Content Include="content\bootstrap\badges.less" />
     <Content Include="content\bootstrap\alerts.less" />
     <Content Include="content\bootstrap-markdown\bootstrap-markdown.less" />
-    <None Include="scripts\jquery-1.11.2.intellisense.js" />
-    <Content Include="scripts\jquery-1.11.2.js" />
-    <Content Include="scripts\jquery-1.11.2.min.js" />
+    <None Include="scripts\jquery-3.1.0.intellisense.js" />
+    <Content Include="scripts\jquery-3.1.0.js" />
+    <Content Include="scripts\jquery-3.1.0.min.js" />
+    <Content Include="scripts\jquery-3.1.0.slim.js" />
+    <Content Include="scripts\jquery-3.1.0.slim.min.js" />
     <Content Include="scripts\jquery.tagsinput.js" />
     <Content Include="scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="scripts\jquery-3.1.0.slim.min.map" />
+    <Content Include="scripts\jquery-3.1.0.min.map" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
     <Content Include="scripts\jquery.validate.js" />
     <Content Include="scripts\jquery.validate.min.js" />
@@ -284,7 +286,6 @@
     <Content Include="Views\_LoginLayout.cshtml" />
     <Content Include="Views\Home\_AboutMe.cshtml" />
     <Content Include="Views\Admin\ChangeProfile.cshtml" />
-    <Content Include="scripts\jquery-1.11.2.min.map" />
     <Content Include="Views\Home\_Links.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
