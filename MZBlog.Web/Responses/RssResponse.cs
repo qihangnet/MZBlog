@@ -9,48 +9,44 @@ using System.Xml;
 
 namespace MZBlog.Web.Responses
 {
-    public class RssResponse : Response
-    {
-        private string RssTitle { get; set; }
+	public class RssResponse : Response
+	{
+		private string RssTitle { get; set; }
 
-        private Uri BaseUrl { get; set; }
+		private Uri BaseUrl { get; set; }
 
-        public RssResponse(IEnumerable<BlogPost> model, string rssTitle, Uri baseUrl)
-        {
-            RssTitle = rssTitle; ;
-            BaseUrl = baseUrl;
+		public RssResponse(IEnumerable<BlogPost> model, string rssTitle, Uri baseUrl)
+		{
+			RssTitle = rssTitle; ;
+			BaseUrl = baseUrl;
 
-            Contents = getXmlContent(model);
-            ContentType = "application/rss+xml";
-            StatusCode = HttpStatusCode.OK;
-        }
+			Contents = getXmlContent(model);
+			ContentType = "application/rss+xml";
+			StatusCode = HttpStatusCode.OK;
+		}
 
-        private Action<Stream> getXmlContent(IEnumerable<BlogPost> model)
-        {
-            var items = model.Select(post =>
-                new SyndicationItem(
-                    title: post.Title,
-                    content: post.Content,
-                    itemAlternateLink: new Uri(BaseUrl + post.GetLink().TrimStart('/')),
-                    id: post.Id,
-                    lastUpdatedTime: post.PubDate)
-                                                 {
-                                                     PublishDate = post.PubDate,
-                                                     Summary = new TextSyndicationContent(post.Content, TextSyndicationContentKind.Html)
-                                                 })
-                                                 .ToList();
+		private Action<Stream> getXmlContent(IEnumerable<BlogPost> model)
+		{
+			var items = model.Select(post =>
+									 new SyndicationItem(post.Title, post.Content, new Uri(BaseUrl + post.GetLink().TrimStart('/')))
+									 {
+										 Id = post.Id,
+										 LastUpdatedTime = post.DateUTC,
+										 PublishDate = post.PubDate,
+										 Summary = new TextSyndicationContent(post.Content, TextSyndicationContentKind.Html)
+									 }).ToList();
 
-            var feed = new SyndicationFeed(RssTitle, RssTitle, BaseUrl, items);
+			var feed = new SyndicationFeed(RssTitle, RssTitle, BaseUrl, items);
 
-            var formatter = new Rss20FeedFormatter(feed);
+			var formatter = new Rss20FeedFormatter(feed);
 
-            return stream =>
-            {
-                using (var writer = XmlWriter.Create(stream))
-                {
-                    formatter.WriteTo(writer);
-                }
-            };
-        }
-    }
+			return stream =>
+			{
+				using (var writer = XmlWriter.Create(stream))
+				{
+					formatter.WriteTo(writer);
+				}
+			};
+		}
+	}
 }
