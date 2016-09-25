@@ -8,13 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MZBlog.Core", "MZBlog.Core\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MZBlog.Core.Tests", "MZBlog.Core.Tests\MZBlog.Core.Tests.csproj", "{576BEFE9-4A67-4DBB-B740-14F84F714170}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E2A0F0CB-95A4-4AA3-9DC2-FA5D26A55053}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{131EA229-EBF3-4B11-9B70-170752A3966D}"
 EndProject
 Global
