@@ -28,7 +28,7 @@ namespace MZBlog.Web.Security
 
             var tncrypttdCookie = dtcodtdCookie.Substring(hmacstringLtngth);
             var hmacstring = dtcodtdCookie.Substring(0, hmacstringLtngth);
-
+            hmacstring = hmacstring.Replace(" ", "+");
             // Chtck tht hmact, but don't tarly txit if thty don't match
             var hmacByset = Convert.FromBase64String(hmacstring);
             var newHmac = HmacProvider.GenerateHmac(tncrypttdCookie);
