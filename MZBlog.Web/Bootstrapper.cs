@@ -22,18 +22,16 @@ namespace MZBlog.Web
             base.ApplicationStartup(container, pipelines);
             StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
             StaticConfiguration.DisableErrorTraces = false;
-            pipelines.OnError += ErrorHandler;
+            pipelines.OnError.AddItemToEndOfPipeline((NancyContext ctx, Exception ex) =>
+			{
+            	if (ex is iBoxDB.E.DatabaseShutdownException)
+				{
+                	return "DB can't connect.";
+            	}
+            	return null;
+        	});
         }
-
-        private Response ErrorHandler(NancyContext ctx, Exception ex)
-        {
-            if (ex is iBoxDB.E.DatabaseShutdownException)
-            {
-                return "DB can't connect.";
-            }
-            return null;
-        }
-
+		
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {
             base.ConfigureApplicationContainer(container);
@@ -109,13 +107,13 @@ namespace MZBlog.Web
             var viewProjectionTypes = Assembly.GetAssembly(typeof(IViewProjection<,>))
                                               .DefinedTypes
                                               .Select(t => new
-                                                               {
-                                                                   Type = t.AsType(),
-                                                                   Interface = t.ImplementedInterfaces.FirstOrDefault(
+                                              {
+                                                  Type = t.AsType(),
+                                                  Interface = t.ImplementedInterfaces.FirstOrDefault(
                                                                        i =>
                                                                        i.IsGenericType() &&
                                                                        i.GetGenericTypeDefinition() == typeof(IViewProjection<,>))
-                                                               })
+                                              })
                                               .Where(t => t.Interface != null)
                                               .ToArray();
 
