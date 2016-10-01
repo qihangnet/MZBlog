@@ -1,8 +1,8 @@
 /* ===================================================
- * bootstrap-markdown.js v2.8.0
+ * bootstrap-markdown.js v2.10.0
  * http://github.com/toopay/bootstrap-markdown
  * ===================================================
- * Copyright 2013-2015 Taufan Aditya
+ * Copyright 2013-2016 Taufan Aditya
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,18 @@
  * limitations under the License.
  * ========================================================== */
 
-!function ($) {
-
+(function(factory){
+    if (typeof define === "function" && define.amd) {
+        //RequireJS
+        define(["jquery"], factory);
+    } else if (typeof exports === 'object') {
+        //Backbone.js
+        factory(require('jquery'));
+    } else {
+        //Jquery plugin
+        factory(jQuery);
+    }
+}(function($){
   "use strict"; // jshint ;_;
 
   /* MARKDOWN CLASS DEFINITION
@@ -151,15 +161,19 @@
         this.$textarea.css('resize',this.$options.resize);
       }
 
-      this.$textarea
-        .on('focus',    $.proxy(this.focus, this))
-        .on('keypress', $.proxy(this.keypress, this))
-        .on('keyup',    $.proxy(this.keyup, this))
-        .on('change',   $.proxy(this.change, this))
-        .on('select',   $.proxy(this.select, this));
+      this.$textarea.on({
+          'focus' : $.proxy(this.focus, this),
+          'keyup' : $.proxy(this.keyup, this),
+          'change' : $.proxy(this.change, this),
+          'select' : $.proxy(this.select, this)
+      });
 
       if (this.eventSupported('keydown')) {
         this.$textarea.on('keydown', $.proxy(this.keydown, this));
+      }
+
+      if (this.eventSupported('keypress')) {
+        this.$textarea.on('keypress', $.proxy(this.keypress, this))
       }
 
       // Re-attach markdown data
@@ -219,6 +233,8 @@
     } else {
       $editor.removeClass('md-fullscreen-mode');
       $('body').removeClass('md-nooverflow');
+
+      if (this.$isPreview == true) this.hidePreview().showPreview()
     }
 
     this.$isFullscreen = mode;
@@ -253,7 +269,24 @@
         // Merge the main & additional button groups together
         var allBtnGroups = [];
         if (options.buttons.length > 0) allBtnGroups = allBtnGroups.concat(options.buttons[0]);
-        if (options.additionalButtons.length > 0) allBtnGroups = allBtnGroups.concat(options.additionalButtons[0]);
+        if (options.additionalButtons.length > 0) {
+          // iterate the additional button groups
+          $.each(options.additionalButtons[0], function(idx, buttonGroup){
+            
+            // see if the group name of the addional group matches an existing group
+            var matchingGroups = $.grep(allBtnGroups, function(allButtonGroup, allIdx){
+              return allButtonGroup.name === buttonGroup.name;
+            });
+
+            // if it matches add the addional buttons to that group, if not just add it to the all buttons group
+            if(matchingGroups.length > 0) {
+              matchingGroups[0].data = matchingGroups[0].data.concat(buttonGroup.data);
+            } else {              
+              allBtnGroups.push(options.additionalButtons[0][idx]);
+            }
+
+          });
+        } 
 
         // Reduce and/or reorder the button groups
         if (options.reorderButtonGroups.length > 0) {
@@ -444,7 +477,9 @@
       // parse with supported markdown parser
       var val = val || this.$textarea.val();
 
-      if (typeof markdown == 'object') {
+      if (this.$options.parser) {
+        content = this.$options.parser(val);
+      } else if (typeof markdown == 'object') {
         content = markdown.toHTML(val);
       } else if (typeof marked == 'function') {
         content = marked(val);
@@ -463,6 +498,12 @@
           content,
           callbackContent;
 
+      if (this.$isPreview == true) {
+        // Avoid sequenced element creation on missused scenario
+        // @see https://github.com/toopay/bootstrap-markdown/issues/170
+        return this;
+      }
+      
       // Give flag that tell the editor enter preview mode
       this.$isPreview = true;
       // Disable all buttons
@@ -660,16 +701,11 @@
       return;
     }
 
-  , __parseButtonNameParam: function(nameParam) {
-      var buttons = [];
+  , __parseButtonNameParam: function (names) {
+      return typeof names == 'string' ?
+                      names.split(' ') :
+                      names;
 
-      if (typeof nameParam == 'string') {
-        buttons = nameParam.split(',')
-      } else {
-        buttons = nameParam;
-      }
-
-      return buttons;
     }
 
   , enableButtons: function(name) {
@@ -843,7 +879,7 @@
             // Build the original element
             var oldElement = $('<'+editable.type+'/>'),
                 content = this.getContent(),
-                currentContent = (typeof markdown == 'object') ? markdown.toHTML(content) : content;
+                currentContent = this.parseContent(content);
 
             $(editable.attrKeys).each(function(k,v) {
               oldElement.attr(editable.attrKeys[k],editable.attrValues[k]);
@@ -887,13 +923,14 @@
     /* Editor Properties */
     autofocus: false,
     hideable: false,
-    savable:false,
+    savable: false,
     width: 'inherit',
     height: 'inherit',
     resize: 'none',
     iconlibrary: 'glyph',
     language: 'en',
     initialstate: 'editor',
+    parser: null,
 
     /* Buttons Properties */
     buttons: [
@@ -1014,7 +1051,8 @@
 
             link = prompt(e.__localize('Insert Hyperlink'),'http://');
 
-            if (link !== null && link !== '' && link !== 'http://' && link.substr(0,4) === 'http') {
+            var urlRegex = new RegExp('^((http|https)://|(mailto:)|(//))[a-z0-9]', 'i');
+            if (link !== null && link !== '' && link !== 'http://' && urlRegex.test(link)) {
               var sanitizedLink = $('<div>'+link+'</div>').text();
 
               // transform selection and set the cursor into chunked text
@@ -1043,7 +1081,8 @@
 
             link = prompt(e.__localize('Insert Image Hyperlink'),'http://');
 
-            if (link !== null && link !== '' && link !== 'http://' && link.substr(0,4) === 'http') {
+            var urlRegex = new RegExp('^((http|https)://|(//))[a-z0-9]', 'i');
+            if (link !== null && link !== '' && link !== 'http://' && urlRegex.test(link)) {
               var sanitizedLink = $('<div>'+link+'</div>').text();
 
               // transform selection and set the cursor into chunked text
@@ -1348,4 +1387,4 @@
       })
     });
 
-}(window.jQuery);
+}));
