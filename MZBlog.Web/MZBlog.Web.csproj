@@ -170,7 +170,6 @@
     <Content Include="content\css\mz-admin.min.css">
       <DependentUpon>mz-admin.css</DependentUpon>
     </Content>
-    <Content Include="content\fonts\fontawesome-webfont.svg" />
     <Content Include="content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="content\Highlight\arta.css" />
     <Content Include="content\Highlight\ascetic.css" />
@@ -210,11 +209,6 @@
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\Highlight\highlight.pack.js" />
     <Content Include="scripts\html5shiv.js" />
-    <Content Include="content\fonts\fontawesome-webfont.woff2" />
-    <Content Include="content\fonts\fontawesome-webfont.woff" />
-    <Content Include="content\fonts\fontawesome-webfont.ttf" />
-    <Content Include="content\fonts\fontawesome-webfont.eot" />
-    <Content Include="content\fonts\FontAwesome.otf" />
     <Content Include="content\bootstrap-markdown\bootstrap-markdown.less" />
     <Content Include="content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="content\fonts\glyphicons-halflings-regular.woff" />
