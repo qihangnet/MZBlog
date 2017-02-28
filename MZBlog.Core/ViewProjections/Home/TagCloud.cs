@@ -34,7 +34,7 @@ namespace MZBlog.Core.ViewProjections.Home
         public TagCloudViewModel Project(TagCloudBindingModel input)
         {
             var result = new Dictionary<Tag, int>();
-            var tags = _db.Select<Tag>("from " + DBTableNames.Tags +" order by PostCount desc");
+            var tags = _db.Select<Tag>("from " + DBTableNames.Tags + " order by PostCount desc");
 
             return new TagCloudViewModel
             {

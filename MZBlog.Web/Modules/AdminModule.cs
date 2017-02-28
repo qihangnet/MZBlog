@@ -49,7 +49,7 @@ namespace MZBlog.Web.Modules
         private dynamic ChangeProfile()
         {
             var authorModel = _viewProjectionFactory.Get<string, AuthorProfileViewModel>(CurrentUser.Id);
-            return View["ChangeProfile",authorModel];
+            return View["ChangeProfile", authorModel];
         }
 
         private dynamic ChangeProfile(ChangeProfileCommand command)

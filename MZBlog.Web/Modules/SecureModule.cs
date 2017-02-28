@@ -48,7 +48,7 @@ namespace MZBlog.Web.Modules
             if (username.IsNullOrWhitespace())
                 return ctx.GetRedirect("/mz-login?returnUrl=" + Request.Url.Path).WithCookie(FormsAuthentication.CreateLogoutCookie());
 
-            ctx.CurrentUser = new BlogUserIdentity(username, new string[] {"admin" });
+            ctx.CurrentUser = new BlogUserIdentity(username, new string[] { "admin" });
 
             return null;
         }

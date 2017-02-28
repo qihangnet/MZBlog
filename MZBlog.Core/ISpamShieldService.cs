@@ -10,6 +10,7 @@ namespace MZBlog.Core
     {
         [Required]
         public string Tick { get; set; }
+
         [Required]
         public string Hash { get; set; }
     }

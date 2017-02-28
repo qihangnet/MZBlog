@@ -28,10 +28,10 @@ namespace MZBlog.Web.Modules
             if (rss == null)
             {
                 var recentPosts = _viewProjectionFactory.Get<RecentBlogPostsBindingModel, RecentBlogPostsViewModel>(new RecentBlogPostsBindingModel()
-                                                                                                      {
-                                                                                                          Page = 1,
-                                                                                                          Take = 30
-                                                                                                      });
+                {
+                    Page = 1,
+                    Take = 30
+                });
 
                 rss = new RssResponse(recentPosts.Posts, Settings.WebsiteName, new Uri(AppConfiguration.Current.SiteUrl));
                 _cache.Add(cacheKey, rss, 60 * 5);

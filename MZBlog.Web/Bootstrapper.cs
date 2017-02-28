@@ -23,15 +23,15 @@ namespace MZBlog.Web
             StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
             StaticConfiguration.DisableErrorTraces = false;
             pipelines.OnError.AddItemToEndOfPipeline((NancyContext ctx, Exception ex) =>
-			{
-            	if (ex is iBoxDB.E.DatabaseShutdownException)
-				{
-                	return "DB can't connect.";
-            	}
-            	return null;
-        	});
+            {
+                if (ex is iBoxDB.E.DatabaseShutdownException)
+                {
+                    return "DB can't connect.";
+                }
+                return null;
+            });
         }
-		
+
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {
             base.ConfigureApplicationContainer(container);
@@ -51,8 +51,8 @@ namespace MZBlog.Web
             base.ConfigureConventions(nancyConventions);
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("scripts"));
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("content"));
-			nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("css"));
-			nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("fonts"));
+            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("css"));
+            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("fonts"));
         }
 
         public DB.AutoBox Database

@@ -74,13 +74,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="content\css\mzblog.css">
-      <DependentUpon>mzblog.less</DependentUpon>
+    <Content Include="content\css\mz-admin.css">
+      <DependentUpon>mz-admin.less</DependentUpon>
     </Content>
-    <Content Include="content\css\mzblog.min.css">
-      <DependentUpon>mzblog.css</DependentUpon>
-    </Content>
-    <Content Include="content\css\mz-admin.css.map">
+    <Content Include="content\css\mz-admin.min.css">
       <DependentUpon>mz-admin.css</DependentUpon>
     </Content>
     <Content Include="content\bootstrap\wells.less" />
@@ -159,15 +156,12 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <None Include="content\css\mz-admin.less" />
-    <Content Include="content\css\mzblog.css.map">
-      <DependentUpon>mzblog.css</DependentUpon>
-    </Content>
     <None Include="content\css\mzblog.less" />
-    <Content Include="content\css\mz-admin.css">
-      <DependentUpon>mz-admin.less</DependentUpon>
+    <Content Include="content\css\mzblog.css">
+      <DependentUpon>mzblog.less</DependentUpon>
     </Content>
-    <Content Include="content\css\mz-admin.min.css">
-      <DependentUpon>mz-admin.css</DependentUpon>
+    <Content Include="content\css\mzblog.min.css">
+      <DependentUpon>mzblog.css</DependentUpon>
     </Content>
     <Content Include="content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="content\Highlight\arta.css" />

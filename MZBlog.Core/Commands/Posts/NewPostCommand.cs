@@ -2,7 +2,6 @@
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace MZBlog.Core.Commands.Posts
@@ -38,18 +37,18 @@ namespace MZBlog.Core.Commands.Posts
             var markdown = new MarkdownSharp.Markdown();
             //TODO:应该验证TitleSlug是否唯一
             var post = new BlogPost
-                           {
-                               Id = ObjectId.NewObjectId(),
-                               AuthorEmail = command.Author.Email,
-                               AuthorDisplayName = command.Author.DisplayName,
-                               MarkDown = command.MarkDown,
-                               Content = markdown.Transform(command.MarkDown),
-                               PubDate = command.PubDate.CloneToUtc(),
-                               Status = command.Published ? PublishStatus.Published : PublishStatus.Draft,
-                               Title = command.Title,
-                               TitleSlug = command.TitleSlug.IsNullOrWhitespace() ? command.Title.Trim().ToSlug() : command.TitleSlug.Trim().ToSlug(),
-                               DateUTC = DateTime.UtcNow
-                           };
+            {
+                Id = ObjectId.NewObjectId(),
+                AuthorEmail = command.Author.Email,
+                AuthorDisplayName = command.Author.DisplayName,
+                MarkDown = command.MarkDown,
+                Content = markdown.Transform(command.MarkDown),
+                PubDate = command.PubDate.CloneToUtc(),
+                Status = command.Published ? PublishStatus.Published : PublishStatus.Draft,
+                Title = command.Title,
+                TitleSlug = command.TitleSlug.IsNullOrWhitespace() ? command.Title.Trim().ToSlug() : command.TitleSlug.Trim().ToSlug(),
+                DateUTC = DateTime.UtcNow
+            };
             if (!command.Tags.IsNullOrWhitespace())
             {
                 var tags = command.Tags.Trim().Split(',').Select(s => s.Trim());

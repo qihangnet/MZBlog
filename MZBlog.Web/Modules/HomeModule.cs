@@ -82,7 +82,7 @@ namespace MZBlog.Web.Modules
                 ViewBag.Title = "首页";
             else
                 ViewBag.Title = "文章列表";
-            
+
             return View["Index", model];
         }
 
