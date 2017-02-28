@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "content/css/mz-admin.css",
+    "inputFile": "content/css/mz-admin.less"
+  },
+  {
+    "outputFile": "content/css/mzblog.css",
+    "inputFile": "content/css/mzblog.less"
+  }
+]
