@@ -45,9 +45,6 @@
       <HintPath>..\packages\iBoxDB.2.9.1\lib\net45\iBoxDB.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MarkdownSharp">
-      <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
-    </Reference>
     <Reference Include="Pinyin4net">
       <HintPath>..\packages\pinyin4net.1.0.0\lib\net40\Pinyin4net.dll</HintPath>
     </Reference>
@@ -56,6 +53,10 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="Markdig">
+      <HintPath>..\packages\Markdig.0.10.6\lib\net40\Markdig.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\ICache.cs" />
