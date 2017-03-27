@@ -15,6 +15,7 @@
         <script src="~/scripts/html5shiv.js"></script>
         <![endif]-->
     <link href="~/content/css/mzblog.min.css?v=20170228" rel="stylesheet" />
+	<link href="~/content/css/mermaid.css?v=7.0.0" rel="stylesheet" />
 </head>
 <body>
     <nav class="navbar navbar-default" role="navigation">
@@ -81,6 +82,8 @@
     </footer>
     <script src="~/scripts/jquery-3.1.1.min.js"></script>
     <script src="~/scripts/bootstrap.min.js?v=3.3.7"></script>
+	<script src="~/scripts/mermaid.min.js?v=7.0.0"></script>
+	<script>mermaid.initialize({startOnLoad:true});</script>
     @RenderSection("PostScripts", false)
 </body>
 </html>

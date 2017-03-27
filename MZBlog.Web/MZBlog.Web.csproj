@@ -236,6 +236,8 @@
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="css\font-awesome.min.css" />
     <Content Include="css\font-awesome.css" />
+    <Content Include="content\css\mermaid.css" />
+    <Content Include="scripts\mermaid.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ErrorHandling\MZBlog404Handler.cs" />
