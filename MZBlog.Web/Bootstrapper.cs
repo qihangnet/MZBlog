@@ -1,4 +1,8 @@
-﻿using iBoxDB.LocalServer;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using iBoxDB.LocalServer;
 using MZBlog.Core;
 using MZBlog.Core.Cache;
 using MZBlog.Core.Documents;
@@ -8,123 +12,119 @@ using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.TinyIoc;
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 
 namespace MZBlog.Web
 {
-    public class Bootstrapper : DefaultNancyBootstrapper
-    {
-        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
-        {
-            base.ApplicationStartup(container, pipelines);
-            StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
-            StaticConfiguration.DisableErrorTraces = false;
-            pipelines.OnError.AddItemToEndOfPipeline((NancyContext ctx, Exception ex) =>
-            {
-                if (ex is iBoxDB.E.DatabaseShutdownException)
-                {
-                    return "DB can't connect.";
-                }
-                return null;
-            });
-        }
+	public class Bootstrapper : DefaultNancyBootstrapper
+	{
+		protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+		{
+			base.ApplicationStartup(container, pipelines);
+			StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
+			StaticConfiguration.DisableErrorTraces = false;
+			pipelines.OnError.AddItemToEndOfPipeline((NancyContext ctx, Exception ex) =>
+			{
+				if (ex is iBoxDB.E.DatabaseShutdownException)
+				{
+					return "DB can't connect.";
+				}
+				return null;
+			});
+		}
 
-        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {
-            base.ConfigureApplicationContainer(container);
+		protected override void ConfigureApplicationContainer(TinyIoCContainer container)
+		{
+			base.ConfigureApplicationContainer(container);
 
-            container.Register(typeof(ISpamShieldService), typeof(SpamShieldService));
-            container.Register(typeof(ICache), typeof(RuntimeCache));
+			container.Register(typeof(ISpamShieldService), typeof(SpamShieldService));
+			container.Register(typeof(ICache), typeof(RuntimeCache));
 
-            RegisterIViewProjections(container);
-            TagExtension.SetupViewProjectionFactory(container.Resolve<IViewProjectionFactory>());
-            RegisterICommandInvoker(container);
-            container.Register<DB.AutoBox>(this.Database);
-            //container.Register(typeof(MongoDatabase), (cContainer, overloads) => Database);
-        }
+			RegisterIViewProjections(container);
+			TagExtension.SetupViewProjectionFactory(container.Resolve<IViewProjectionFactory>());
+			RegisterICommandInvoker(container);
 
-        protected override void ConfigureConventions(NancyConventions nancyConventions)
-        {
-            base.ConfigureConventions(nancyConventions);
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("scripts"));
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("content"));
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("css"));
-            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("fonts"));
-        }
+			var db = Database("ibox");
+			container.Register(db);
+		}
 
-        public DB.AutoBox Database
-        {
-            get
-            {
-                var dbPath = Path.Combine(this.RootPathProvider.GetRootPath(), "App_Data", "ibox");
-                if (!Directory.Exists(dbPath))
-                {
-                    Directory.CreateDirectory(dbPath);
-                }
+		protected override void ConfigureConventions(NancyConventions nancyConventions)
+		{
+			base.ConfigureConventions(nancyConventions);
+			nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("scripts"));
+			nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("content"));
+			nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("css"));
+			nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("fonts"));
+		}
 
-                var server = new DB(dbPath);
-                var config = server.GetConfig();
-                config.EnsureTable<Author>(DBTableNames.Authors, "Id");
-                //config.EnsureIndex<Author>(DBTableNames.Authors, "Email");
-                config.EnsureTable<BlogPost>(DBTableNames.BlogPosts, "Id");
-                //config.EnsureIndex<BlogPost>(DBTableNames.BlogPosts, "TitleSlug", "Status", "PubDate", "DateUTC");
-                config.EnsureTable<BlogComment>(DBTableNames.BlogComments, "Id");
-                //config.EnsureIndex<BlogComment>(DBTableNames.BlogComments, "PostId");
-                config.EnsureTable<SpamHash>(DBTableNames.SpamHashes, "Id");
-                config.EnsureTable<Tag>(DBTableNames.Tags, "Slug");
+		private DB.AutoBox Database(string folderName)
+		{
+			var dbPath = Path.Combine(RootPathProvider.GetRootPath(), "App_Data", folderName);
+				if (!Directory.Exists(dbPath))
+				{
+					Directory.CreateDirectory(dbPath);
+				}
 
-                var db = server.Open();
-                return db;
-            }
-        }
+				var server = new DB(dbPath);
 
-        public static void RegisterICommandInvoker(TinyIoCContainer container)
-        {
-            var commandInvokerTypes = Assembly.GetAssembly(typeof(ICommandInvoker<,>))
-                                              .DefinedTypes
-                                              .Select(t => new
-                                              {
-                                                  Type = t.AsType(),
-                                                  Interface = t.ImplementedInterfaces.FirstOrDefault(
-                                                      i =>
-                                                      i.IsGenericType() &&
-                                                      i.GetGenericTypeDefinition() == typeof(ICommandInvoker<,>))
-                                              })
-                                              .Where(t => t.Interface != null)
-                                              .ToArray();
+			var config = server.GetConfig();
 
-            foreach (var commandInvokerType in commandInvokerTypes)
-            {
-                container.Register(commandInvokerType.Interface, commandInvokerType.Type);
-            }
+			config.EnsureTable<Author>(DBTableNames.Authors, "Id");
+			//config.EnsureIndex<Author>(DBTableNames.Authors, "Email");
+			config.EnsureTable<BlogPost>(DBTableNames.BlogPosts, "Id");
+			//config.EnsureIndex<BlogPost>(DBTableNames.BlogPosts, "TitleSlug", "Status", "PubDate", "DateUTC");
+			config.EnsureTable<BlogComment>(DBTableNames.BlogComments, "Id");
+			//config.EnsureIndex<BlogComment>(DBTableNames.BlogComments, "PostId");
+			config.EnsureTable<SpamHash>(DBTableNames.SpamHashes, "Id");
+			config.EnsureTable<Tag>(DBTableNames.Tags, "Slug");
 
-            container.Register(typeof(ICommandInvokerFactory), (cContainer, overloads) => new CommandInvokerFactory(cContainer));
-        }
+			var db = server.Open();
+			return db;
+		}
 
-        public static void RegisterIViewProjections(TinyIoCContainer container)
-        {
-            var viewProjectionTypes = Assembly.GetAssembly(typeof(IViewProjection<,>))
-                                              .DefinedTypes
-                                              .Select(t => new
-                                              {
-                                                  Type = t.AsType(),
-                                                  Interface = t.ImplementedInterfaces.FirstOrDefault(
-                                                                       i =>
-                                                                       i.IsGenericType() &&
-                                                                       i.GetGenericTypeDefinition() == typeof(IViewProjection<,>))
-                                              })
-                                              .Where(t => t.Interface != null)
-                                              .ToArray();
+		public static void RegisterICommandInvoker(TinyIoCContainer container)
+		{
+			var commandInvokerTypes = Assembly.GetAssembly(typeof(ICommandInvoker<,>))
+											  .DefinedTypes
+											  .Select(t => new
+											  {
+												  Type = t.AsType(),
+												  Interface = t.ImplementedInterfaces.FirstOrDefault(
+													  i =>
+													  i.IsGenericType() &&
+													  i.GetGenericTypeDefinition() == typeof(ICommandInvoker<,>))
+											  })
+											  .Where(t => t.Interface != null)
+											  .ToArray();
 
-            foreach (var viewProjectionType in viewProjectionTypes)
-            {
-                container.Register(viewProjectionType.Interface, viewProjectionType.Type);
-            }
+			foreach (var commandInvokerType in commandInvokerTypes)
+			{
+				container.Register(commandInvokerType.Interface, commandInvokerType.Type);
+			}
 
-            container.Register(typeof(IViewProjectionFactory), (cContainer, overloads) => new ViewProjectionFactory(cContainer));
-        }
-    }
+			container.Register(typeof(ICommandInvokerFactory), (cContainer, overloads) => new CommandInvokerFactory(cContainer));
+		}
+
+		public static void RegisterIViewProjections(TinyIoCContainer container)
+		{
+			var viewProjectionTypes = Assembly.GetAssembly(typeof(IViewProjection<,>))
+											  .DefinedTypes
+											  .Select(t => new
+											  {
+												  Type = t.AsType(),
+												  Interface = t.ImplementedInterfaces.FirstOrDefault(
+																	   i =>
+																	   i.IsGenericType() &&
+																	   i.GetGenericTypeDefinition() == typeof(IViewProjection<,>))
+											  })
+											  .Where(t => t.Interface != null)
+											  .ToArray();
+
+			foreach (var viewProjectionType in viewProjectionTypes)
+			{
+				container.Register(viewProjectionType.Interface, viewProjectionType.Type);
+			}
+
+			container.Register(typeof(IViewProjectionFactory), (cContainer, overloads) => new ViewProjectionFactory(cContainer));
+		}
+	}
 }
