@@ -66,11 +66,11 @@
     <Reference Include="Nancy.Validation.DataAnnotations">
       <HintPath>..\packages\Nancy.Validation.DataAnnotations.1.4.1\lib\net40\Nancy.Validation.DataAnnotations.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Validation.DataAnnotations.Extensions">
-      <HintPath>..\packages\Nancy.Validation.DataAnnotations.Extensions.0.3.0\lib\net45\Nancy.Validation.DataAnnotations.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy.ViewEngines.Razor">
       <HintPath>..\packages\Nancy.Viewengines.Razor.1.4.3\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Validation.DataAnnotations.Extensions">
+      <HintPath>..\packages\Nancy.Validation.DataAnnotations.Extensions.0.4.0\lib\net45\Nancy.Validation.DataAnnotations.Extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -48,7 +48,7 @@ namespace MZBlog.Core.Commands.Posts
 
 		public CommandResult Execute(NewCommentCommand command)
 		{
-			if (Regex.IsMatch(command.Email, @"smithg\d*@gmail.com") || _spamShield.IsSpam(command.SpamShield))
+			if (Regex.IsMatch(command.Email, @"smith\w\d*@gmail.com") || _spamShield.IsSpam(command.SpamShield))
 			{
 				return new CommandResult("You are a spam!");
 			}
