@@ -154,3 +154,4 @@ packages/
 
 *.userprefs
 /.vs/config/applicationhost.config
+.vs

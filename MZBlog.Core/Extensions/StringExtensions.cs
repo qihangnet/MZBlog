@@ -1,20 +1,13 @@
-﻿using Pinyin4net;
-using Pinyin4net.Format;
-using System.Linq;
+﻿using NPinyin;
 using System.Text.RegularExpressions;
 
 namespace MZBlog.Core.Extensions
 {
     public static class StringExtensions
     {
-        private static readonly HanyuPinyinOutputFormat format;
 
         static StringExtensions()
         {
-            format = new HanyuPinyinOutputFormat();
-            format.ToneType = HanyuPinyinToneType.WITHOUT_TONE;
-            format.VCharType = HanyuPinyinVCharType.WITH_V;
-            format.CaseType = HanyuPinyinCaseType.LOWERCASE;
         }
 
         public static bool IsNullOrWhitespace(this string text)
@@ -50,41 +43,7 @@ namespace MZBlog.Core.Extensions
 
         private static string ConvertChineseToPY(string value)
         {
-            return Regex.Replace(value, "[\u4e00-\u9fa5]", (m) => string.Format(" {0} ", m.Value.ChsToPinYin()));
+            return Regex.Replace(value, "[\u4e00-\u9fa5]", (m) => string.Format(" {0} ", Pinyin.GetPinyin(m.Value).ToLower()));
         }
-
-        #region 汉字转拼音
-
-        /// <summary>
-        /// 简体中文转拼音
-        /// </summary>
-        /// <param name="chs">简体中文字</param>
-        /// <returns>拼音</returns>
-        private static string ChsToPinYin(this string chs)
-        {
-            var myRegex = new Regex("^[\u4e00-\u9fa5]$");
-            var returnstr = "";
-            var nowchar = chs.ToCharArray();
-            for (var j = 0; j < nowchar.Length; j++)
-            {
-                if (myRegex.IsMatch(nowchar[j].ToString()))
-                {
-                    var pingStrs = PinyinHelper.ToHanyuPinyinStringArray(nowchar[j], format);
-                    if (pingStrs.Any())
-                    {
-                        returnstr += pingStrs[0];
-                    }
-                    else
-                        returnstr += nowchar[j].ToString();
-                }
-                else
-                {
-                    returnstr += nowchar[j].ToString();
-                }
-            }
-            return returnstr;
-        }
-
-        #endregion 汉字转拼音
     }
 }

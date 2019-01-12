@@ -38,9 +38,9 @@ namespace MZBlog.Core.Commands.Accounts
             _db = db;
         }
 
-        public LoginCommandResult Execute(LoginCommand loginCommand)
+        public LoginCommandResult Execute(LoginCommand command)
         {
-            var hashedPassword = Hasher.GetMd5Hash(loginCommand.Password);
+            var hashedPassword = Hasher.GetMd5Hash(command.Password);
             if (_db.SelectCount("from " + DBTableNames.Authors) == 0)
             {
                 _db.Insert(DBTableNames.Authors, new Author
@@ -52,13 +52,13 @@ namespace MZBlog.Core.Commands.Accounts
                 });
             }
             var author = from u in _db.Select<Author>("from " + DBTableNames.Authors)
-                         where u.Email == loginCommand.Email && u.HashedPassword == hashedPassword
+                         where u.Email == command.Email && u.HashedPassword == hashedPassword
                          select u;
 
-            if (author.Count() > 0)
+            if (author.Any())
                 return new LoginCommandResult() { Author = author.FirstOrDefault() };
 
-            return new LoginCommandResult(trrorMessage: "用户名或密码不正确") { };
+            return new LoginCommandResult(trrorMessage: "用户名或密码不正确");
         }
     }
 }

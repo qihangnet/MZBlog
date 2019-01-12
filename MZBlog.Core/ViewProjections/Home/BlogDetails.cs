@@ -1,10 +1,11 @@
 ﻿using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 using System.Linq;
+using MediatR;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
-    public class BlogPostDetailsBindingModel
+    public class BlogPostDetailsQuery:IRequest<BlogPostDetailsViewModel>
     {
         public string Permalink { get; set; }
     }
@@ -16,7 +17,7 @@ namespace MZBlog.Core.ViewProjections.Home
         public BlogComment[] Comments { get; set; }
     }
 
-    public class BlogPostDetailsViewProjection : IViewProjection<BlogPostDetailsBindingModel, BlogPostDetailsViewModel>
+    public class BlogPostDetailsViewProjection : RequestHandler<BlogPostDetailsQuery, BlogPostDetailsViewModel>
     {
         private readonly DB.AutoBox _db;
 
@@ -25,9 +26,9 @@ namespace MZBlog.Core.ViewProjections.Home
             _db = db;
         }
 
-        public BlogPostDetailsViewModel Project(BlogPostDetailsBindingModel input)
+        protected override BlogPostDetailsViewModel Handle(BlogPostDetailsQuery request)
         {
-            var post = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where TitleSlug==?", input.Permalink).FirstOrDefault();
+            var post = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where TitleSlug==?", request.Permalink).FirstOrDefault();
             if (post == null)
                 return null;
             post.ViewCount++;

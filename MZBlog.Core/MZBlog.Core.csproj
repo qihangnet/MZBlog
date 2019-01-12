@@ -1,118 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D6DB6C53-3F52-4850-9FA1-80127CE45BB4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>MZBlog.Core</RootNamespace>
-    <AssemblyName>MZBlog.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\ITmeze.Web\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Publish|AnyCPU'">
-    <OutputPath>bin\Publish\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="iBoxDB, Version=2.9.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\iBoxDB.2.9.1\lib\net45\iBoxDB.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Pinyin4net">
-      <HintPath>..\packages\pinyin4net.1.0.0\lib\net40\Pinyin4net.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Runtime.Caching" />
-    <Reference Include="mscorlib" />
-    <Reference Include="Markdig">
-      <HintPath>..\packages\Markdig.0.10.7\lib\net40\Markdig.dll</HintPath>
-    </Reference>
+    <PackageReference Include="iBoxDB" Version="2.17.3.2" />
+    <PackageReference Include="Markdig" Version="0.15.7" />
+    <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cache\ICache.cs" />
-    <Compile Include="Cache\RuntimeCache.cs" />
-    <Compile Include="CommandResult.cs" />
-    <Compile Include="Commands\Accounts\ChangePasswordCommand.cs" />
-    <Compile Include="Commands\Accounts\ChangeProfileCommand.cs" />
-    <Compile Include="Commands\Accounts\LoginCommand.cs" />
-    <Compile Include="Commands\Posts\DeleteCommentCommand.cs" />
-    <Compile Include="Commands\Posts\DeletePostCommand.cs" />
-    <Compile Include="Commands\Posts\NewCommentCommand.cs" />
-    <Compile Include="Commands\Posts\NewPostCommand.cs" />
-    <Compile Include="Commands\Posts\EditPostCommand.cs" />
-    <Compile Include="DBTableNames.cs" />
-    <Compile Include="Documents\Author.cs" />
-    <Compile Include="Documents\BlogComment.cs" />
-    <Compile Include="Documents\BlogPost.cs" />
-    <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\DocumentExtensions.cs" />
-    <Compile Include="Documents\PublishStatus.cs" />
-    <Compile Include="Documents\SpamHash.cs" />
-    <Compile Include="Documents\Tag.cs" />
-    <Compile Include="Extensions\IQueryableExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\TagExtension.cs" />
-    <Compile Include="ICommandInvoker.cs" />
-    <Compile Include="ObjectId.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Hasher.cs" />
-    <Compile Include="ISpamShieldService.cs" />
-    <Compile Include="ViewProjections\Admin\AllBlogComments.cs" />
-    <Compile Include="ViewProjections\Admin\AllStatistics.cs" />
-    <Compile Include="ViewProjections\Admin\AuthorProfile.cs" />
-    <Compile Include="ViewProjections\Home\BlogDetails.cs" />
-    <Compile Include="ViewProjections\Admin\AllBlogPosts.cs" />
-    <Compile Include="ViewProjections\Admin\BlogPostEdit.cs" />
-    <Compile Include="ViewProjections\Home\RecentBlogPosts.cs" />
-    <Compile Include="ViewProjections\Home\IntervalBlogPosts.cs" />
-    <Compile Include="ViewProjections\Home\TagCloud.cs" />
-    <Compile Include="ViewProjections\Home\TagDetail.cs" />
-    <Compile Include="ViewProjections\Home\TaggedBlogPosts.cs" />
-    <Compile Include="ViewProjections\Home\RecentBlogPostsSummary.cs" />
-    <Compile Include="IViewProjectionFactory.cs" />
-    <Compile Include="IViewProjection.cs" />
-    <Compile Include="ViewProjections\Account\UserDetails.cs" />
+    <None Remove="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -4,7 +4,7 @@ namespace MZBlog.Core.Documents
     {
         public Author()
         {
-            Id = ObjectId.NewObjectId();
+            Id = ObjectId.NewId();
         }
 
         public string Id { get; set; }

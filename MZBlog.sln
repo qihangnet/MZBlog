@@ -1,14 +1,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MZBlog.Web", "MZBlog.Web\MZBlog.Web.csproj", "{7B5BF18F-18B2-4A0F-BA84-5A42DAAC010A}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MZBlog.Core", "MZBlog.Core\MZBlog.Core.csproj", "{D6DB6C53-3F52-4850-9FA1-80127CE45BB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MZBlog.Core", "MZBlog.Core\MZBlog.Core.csproj", "{D6DB6C53-3F52-4850-9FA1-80127CE45BB4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MZBlog.Core.Tests", "MZBlog.Core.Tests\MZBlog.Core.Tests.csproj", "{576BEFE9-4A67-4DBB-B740-14F84F714170}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MZBlog.Core.Tests", "MZBlog.Core.Tests\MZBlog.Core.Tests.csproj", "{576BEFE9-4A67-4DBB-B740-14F84F714170}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{131EA229-EBF3-4B11-9B70-170752A3966D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MZBlog.Web", "MZBlog.Web\MZBlog.Web.csproj", "{6059231A-E290-4510-A081-CE5088DA998B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +16,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B5BF18F-18B2-4A0F-BA84-5A42DAAC010A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B5BF18F-18B2-4A0F-BA84-5A42DAAC010A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B5BF18F-18B2-4A0F-BA84-5A42DAAC010A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B5BF18F-18B2-4A0F-BA84-5A42DAAC010A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6DB6C53-3F52-4850-9FA1-80127CE45BB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6DB6C53-3F52-4850-9FA1-80127CE45BB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6DB6C53-3F52-4850-9FA1-80127CE45BB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -28,11 +24,18 @@ Global
 		{576BEFE9-4A67-4DBB-B740-14F84F714170}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{576BEFE9-4A67-4DBB-B740-14F84F714170}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{576BEFE9-4A67-4DBB-B740-14F84F714170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6059231A-E290-4510-A081-CE5088DA998B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6059231A-E290-4510-A081-CE5088DA998B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6059231A-E290-4510-A081-CE5088DA998B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6059231A-E290-4510-A081-CE5088DA998B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{576BEFE9-4A67-4DBB-B740-14F84F714170} = {131EA229-EBF3-4B11-9B70-170752A3966D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {445EC50F-2D59-4C21-B538-2EEF3B8B8684}
 	EndGlobalSection
 EndGlobal

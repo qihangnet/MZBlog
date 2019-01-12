@@ -1,19 +1,21 @@
-﻿using MZBlog.Core.Documents;
+﻿using iBoxDB.LocalServer;
+using MZBlog.Core.Documents;
 
 namespace MZBlog.Core.Extensions
 {
     public static class TagExtension
     {
-        private static IViewProjectionFactory _viewFac;
+        private static DB.AutoBox _db;
 
-        public static void SetupViewProjectionFactory(IViewProjectionFactory fac)
+        public static void SetupDb(DB.AutoBox db)
         {
-            _viewFac = fac;
+            if (_db == null)
+                _db = db;
         }
 
         public static Tag AsTag(this string slug)
         {
-            return _viewFac.Get<string, Tag>(slug);
+            return _db.SelectKey<Tag>(DBTableNames.Tags, slug);
         }
     }
 }

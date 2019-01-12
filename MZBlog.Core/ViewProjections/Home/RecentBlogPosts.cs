@@ -2,7 +2,7 @@
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
-
+using MediatR;
 namespace MZBlog.Core.ViewProjections.Home
 {
     public class RecentBlogPostsViewModel
@@ -22,9 +22,9 @@ namespace MZBlog.Core.ViewProjections.Home
         }
     }
 
-    public class RecentBlogPostsBindingModel
+    public class RecentBlogPostsQuery: IRequest<RecentBlogPostsViewModel>
     {
-        public RecentBlogPostsBindingModel()
+        public RecentBlogPostsQuery()
         {
             Page = 1;
             Take = 20;
@@ -35,34 +35,34 @@ namespace MZBlog.Core.ViewProjections.Home
         public int Take { get; set; }
     }
 
-    public class RecentBlogPostViewProjection : IViewProjection<RecentBlogPostsBindingModel, RecentBlogPostsViewModel>
+    public class RecentBlogPostsQueryHandler : RequestHandler<RecentBlogPostsQuery, RecentBlogPostsViewModel>
     {
         private readonly DB.AutoBox _db;
 
-        public RecentBlogPostViewProjection(DB.AutoBox db)
+        public RecentBlogPostsQueryHandler(DB.AutoBox db)
         {
             _db = db;
         }
 
-        public RecentBlogPostsViewModel Project(RecentBlogPostsBindingModel input)
+        protected override RecentBlogPostsViewModel Handle(RecentBlogPostsQuery request)
         {
-            var skip = (input.Page - 1) * input.Take;
+            var skip = (request.Page - 1) * request.Take;
             var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
                          where p.IsPublished
                          orderby p.PubDate descending
                          select p)
                          .Skip(skip)
-                         .Take(input.Take + 1)
+                         .Take(request.Take + 1)
                          .ToList()
                          .AsReadOnly();
 
-            var pagedPosts = posts.Take(input.Take).ToList();
-            var hasNextPage = posts.Count > input.Take;
+            var pagedPosts = posts.Take(request.Take).ToList();
+            var hasNextPage = posts.Count > request.Take;
 
             return new RecentBlogPostsViewModel
             {
                 Posts = pagedPosts,
-                Page = input.Page,
+                Page = request.Page,
                 HasNextPage = hasNextPage
             };
         }

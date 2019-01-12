@@ -1,35 +1,33 @@
-﻿using System;
-using System.Runtime.Caching;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace MZBlog.Core.Cache
 {
     public class RuntimeCache : ICache
     {
         private readonly MemoryCache _cache;
-        private readonly CacheItemPolicy _defaultCacheItemPolicy;
+        private readonly MemoryCacheEntryOptions _defaultCacheItemPolicy;
 
         public RuntimeCache()
         {
-            _cache = MemoryCache.Default;
-            _defaultCacheItemPolicy = new CacheItemPolicy { SlidingExpiration = TimeSpan.FromSeconds(60 * 2) };
+            _cache = new MemoryCache(new MemoryCacheOptions());
+            _defaultCacheItemPolicy = new MemoryCacheEntryOptions { SlidingExpiration = TimeSpan.FromSeconds(60 * 2) };
         }
 
-        public void Add(string key, object obj)
+        public void Add<T>(string key, T obj)
         {
-            var cacheItem = new CacheItem(key, obj);
-            _cache.Set(cacheItem, _defaultCacheItemPolicy);
+            _cache.Set(key, obj, _defaultCacheItemPolicy);
         }
 
-        public void Add(string key, object obj, int seconds)
+        public void Add<T>(string key, T obj, int seconds)
         {
             _cache.Set(key, obj, DateTimeOffset.Now.AddSeconds(seconds));
         }
 
-        public void Add(string key, object obj, TimeSpan slidingExpiration)
+        public void Add<T>(string key, T obj, TimeSpan slidingExpiration)
         {
-            var cacheItem = new CacheItem(key, obj);
-            var cacheItemPolicy = new CacheItemPolicy { SlidingExpiration = slidingExpiration };
-            _cache.Set(cacheItem, cacheItemPolicy);
+            var cacheItemPolicy = new MemoryCacheEntryOptions { SlidingExpiration = slidingExpiration };
+            _cache.Set(key, obj, cacheItemPolicy);
         }
 
         public bool Exists(string key)
@@ -39,14 +37,13 @@ namespace MZBlog.Core.Cache
 
         public T Get<T>(string key)
         {
-            return (T)_cache.Get(key);
+            return _cache.Get<T>(key);
         }
 
-        public void Max(string key, object obj)
+        public void Max<T>(string key, T obj)
         {
-            var cacheItem = new CacheItem(key, obj);
-            var cacheItemPolicy = new CacheItemPolicy { AbsoluteExpiration = DateTime.MaxValue.AddYears(-1), Priority = CacheItemPriority.NotRemovable };
-            _cache.Set(cacheItem, cacheItemPolicy);
+            var cacheItemPolicy = new MemoryCacheEntryOptions { AbsoluteExpiration = DateTime.MaxValue.AddYears(-1), Priority = CacheItemPriority.NeverRemove };
+            _cache.Set(key, obj, cacheItemPolicy);
         }
 
         public void Remove(string key)

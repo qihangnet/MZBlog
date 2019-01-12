@@ -2,6 +2,7 @@
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
+using MediatR;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
@@ -12,12 +13,12 @@ namespace MZBlog.Core.ViewProjections.Home
         public string Tag { get; set; }
     }
 
-    public class TaggedBlogPostsBindingModel
+    public class TaggedBlogPostsQuery : IRequest<TaggedBlogPostsViewModel>
     {
         public string Tag { get; set; }
     }
 
-    public class TaggedBlogPostsViewProjection : IViewProjection<TaggedBlogPostsBindingModel, TaggedBlogPostsViewModel>
+    public class TaggedBlogPostsViewProjection : RequestHandler<TaggedBlogPostsQuery, TaggedBlogPostsViewModel>
     {
         private readonly DB.AutoBox _db;
 
@@ -25,11 +26,10 @@ namespace MZBlog.Core.ViewProjections.Home
         {
             _db = db;
         }
-
-        public TaggedBlogPostsViewModel Project(TaggedBlogPostsBindingModel input)
+        protected override TaggedBlogPostsViewModel Handle(TaggedBlogPostsQuery request)
         {
             var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
-                         where p.IsPublished && p.Tags.Contains(input.Tag)
+                         where p.IsPublished && p.Tags.Contains(request.Tag)
                          orderby p.PubDate descending
                          select p)
                      .ToList();

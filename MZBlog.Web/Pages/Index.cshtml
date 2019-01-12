@@ -1,0 +1,75 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = Model.RecentBlogPosts.HasPrevPage ? $"第{Model.RecentBlogPosts.Page}页" : "首页";
+}
+
+@foreach (var blogPost in Model.RecentBlogPosts.Posts)
+{
+    <div class="row mb-md-3">
+        <div class="card">
+            <h5 class="card-header"><a href="@blogPost.GetLink()">@blogPost.Title</a></h5>
+            <div class="card-body pt-2">
+                <div class="text-muted text-right">
+                    <span class="author">@blogPost.AuthorDisplayName</span>
+                    发表于
+                    <time datetime="@blogPost.PubDate" pubdate>@blogPost.PubDate.ToChineseTime().ToString("yyyy-MM-dd HH:mm")</time>
+                    , 阅读
+                    (<span class="viewcount">@blogPost.ViewCount</span>)
+                </div>
+                <p>
+                    @Html.Raw(blogPost.Description)
+                    <a href="@blogPost.GetLink()">阅读全文</a>
+                </p>
+            </div>
+            <div class="card-footer text-muted">
+                <i class="fa fa-tag"></i>
+                @if (blogPost.Tags != null)
+                {
+                    foreach (var tag in blogPost.Tags)
+                    {
+                        <text> [ <a href="~/tag/@tag">@tag.AsTag().Name</a> ]</text>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<nav aria-label="...">
+    <ul class="pagination justify-content-center">
+        @if (Model.RecentBlogPosts.HasPrevPage)
+        {
+            <li class="page-item">
+                @if (Model.RecentBlogPosts.Page == 2)
+                {
+                    <a class="page-link" href="~/" title="较新的">较新的</a>
+                }
+                else
+                {
+                    <a class="page-link" href="~/?page=@(Model.RecentBlogPosts.Page - 1)" title="较新的">
+                        较新的
+                    </a>
+                }
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">较新的</a>
+            </li>
+        }
+        @if (Model.RecentBlogPosts.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="~/?page=@(Model.RecentBlogPosts.Page + 1)" title="较旧的">较旧的</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">较旧的</a>
+            </li>
+        }
+    </ul>
+</nav>

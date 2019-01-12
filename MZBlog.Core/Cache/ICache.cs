@@ -9,7 +9,7 @@ namespace MZBlog.Core.Cache
         /// </summary>
         /// <param name="key">缓存Key</param>
         /// <param name="obj">要缓存的对象</param>
-        void Add(string key, object obj);
+        void Add<T>(string key, T obj);
 
         /// <summary>
         /// 向Cache中添加缓存对象，如果时间达到指定的秒数即被移除
@@ -17,7 +17,7 @@ namespace MZBlog.Core.Cache
         /// <param name="key">缓存Key</param>
         /// <param name="obj">要缓存的对象</param>
         /// <param name="seconds">固定的超时秒数</param>
-        void Add(string key, object obj, int seconds);
+        void Add<T>(string key, T obj, int seconds);
 
         /// <summary>
         /// 向Cache中添加缓存对象
@@ -25,7 +25,7 @@ namespace MZBlog.Core.Cache
         /// <param name="key">缓存Key</param>
         /// <param name="obj">要缓存的对象</param>
         /// <param name="slidingExpiration">指定时间段</param>
-        void Add(string key, object obj, TimeSpan slidingExpiration);
+        void Add<T>(string key, T obj, TimeSpan slidingExpiration);
 
         /// <summary>
         /// 从Cache中判断指定的Key是否已经有缓存数据
@@ -47,7 +47,7 @@ namespace MZBlog.Core.Cache
         /// </summary>
         /// <param name="key">缓存Key</param>
         /// <param name="obj">要缓存的对象</param>
-        void Max(string key, object obj);
+        void Max<T>(string key, T obj);
 
         /// <summary>
         /// 从Cache中移除缓存项

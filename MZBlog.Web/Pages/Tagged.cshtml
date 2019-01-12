@@ -1,0 +1,37 @@
+﻿@page "/tag/{tag:minlength(1)}"
+@model TaggedModel
+@{
+    ViewData["Title"] = Model.Data.Tag;
+}
+
+@foreach (var blogPost in Model.Data.Posts)
+{
+    <div class="row mb-md-3">
+        <div class="card">
+            <h5 class="card-header"><a href="@blogPost.GetLink()">@blogPost.Title</a></h5>
+            <div class="card-body pt-2">
+                <div class="text-muted text-right">
+                    <span class="author">@blogPost.AuthorDisplayName</span>
+                    发表于
+                    <time datetime="@blogPost.PubDate" pubdate>@blogPost.PubDate.ToChineseTime().ToString("yyyy-MM-dd HH:mm")</time>
+                    , 阅读
+                    (<span class="viewcount">@blogPost.ViewCount</span>)
+                </div>
+                <p>
+                    @Html.Raw(blogPost.Description)
+                    <a href="@blogPost.GetLink()">阅读全文</a>
+                </p>
+            </div>
+            <div class="card-footer text-muted">
+                <i class="fa fa-tag"></i>
+                @if (blogPost.Tags != null)
+                {
+                    foreach (var tag in blogPost.Tags)
+                    {
+                        <text> [ <a href="~/tag/@tag">@tag.AsTag().Name</a> ]</text>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}

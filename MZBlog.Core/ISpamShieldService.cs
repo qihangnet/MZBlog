@@ -35,7 +35,7 @@ namespace MZBlog.Core
 
         public string CreateTick(string key)
         {
-            var tick = ObjectId.NewObjectId().ToString();
+            var tick = ObjectId.NewId().ToString();
             var spamHash = new SpamHash
             {
                 Id = tick,
