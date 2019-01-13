@@ -34,6 +34,11 @@ button.accept-policy {
   line-height: inherit;
 }
 
+.card-body img
+{
+  max-width: 100%;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
