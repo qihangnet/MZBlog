@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.WebEncoders;
 using MZBlog.Core;
 using MZBlog.Core.Documents;
 using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace MZBlog.Web
 {
@@ -30,6 +33,10 @@ namespace MZBlog.Web
                 options.CheckConsentNeeded = _ => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.Configure<WebEncoderOptions>(options =>
+                options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin,
+                    UnicodeRanges.CjkUnifiedIdeographs));
 
             var db = Database("ibox");
             Core.Extensions.TagExtension.SetupDb(db);
