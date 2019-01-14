@@ -1,4 +1,6 @@
-﻿using iBoxDB.LocalServer;
+﻿using System.Collections.Generic;
+using System.Linq;
+using iBoxDB.LocalServer;
 using MZBlog.Core.Documents;
 
 namespace MZBlog.Core.Extensions
@@ -16,6 +18,13 @@ namespace MZBlog.Core.Extensions
         public static Tag AsTag(this string slug)
         {
             return _db.SelectKey<Tag>(DBTableNames.Tags, slug);
+        }
+
+        public static IEnumerable<Tag> Project(this IEnumerable<string> input)
+        {
+            var tags = from slug in input
+                       select _db.SelectKey<Tag>(DBTableNames.Tags, slug);
+            return tags;
         }
     }
 }

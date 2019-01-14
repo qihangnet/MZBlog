@@ -1,9 +1,15 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 
 namespace MZBlog.Core.ViewProjections.Account
 {
-    public class GetUserDetails : IViewProjection<string, Author>
+    public class AuthorDetailQuery : IRequest<Author>
+    {
+        public string Id { get; set; }
+    }
+
+    public class GetUserDetails : RequestHandler<AuthorDetailQuery, Author>
     {
         private readonly DB.AutoBox _db;
 
@@ -12,9 +18,9 @@ namespace MZBlog.Core.ViewProjections.Account
             _db = db;
         }
 
-        public Author Project(string input)
+        protected override Author Handle(AuthorDetailQuery request)
         {
-            return _db.SelectKey<Author>(DBTableNames.Authors, input);
+            return _db.SelectKey<Author>(DBTableNames.Authors, request.Id);
         }
     }
 }
