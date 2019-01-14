@@ -7,7 +7,7 @@
 @foreach (var blogPost in Model.Data.Posts)
 {
     <div class="row mb-3">
-        <div class="card">
+        <div class="card post-card">
             <h5 class="card-header"><a href="@blogPost.GetLink()">@blogPost.Title</a></h5>
             <div class="card-body pt-2">
                 <div class="text-muted text-right">
