@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using MediatR;
 using MZBlog.Core.Commands.Accounts;
 using MZBlog.Core.Documents;
@@ -29,7 +29,7 @@ namespace MZBlog.Core.Tests.Accounts
                 Password = "test"
             }, new CancellationToken());
 
-            result.Success.Should().BeTrue();
+            result.Success.ShouldBeTrue();
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace MZBlog.Core.Tests.Accounts
                 Password = "psw2"
             }, new CancellationToken());
 
-            result.Success.Should().BeFalse();
+            result.Success.ShouldBeFalse();
         }
     }
 }

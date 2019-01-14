@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using MediatR;
 using MZBlog.Core.Commands.Accounts;
 using MZBlog.Core.Documents;
@@ -31,7 +31,7 @@ namespace MZBlog.Core.Tests.Accounts
                 NewPassword = "pswtest",
                 NewPasswordConfirm = "pswtest"
             }, new CancellationToken());
-            result.Success.Should().BeFalse();
+            result.Success.ShouldBeFalse();
         }
 
         [Fact]
@@ -56,15 +56,10 @@ namespace MZBlog.Core.Tests.Accounts
                 NewPasswordConfirm = "pswtest"
             }, new CancellationToken());
 
-            result.Success.Should().BeTrue();
+            result.Success.ShouldBeTrue();
 
             db.SelectKey<Author>(DBTableNames.Authors, author.Id).HashedPassword
-                .Should().BeEquivalentTo(Hasher.GetMd5Hash("pswtest"));
+            .ShouldBe(Hasher.GetMd5Hash("pswtest"));
         }
-
-        // ~ChangePasswordCommandTests()
-        // {
-        //     _db.Delete(DBTableNames.Authors, authorId);
-        // }
     }
 }
