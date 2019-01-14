@@ -35,7 +35,7 @@ namespace MZBlog.Core.ViewProjections.Home
                      .ToList();
             if (posts.Count == 0)
                 return null;
-            var tagName = _db.SelectKey<Tag>(DBTableNames.Tags, posts.First().Tags[0]).Name;
+            var tagName = _db.SelectKey<Tag>(DBTableNames.Tags, request.Tag).Name;
             return new TaggedBlogPostsViewModel
             {
                 Posts = posts,
