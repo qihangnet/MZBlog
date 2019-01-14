@@ -1,4 +1,5 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,14 @@ namespace MZBlog.Core.ViewProjections.Home
         public DateTime ToDate { get; set; }
     }
 
-    public class IntervalBlogPostsBindingModel
+    public class IntervalBlogPostsBindingModel:IRequest<IntervalBlogPostsViewModel>
     {
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
     }
 
-    public class IntervalBlogPostsViewProjection : IViewProjection<IntervalBlogPostsBindingModel, IntervalBlogPostsViewModel>
+    public class IntervalBlogPostsViewProjection : RequestHandler<IntervalBlogPostsBindingModel, IntervalBlogPostsViewModel>
     {
         private readonly DB.AutoBox _db;
 
@@ -31,18 +32,18 @@ namespace MZBlog.Core.ViewProjections.Home
             _db = db;
         }
 
-        public IntervalBlogPostsViewModel Project(IntervalBlogPostsBindingModel input)
+        protected override IntervalBlogPostsViewModel Handle(IntervalBlogPostsBindingModel request)
         {
             var posts = from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
-                        where p.IsPublished && p.PubDate < input.ToDate && p.PubDate > input.FromDate
+                        where p.IsPublished && p.PubDate < request.ToDate && p.PubDate > request.FromDate
                         orderby p.PubDate descending
                         select p;
 
             return new IntervalBlogPostsViewModel
             {
                 Posts = posts,
-                FromDate = input.FromDate,
-                ToDate = input.ToDate
+                FromDate = request.FromDate,
+                ToDate = request.ToDate
             };
         }
     }

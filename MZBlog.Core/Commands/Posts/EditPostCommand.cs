@@ -1,5 +1,6 @@
 ﻿using iBoxDB.LocalServer;
 using Markdig;
+using MediatR;
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace MZBlog.Core.Commands.Posts
 {
-    public class EditPostCommand
+    public class EditPostCommand:IRequest<CommandResult>
     {
         public string PostId { get; set; }
 
@@ -26,7 +27,7 @@ namespace MZBlog.Core.Commands.Posts
         public bool Published { get; set; }
     }
 
-    public class EditPostCommandInvoker : ICommandInvoker<EditPostCommand, CommandResult>
+    public class EditPostCommandInvoker : RequestHandler<EditPostCommand, CommandResult>
     {
         private readonly DB.AutoBox _db;
 
@@ -35,12 +36,12 @@ namespace MZBlog.Core.Commands.Posts
             _db = db;
         }
 
-        public CommandResult Execute(EditPostCommand command)
+        protected override CommandResult Handle(EditPostCommand cmd)
         {
-            var post = _db.SelectKey<BlogPost>(DBTableNames.BlogPosts, command.PostId);
+            var post = _db.SelectKey<BlogPost>(DBTableNames.BlogPosts, cmd.PostId);
 
             if (post == null)
-                throw new ApplicationException("Post with id: {0} was not found".FormatWith(command.PostId));
+                throw new ApplicationException("Post with id: {0} was not found".FormatWith(cmd.PostId));
             if (post.Tags != null)
             {
                 foreach (var tag in post.Tags)
@@ -58,15 +59,15 @@ namespace MZBlog.Core.Commands.Posts
             //TODO:应该验证TitleSlug是否是除了本文外唯一的
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
 
-            post.MarkDown = command.MarkDown;
-            post.Content = Markdown.ToHtml(command.MarkDown, pipeline);
-            post.PubDate = command.PubDate.CloneToUtc();
-            post.Status = command.Published ? PublishStatus.Published : PublishStatus.Draft;
-            post.Title = command.Title;
-            post.TitleSlug = command.TitleSlug.Trim().ToSlug();
-            if (!command.Tags.IsNullOrWhitespace())
+            post.MarkDown = cmd.MarkDown;
+            post.Content = Markdown.ToHtml(cmd.MarkDown, pipeline);
+            post.PubDate = cmd.PubDate.CloneToUtc();
+            post.Status = cmd.Published ? PublishStatus.Published : PublishStatus.Draft;
+            post.Title = cmd.Title;
+            post.TitleSlug = cmd.TitleSlug.Trim().ToSlug();
+            if (!cmd.Tags.IsNullOrWhitespace())
             {
-                var tags = command.Tags.Trim().Split(',').Select(s => s.Trim());
+                var tags = cmd.Tags.Trim().Split(',').Select(s => s.Trim());
                 post.Tags = tags.Select(s => s.ToSlug()).ToArray();
                 foreach (var tag in tags)
                 {

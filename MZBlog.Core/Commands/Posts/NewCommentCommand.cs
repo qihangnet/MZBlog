@@ -1,4 +1,5 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace MZBlog.Core.Commands.Posts
 {
-    public class NewCommentCommand
+    public class NewCommentCommand : IRequest<CommandResult>
     {
         public NewCommentCommand()
         {
@@ -35,7 +36,7 @@ namespace MZBlog.Core.Commands.Posts
         public string IPAddress { get; set; }
     }
 
-    public class NewCommentCommandInvoker : ICommandInvoker<NewCommentCommand, CommandResult>
+    public class NewCommentCommandInvoker : RequestHandler<NewCommentCommand, CommandResult>
     {
         private readonly DB.AutoBox _db;
         private readonly ISpamShieldService _spamShield;
@@ -46,22 +47,22 @@ namespace MZBlog.Core.Commands.Posts
             _spamShield = spamShield;
         }
 
-        public CommandResult Execute(NewCommentCommand command)
+        protected override CommandResult Handle(NewCommentCommand cmd)
         {
-            if (Regex.IsMatch(command.Email, @"smith\w\d*@gmail.com") || _spamShield.IsSpam(command.SpamShield))
+            if (Regex.IsMatch(cmd.Email, @"smith\w\d*@gmail.com") || _spamShield.IsSpam(cmd.SpamShield))
             {
                 return new CommandResult("You are a spam!");
             }
 
             var comment = new BlogComment
             {
-                Id = command.Id,
-                Email = command.Email,
-                NickName = command.NickName,
-                Content = command.Content,
-                IPAddress = command.IPAddress,
-                PostId = command.PostId,
-                SiteUrl = command.SiteUrl,
+                Id = cmd.Id,
+                Email = cmd.Email,
+                NickName = cmd.NickName,
+                Content = cmd.Content,
+                IPAddress = cmd.IPAddress,
+                PostId = cmd.PostId,
+                SiteUrl = cmd.SiteUrl,
                 CreatedTime = DateTime.UtcNow
             };
 

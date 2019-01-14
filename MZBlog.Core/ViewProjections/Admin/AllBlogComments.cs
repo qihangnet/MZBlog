@@ -1,11 +1,12 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
-    public class AllBlogCommentsBindingModel
+    public class AllBlogCommentsBindingModel:IRequest<AllBlogCommentsViewModel>
     {
         public AllBlogCommentsBindingModel()
         {
@@ -35,7 +36,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         public int Page { get; set; }
     }
 
-    public class BlogCommentsViewProjection : IViewProjection<AllBlogCommentsBindingModel, AllBlogCommentsViewModel>
+    public class BlogCommentsViewProjection : RequestHandler<AllBlogCommentsBindingModel, AllBlogCommentsViewModel>
     {
         private readonly DB.AutoBox _db;
 
@@ -44,20 +45,20 @@ namespace MZBlog.Core.ViewProjections.Admin
             _db = db;
         }
 
-        public AllBlogCommentsViewModel Project(AllBlogCommentsBindingModel input)
+        protected override AllBlogCommentsViewModel Handle(AllBlogCommentsBindingModel request)
         {
-            var skip = (input.Page - 1) * input.Take;
+            var skip = (request.Page - 1) * request.Take;
 
-            var comments = _db.Select<BlogComment>("from " + DBTableNames.BlogComments + " order by CreatedTime desc limit " + skip + "," + input.Take + 1)
+            var comments = _db.Select<BlogComment>("from " + DBTableNames.BlogComments + " order by CreatedTime desc limit " + skip + "," + request.Take + 1)
                 .ToList().AsReadOnly();
 
-            var pagedComments = comments.Take(input.Take);
-            var hasNextPage = comments.Count > input.Take;
+            var pagedComments = comments.Take(request.Take);
+            var hasNextPage = comments.Count > request.Take;
 
             return new AllBlogCommentsViewModel
             {
                 Comments = pagedComments,
-                Page = input.Page,
+                Page = request.Page,
                 HasNextPage = hasNextPage
             };
         }

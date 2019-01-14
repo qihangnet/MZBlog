@@ -1,4 +1,5 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         }
     }
 
-    public class AllBlogPostsBindingModel
+    public class AllBlogPostsBindingModel : IRequest<AllBlogPostsViewModel>
     {
         public AllBlogPostsBindingModel()
         {
@@ -35,7 +36,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         public int Take { get; set; }
     }
 
-    public class AllBlogPostViewProjection : IViewProjection<AllBlogPostsBindingModel, AllBlogPostsViewModel>
+    public class AllBlogPostViewProjection : RequestHandler<AllBlogPostsBindingModel, AllBlogPostsViewModel>
     {
         private readonly DB.AutoBox _db;
 
@@ -44,25 +45,25 @@ namespace MZBlog.Core.ViewProjections.Admin
             _db = db;
         }
 
-        public AllBlogPostsViewModel Project(AllBlogPostsBindingModel input)
+        protected override AllBlogPostsViewModel Handle(AllBlogPostsBindingModel request)
         {
-            var skip = (input.Page - 1) * input.Take;
+            var skip = (request.Page - 1) * request.Take;
 
             var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
                          orderby p.DateUTC descending
                          select p)
                         .Skip(skip)
-                        .Take(input.Take + 1)
+                        .Take(request.Take + 1)
                         .ToList()
                         .AsReadOnly();
 
-            var pagedPosts = posts.Take(input.Take);
-            var hasNextPage = posts.Count > input.Take;
+            var pagedPosts = posts.Take(request.Take);
+            var hasNextPage = posts.Count > request.Take;
 
             return new AllBlogPostsViewModel
             {
                 Posts = pagedPosts,
-                Page = input.Page,
+                Page = request.Page,
                 HasNextPage = hasNextPage
             };
         }

@@ -1,4 +1,5 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,12 @@ namespace MZBlog.Core.ViewProjections.Home
         public string Link { get; set; }
     }
 
-    public class RecentBlogPostSummaryBindingModel
+    public class RecentBlogPostSummaryBindingModel : IRequest<RecentBlogPostSummaryViewModel>
     {
         public int Page { get; set; }
     }
 
-    public class RecentBlogPostSummaryViewProjection : IViewProjection<RecentBlogPostSummaryBindingModel, RecentBlogPostSummaryViewModel>
+    public class RecentBlogPostSummaryViewProjection : RequestHandler<RecentBlogPostSummaryBindingModel, RecentBlogPostSummaryViewModel>
     {
         private readonly DB.AutoBox _db;
 
@@ -31,7 +32,7 @@ namespace MZBlog.Core.ViewProjections.Home
             _db = db;
         }
 
-        public RecentBlogPostSummaryViewModel Project(RecentBlogPostSummaryBindingModel input)
+        protected override RecentBlogPostSummaryViewModel Handle(RecentBlogPostSummaryBindingModel request)
         {
             var titles = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
                           where p.IsPublished
@@ -42,7 +43,7 @@ namespace MZBlog.Core.ViewProjections.Home
                               Link = p.GetLink()
                           }
                           )
-                .Take(input.Page)
+                .Take(request.Page)
                 .ToList()
                 .AsReadOnly();
 

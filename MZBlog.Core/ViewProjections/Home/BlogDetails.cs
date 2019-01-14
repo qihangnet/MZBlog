@@ -5,7 +5,7 @@ using MediatR;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
-    public class BlogPostDetailsQuery:IRequest<BlogPostDetailsViewModel>
+    public class BlogPostDetailsQuery : IRequest<BlogPostDetailsViewModel>
     {
         public string Permalink { get; set; }
     }

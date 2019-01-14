@@ -1,11 +1,12 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace MZBlog.Core.Commands.Accounts
 {
-    public class LoginCommand
+    public class LoginCommand : IRequest<LoginCommandResult>
     {
         [Required]
         public string Email { get; set; }
@@ -22,14 +23,14 @@ namespace MZBlog.Core.Commands.Accounts
             : base()
         { }
 
-        public LoginCommandResult(string trrorMessage)
-            : base(trrorMessage)
+        public LoginCommandResult(string errorMessage)
+            : base(errorMessage)
         { }
 
         public Author Author { get; set; }
     }
 
-    public class LoginCommandInvoker : ICommandInvoker<LoginCommand, LoginCommandResult>
+    public class LoginCommandInvoker : RequestHandler<LoginCommand, LoginCommandResult>
     {
         private readonly DB.AutoBox _db;
 
@@ -38,9 +39,9 @@ namespace MZBlog.Core.Commands.Accounts
             _db = db;
         }
 
-        public LoginCommandResult Execute(LoginCommand command)
+        protected override LoginCommandResult Handle(LoginCommand cmd)
         {
-            var hashedPassword = Hasher.GetMd5Hash(command.Password);
+            var hashedPassword = Hasher.GetMd5Hash(cmd.Password);
             if (_db.SelectCount("from " + DBTableNames.Authors) == 0)
             {
                 _db.Insert(DBTableNames.Authors, new Author
@@ -52,13 +53,13 @@ namespace MZBlog.Core.Commands.Accounts
                 });
             }
             var author = from u in _db.Select<Author>("from " + DBTableNames.Authors)
-                         where u.Email == command.Email && u.HashedPassword == hashedPassword
+                         where u.Email == cmd.Email && u.HashedPassword == hashedPassword
                          select u;
 
             if (author.Any())
                 return new LoginCommandResult() { Author = author.FirstOrDefault() };
 
-            return new LoginCommandResult(trrorMessage: "用户名或密码不正确");
+            return new LoginCommandResult(errorMessage: "用户名或密码不正确");
         }
     }
 }

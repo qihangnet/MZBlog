@@ -1,10 +1,11 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
-    public class TagCloudBindingModel
+    public class TagCloudBindingModel : IRequest<TagCloudViewModel>
     {
         public int Threshold { get; set; }
 
@@ -22,7 +23,7 @@ namespace MZBlog.Core.ViewProjections.Home
         public IEnumerable<Tag> Tags { get; set; }
     }
 
-    public class TagCloudViewProjection : IViewProjection<TagCloudBindingModel, TagCloudViewModel>
+    public class TagCloudViewProjection : RequestHandler<TagCloudBindingModel, TagCloudViewModel>
     {
         private readonly DB.AutoBox _db;
 
@@ -31,7 +32,7 @@ namespace MZBlog.Core.ViewProjections.Home
             _db = db;
         }
 
-        public TagCloudViewModel Project(TagCloudBindingModel input)
+        protected override TagCloudViewModel Handle(TagCloudBindingModel request)
         {
             var result = new Dictionary<Tag, int>();
             var tags = _db.Select<Tag>("from " + DBTableNames.Tags + " order by PostCount desc");

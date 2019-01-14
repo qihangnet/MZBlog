@@ -1,5 +1,6 @@
 ﻿using iBoxDB.LocalServer;
 using Markdig;
+using MediatR;
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace MZBlog.Core.Commands.Posts
 {
-    public class NewPostCommand
+    public class NewPostCommand : IRequest<CommandResult>
     {
         public Author Author { get; set; }
 
@@ -24,7 +25,7 @@ namespace MZBlog.Core.Commands.Posts
         public bool Published { get; set; }
     }
 
-    public class NewPostCommandInvoker : ICommandInvoker<NewPostCommand, CommandResult>
+    public class NewPostCommandInvoker : RequestHandler<NewPostCommand, CommandResult>
     {
         private readonly DB.AutoBox _db;
 
@@ -33,26 +34,26 @@ namespace MZBlog.Core.Commands.Posts
             _db = db;
         }
 
-        public CommandResult Execute(NewPostCommand command)
+        protected override CommandResult Handle(NewPostCommand cmd)
         {
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
             //TODO:应该验证TitleSlug是否唯一
             var post = new BlogPost
             {
                 Id = ObjectId.NewId(),
-                AuthorEmail = command.Author.Email,
-                AuthorDisplayName = command.Author.DisplayName,
-                MarkDown = command.MarkDown,
-                Content = Markdown.ToHtml(command.MarkDown, pipeline),
-                PubDate = command.PubDate.CloneToUtc(),
-                Status = command.Published ? PublishStatus.Published : PublishStatus.Draft,
-                Title = command.Title,
-                TitleSlug = command.TitleSlug.IsNullOrWhitespace() ? command.Title.Trim().ToSlug() : command.TitleSlug.Trim().ToSlug(),
+                AuthorEmail = cmd.Author.Email,
+                AuthorDisplayName = cmd.Author.DisplayName,
+                MarkDown = cmd.MarkDown,
+                Content = Markdown.ToHtml(cmd.MarkDown, pipeline),
+                PubDate = cmd.PubDate.CloneToUtc(),
+                Status = cmd.Published ? PublishStatus.Published : PublishStatus.Draft,
+                Title = cmd.Title,
+                TitleSlug = cmd.TitleSlug.IsNullOrWhitespace() ? cmd.Title.Trim().ToSlug() : cmd.TitleSlug.Trim().ToSlug(),
                 DateUTC = DateTime.UtcNow
             };
-            if (!command.Tags.IsNullOrWhitespace())
+            if (!cmd.Tags.IsNullOrWhitespace())
             {
-                var tags = command.Tags.Trim().Split(',').Select(s => s.Trim());
+                var tags = cmd.Tags.Trim().Split(',').Select(s => s.Trim());
                 post.Tags = tags.Select(s => s.ToSlug()).ToArray();
                 foreach (var tag in tags)
                 {

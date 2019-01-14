@@ -1,4 +1,5 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
@@ -11,7 +12,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         public int TagsCount { get; set; }
     }
 
-    public class AllStatisticsBindingModel
+    public class AllStatisticsBindingModel : IRequest<AllStatisticsViewModel>
     {
         public AllStatisticsBindingModel()
         {
@@ -21,7 +22,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         public int TagThreshold { get; set; }
     }
 
-    public class AllStatisticsViewProjection : IViewProjection<AllStatisticsBindingModel, AllStatisticsViewModel>
+    public class AllStatisticsViewProjection : RequestHandler<AllStatisticsBindingModel, AllStatisticsViewModel>
     {
         private readonly DB.AutoBox _db;
 
@@ -30,7 +31,7 @@ namespace MZBlog.Core.ViewProjections.Admin
             _db = db;
         }
 
-        public AllStatisticsViewModel Project(AllStatisticsBindingModel input)
+        protected override AllStatisticsViewModel Handle(AllStatisticsBindingModel request)
         {
             var postCount = _db.SelectCount("from " + DBTableNames.BlogPosts);
             if (postCount == 0)

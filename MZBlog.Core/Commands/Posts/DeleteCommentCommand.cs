@@ -1,13 +1,14 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 
 namespace MZBlog.Core.Commands.Posts
 {
-    public class DeleteCommentCommand
+    public class DeleteCommentCommand : IRequest<CommandResult>
     {
         public string CommentId { get; set; }
     }
 
-    public class DeleteCommentCommandInvoker : ICommandInvoker<DeleteCommentCommand, CommandResult>
+    public class DeleteCommentCommandInvoker : RequestHandler<DeleteCommentCommand, CommandResult>
     {
         private readonly DB.AutoBox _db;
 
@@ -16,9 +17,9 @@ namespace MZBlog.Core.Commands.Posts
             _db = db;
         }
 
-        public CommandResult Execute(DeleteCommentCommand command)
+        protected override CommandResult Handle(DeleteCommentCommand cmd)
         {
-            _db.Delete(DBTableNames.BlogComments, command.CommentId);
+            _db.Delete(DBTableNames.BlogComments, cmd.CommentId);
 
             return CommandResult.SuccessResult;
         }

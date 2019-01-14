@@ -1,15 +1,16 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 using System.Linq;
 
 namespace MZBlog.Core.Commands.Posts
 {
-    public class DeletePostCommand
+    public class DeletePostCommand : IRequest<CommandResult>
     {
         public string PostId { get; set; }
     }
 
-    public class DeletePostCommandInvoker : ICommandInvoker<DeletePostCommand, CommandResult>
+    public class DeletePostCommandInvoker : RequestHandler<DeletePostCommand, CommandResult>
     {
         private readonly DB.AutoBox _db;
 
@@ -18,16 +19,16 @@ namespace MZBlog.Core.Commands.Posts
             _db = db;
         }
 
-        public CommandResult Execute(DeletePostCommand command)
+        protected override CommandResult Handle(DeletePostCommand cmd)
         {
-            var comments = _db.Select<BlogComment>("from " + DBTableNames.BlogComments + " where PostId==?", command.PostId);
+            var comments = _db.Select<BlogComment>("from " + DBTableNames.BlogComments + " where PostId==?", cmd.PostId);
 
             if (comments.Count() > 0)
             {
                 var commentKeys = comments.Select(s => s.Id).ToArray();
                 _db.Delete(DBTableNames.BlogComments, commentKeys);
             }
-            _db.Delete(DBTableNames.BlogPosts, command.PostId);
+            _db.Delete(DBTableNames.BlogPosts, cmd.PostId);
             return CommandResult.SuccessResult;
         }
     }

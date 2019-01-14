@@ -1,9 +1,10 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 
 namespace MZBlog.Core.Commands.Accounts
 {
-    public class ChangeProfileCommand
+    public class ChangeProfileCommand : IRequest<CommandResult>
     {
         public string AuthorId { get; set; }
 
@@ -12,7 +13,7 @@ namespace MZBlog.Core.Commands.Accounts
         public string NewDisplayName { get; set; }
     }
 
-    public class ChangeProfileCommandInvoker : ICommandInvoker<ChangeProfileCommand, CommandResult>
+    public class ChangeProfileCommandInvoker : RequestHandler<ChangeProfileCommand, CommandResult>
     {
         private readonly DB.AutoBox _db;
 
@@ -21,13 +22,13 @@ namespace MZBlog.Core.Commands.Accounts
             _db = db;
         }
 
-        public CommandResult Execute(ChangeProfileCommand command)
+        protected override CommandResult Handle(ChangeProfileCommand cmd)
         {
-            var author = _db.SelectKey<Author>(DBTableNames.Authors, command.AuthorId);
+            var author = _db.SelectKey<Author>(DBTableNames.Authors, cmd.AuthorId);
             if (author == null)
                 return new CommandResult("用户信息不存在");
-            author.DisplayName = command.NewDisplayName;
-            author.Email = command.NewEmail;
+            author.DisplayName = cmd.NewDisplayName;
+            author.Email = cmd.NewEmail;
 
             _db.Update(DBTableNames.Authors, author);
             return CommandResult.SuccessResult;

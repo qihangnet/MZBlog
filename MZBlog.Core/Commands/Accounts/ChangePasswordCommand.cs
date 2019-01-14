@@ -1,9 +1,10 @@
 ﻿using iBoxDB.LocalServer;
+using MediatR;
 using MZBlog.Core.Documents;
 
 namespace MZBlog.Core.Commands.Accounts
 {
-    public class ChangePasswordCommand
+    public class ChangePasswordCommand : IRequest<CommandResult>
     {
         public string AuthorId { get; set; }
 
@@ -14,7 +15,7 @@ namespace MZBlog.Core.Commands.Accounts
         public string OldPassword { get; set; }
     }
 
-    public class ChangePasswordCommandInvoker : ICommandInvoker<ChangePasswordCommand, CommandResult>
+    public class ChangePasswordCommandInvoker : RequestHandler<ChangePasswordCommand, CommandResult>
     {
         private readonly DB.AutoBox _db;
 
@@ -23,15 +24,15 @@ namespace MZBlog.Core.Commands.Accounts
             _db = db;
         }
 
-        public CommandResult Execute(ChangePasswordCommand command)
+        protected override CommandResult Handle(ChangePasswordCommand cmd)
         {
-            var author = _db.SelectKey<Author>(DBTableNames.Authors, command.AuthorId);
-            if (Hasher.GetMd5Hash(command.OldPassword) != author.HashedPassword)
+            var author = _db.SelectKey<Author>(DBTableNames.Authors, cmd.AuthorId);
+            if (Hasher.GetMd5Hash(cmd.OldPassword) != author.HashedPassword)
             {
                 return new CommandResult("旧密码不正确!");
             }
 
-            author.HashedPassword = Hasher.GetMd5Hash(command.NewPassword);
+            author.HashedPassword = Hasher.GetMd5Hash(cmd.NewPassword);
             _db.Update(DBTableNames.Authors, author);
             return CommandResult.SuccessResult;
         }
