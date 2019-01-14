@@ -34,13 +34,13 @@ namespace MZBlog.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // got help from https://www.cnblogs.com/dudu/p/5879913.html
             services.Configure<WebEncoderOptions>(options =>
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin,
                     UnicodeRanges.CjkUnifiedIdeographs));
 
-            var db = Database("ibox");
-            Core.Extensions.TagExtension.SetupDb(db);
-            services.AddSingleton(db);
+            services.AddiBoxDB();
+            services.AddIpIpDotNet();
             services.AddMediatR();
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -62,17 +62,19 @@ namespace MZBlog.Web
             app.UseCookiePolicy();
             app.UseMvc();
         }
+    }
 
-        private DB.AutoBox Database(string folderName)
+    public static class IServiceCollectionExtensions
+    {
+        public static void AddiBoxDB(this IServiceCollection services, string dbFolderName = "ibox")
         {
-            var dbPath = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location),"App_Data", folderName);
+            var dbPath = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location), "App_Data", dbFolderName);
             if (!Directory.Exists(dbPath))
             {
                 Directory.CreateDirectory(dbPath);
             }
 
             var server = new DB(dbPath);
-
             var config = server.GetConfig();
 
             config.EnsureTable<Author>(DBTableNames.Authors, "Id");
@@ -84,7 +86,22 @@ namespace MZBlog.Web
             config.EnsureTable<SpamHash>(DBTableNames.SpamHashes, "Id");
             config.EnsureTable<Tag>(DBTableNames.Tags, "Slug");
 
-            return server.Open();
+            var db = server.Open();
+            services.AddSingleton(db);
+
+            Core.Extensions.TagExtension.SetupDb(db);
+        }
+
+        public static void AddIpIpDotNet(this IServiceCollection services)
+        {
+            var dbDir = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location), "App_Data");
+            if (!Directory.Exists(dbDir))
+            {
+                Directory.CreateDirectory(dbDir);
+            }
+            var ipDbPath =Path.Combine(dbDir,"ipipfree.ipdb");
+            var ipCity = new IPIP.Net.City(ipDbPath);
+            services.AddSingleton(ipCity);
         }
     }
 }
