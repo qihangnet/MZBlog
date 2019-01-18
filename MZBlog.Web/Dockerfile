@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine
+FROM microsoft/dotnet:2.2-aspnetcore-runtime
 ENV TZ Asia/Shanghai
 ARG source
 WORKDIR /app
