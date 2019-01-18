@@ -1,4 +1,12 @@
 
+CREATE TABLE Author (
+    Id varchar(24) PRIMARY KEY NOT NULL,
+    Email varchar(256) NOT NULL,
+    HashedPassword varchar(200) NOT NULL,
+    DisplayName nvarchar(50) NOT NULL,
+    CreatedUTC datetime NOT NULL
+);
+
 CREATE TABLE BlogPost (
     Id varchar(24) PRIMARY KEY NOT NULL,
     Title nvarchar(100) NOT NULL,

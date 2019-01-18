@@ -1,6 +1,8 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.Commands.Accounts
 {
@@ -15,22 +17,22 @@ namespace MZBlog.Core.Commands.Accounts
 
     public class ChangeProfileCommandInvoker : RequestHandler<ChangeProfileCommand, CommandResult>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public ChangeProfileCommandInvoker(DB.AutoBox db)
+        public ChangeProfileCommandInvoker(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override CommandResult Handle(ChangeProfileCommand cmd)
         {
-            var author = _db.SelectKey<Author>(DBTableNames.Authors, cmd.AuthorId);
+            var author = _conn.Get<Author>(cmd.AuthorId);
             if (author == null)
                 return new CommandResult("用户信息不存在");
             author.DisplayName = cmd.NewDisplayName;
             author.Email = cmd.NewEmail;
 
-            _db.Update(DBTableNames.Authors, author);
+            _conn.Update(author);
             return CommandResult.SuccessResult;
         }
     }

@@ -1,6 +1,8 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
@@ -16,16 +18,16 @@ namespace MZBlog.Core.ViewProjections.Admin
 
     public class BlogPostEditViewProjection : RequestHandler<BlogPostEditBindingModel, BlogPostEditViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public BlogPostEditViewProjection(DB.AutoBox db)
+        public BlogPostEditViewProjection(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override BlogPostEditViewModel Handle(BlogPostEditBindingModel request)
         {
-            var post = _db.SelectKey<BlogPost>(DBTableNames.BlogPosts, request.PostId);
+            var post = _conn.Get<BlogPost>(request.PostId);
 
             return new BlogPostEditViewModel { BlogPost = post };
         }

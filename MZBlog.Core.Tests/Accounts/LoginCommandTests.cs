@@ -6,22 +6,29 @@ using MediatR;
 using MZBlog.Core.Commands.Accounts;
 using MZBlog.Core.Documents;
 using Xunit;
+using Dapper;
+using Dapper.Extensions;
+using System;
 
 namespace MZBlog.Core.Tests.Accounts
 {
-    public class LoginCommandTests : iBoxDBBackedTest
+    public class LoginCommandTests : SqliteBackedTest
     {
         [Fact]
         public async Task login_should_success_if_user_in_database()
         {
-            var db = OpenTestDb();
-            db.Insert(DBTableNames.Authors, new Author()
+            var conn = GetMemorySqliteConnection();
+            (await CreateAuthorTable(conn)).ShouldBe(1);
+
+            conn.Insert(new Author()
             {
                 Email = "test@mz.yi",
-                HashedPassword = Hasher.GetMd5Hash("test")
+                DisplayName = "yimingzhi",
+                HashedPassword = Hasher.GetMd5Hash("test"),
+                CreatedUTC = DateTime.UtcNow
             });
 
-            IRequestHandler<LoginCommand, LoginCommandResult> loginCommandInvoker = new LoginCommandInvoker(db);
+            IRequestHandler<LoginCommand, LoginCommandResult> loginCommandInvoker = new LoginCommandInvoker(conn);
 
             var result = await loginCommandInvoker.Handle(new LoginCommand
             {
@@ -35,16 +42,20 @@ namespace MZBlog.Core.Tests.Accounts
         [Fact]
         public async Task login_should_fail_if_invalid_password_provided()
         {
-            var db = OpenTestDb();
+            var conn = GetMemorySqliteConnection();
+            await CreateAuthorTable(conn);
+
             var document = new Author()
             {
                 Email = "username@mz.yi",
-                HashedPassword = Hasher.GetMd5Hash("psw1")
+                HashedPassword = Hasher.GetMd5Hash("psw1"),
+                DisplayName = "username",
+                CreatedUTC = DateTime.UtcNow
             };
 
-            db.Insert(DBTableNames.Authors, document);
+            conn.Insert(document);
 
-            IRequestHandler<LoginCommand, LoginCommandResult> loginCommandInvoker = new LoginCommandInvoker(db);
+            IRequestHandler<LoginCommand, LoginCommandResult> loginCommandInvoker = new LoginCommandInvoker(conn);
 
             var result = await loginCommandInvoker.Handle(new LoginCommand()
             {

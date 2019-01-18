@@ -1,8 +1,9 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
@@ -38,27 +39,20 @@ namespace MZBlog.Core.ViewProjections.Admin
 
     public class AllBlogPostViewProjection : RequestHandler<AllBlogPostsBindingModel, AllBlogPostsViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public AllBlogPostViewProjection(DB.AutoBox db)
+        public AllBlogPostViewProjection(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override AllBlogPostsViewModel Handle(AllBlogPostsBindingModel request)
         {
             var skip = (request.Page - 1) * request.Take;
+            var list = _conn.Query<BlogPost>($"select * from BlogPost order by CreatedUTC desc limit {request.Take + 1} OFFSET {skip}");
 
-            var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
-                         orderby p.CreatedUTC descending
-                         select p)
-                        .Skip(skip)
-                        .Take(request.Take + 1)
-                        .ToList()
-                        .AsReadOnly();
-
-            var pagedPosts = posts.Take(request.Take);
-            var hasNextPage = posts.Count > request.Take;
+            var pagedPosts = list.Take(request.Take);
+            var hasNextPage = list.Count() > request.Take;
 
             return new AllBlogPostsViewModel
             {

@@ -26,6 +26,7 @@ namespace iBoxToSqlite
             Console.WriteLine("准备MZBlog的sqlite数据库 ...");
             var conn = GetSqliteConnection("mzblog.db");
             conn.Open();
+            Console.WriteLine("清理sqlite数据库 ...");
             // clear all tables
             var list = conn.Query<string>("SELECT name FROM sqlite_master WHERE type='table';");
             foreach (var item in list)
@@ -37,7 +38,8 @@ namespace iBoxToSqlite
             conn.Execute(sql);
 
             // begin migrate
-            Console.WriteLine("开始迁移MZBlog的数据 ...");
+            Console.WriteLine("迁移用户数据 ...");
+            conn.MigrateAuthor();
             Console.WriteLine("迁移标签 ...");
             conn.MigrateTag();
             Console.WriteLine("迁移文章 ...");
@@ -54,6 +56,22 @@ namespace iBoxToSqlite
             conn.Close();
 
             Console.WriteLine("---======迁移完毕=====---");
+        }
+
+        static void MigrateAuthor(this SqliteConnection conn)
+        {
+            var list = (from t in db.Select<Old.Author>("from " + DBTableNames.Authors)
+                        select t);
+            foreach (var item in list)
+            {
+                var author = item.Adapt<Author>();
+                var firstPost = (from t in db.Select<Old.BlogPost>("from " + DBTableNames.BlogPosts)
+                                 orderby t.DateUTC descending
+                                 select t).FirstOrDefault();
+                author.CreatedUTC = firstPost == null ? DateTime.UtcNow : firstPost.DateUTC;
+
+                conn.Insert(author);
+            }
         }
 
         static void MigrateTag(this SqliteConnection conn)
@@ -148,7 +166,7 @@ namespace iBoxToSqlite
         static SqliteConnection GetSqliteConnection(string dbFile)
         {
             var dbPath = Path.Combine(RuntimeAppDataPath, dbFile);
-            var connString = new SqliteConnectionStringBuilder { DataSource = dbPath }.ToString();
+            var connString = new SqliteConnectionStringBuilder { DataSource = ":memory:" }.ToString();
             return new SqliteConnection(connString);
         }
 
@@ -187,98 +205,4 @@ namespace iBoxToSqlite
             return db;
         }
     }
-
-    // public class BlogPost
-    // {
-    //     [ExplicitKey]
-    //     public string Id { get; set; }
-
-    //     public string Title { get; set; }
-
-    //     public string TitleSlug { get; set; }
-
-    //     public int ViewCount { get; set; }
-
-    //     public string MarkDown { get; set; }
-
-    //     public string Content { get; set; }
-
-    //     public Old.PublishStatus Status { get; set; }
-
-    //     public DateTime PublishUTC { get; set; }
-
-    //     public DateTime CreatedUTC { get; set; }
-
-    //     // public string[] Tags { get; set; }
-
-    //     public string AuthorDisplayName { get; set; }
-
-    //     public string AuthorEmail { get; set; }
-    // }
-
-    // public class Tag
-    // {
-    //     [ExplicitKey]
-
-    //     public string Slug { get; set; }
-
-    //     public string Name { get; set; }
-
-    //     public int PostCount { get; set; }
-    // }
-
-    // public class BlogPostTags
-    // {
-    //     [ExplicitKey]
-    //     public string BlogPostId { get; set; }
-
-    //     [ExplicitKey]
-    //     public string TagSlug { get; set; }
-    // }
-
-    // public class BlogComment
-    // {
-    //     [ExplicitKey]
-    //     public string Id { get; set; }
-
-    //     public string Content { get; set; }
-
-    //     public string NickName { get; set; }
-
-    //     public string Email { get; set; }
-
-    //     public string SiteUrl { get; set; }
-
-    //     public DateTime CreatedTime { get; set; }
-
-    //     public string PostId { get; set; }
-
-    //     public string IPAddress { get; set; }
-    // }
-
-    // public class SpamHash
-    // {
-    //     [ExplicitKey]
-    //     public string Id { get; set; }
-
-    //     public string PostKey { get; set; }
-
-    //     public string Hash { get; set; }
-
-    //     public bool Pass { get; set; }
-
-    //     public DateTime CreatedTime { get; set; }
-    // }
-
-    // public class VisitIp
-    // {
-    //     [ExplicitKey]
-    //     public string Ip { get; set; }
-    //     public string Country { get; set; }
-    //     public string Region { get; set; }
-    //     public string City { get; set; }
-    //     public int VisitCount { get; set; }
-    //     public DateTime FirstVisitTime { get; set; }
-    //     public DateTime? LastVisitTime { get; set; }
-    // }
 }

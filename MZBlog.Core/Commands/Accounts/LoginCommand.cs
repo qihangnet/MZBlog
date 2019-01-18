@@ -1,8 +1,10 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.Commands.Accounts
 {
@@ -32,32 +34,29 @@ namespace MZBlog.Core.Commands.Accounts
 
     public class LoginCommandInvoker : RequestHandler<LoginCommand, LoginCommandResult>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public LoginCommandInvoker(DB.AutoBox db)
+        public LoginCommandInvoker(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override LoginCommandResult Handle(LoginCommand cmd)
         {
             var hashedPassword = Hasher.GetMd5Hash(cmd.Password);
-            if (_db.SelectCount("from " + DBTableNames.Authors) == 0)
+            if (_conn.ExecuteScalar<int>("select count(1) from Author") == 0)
             {
-                _db.Insert(DBTableNames.Authors, new Author
+                _conn.Insert(new Author
                 {
                     Email = "mz@bl.og",
                     DisplayName = "mzblog",
-                    Roles = new[] { "admin" },
                     HashedPassword = Hasher.GetMd5Hash("mzblog")
                 });
             }
-            var author = from u in _db.Select<Author>("from " + DBTableNames.Authors)
-                         where u.Email == cmd.Email && u.HashedPassword == hashedPassword
-                         select u;
+            var author = _conn.QueryFirstOrDefault<Author>("select * from Author where Email=@email and HashedPassword=@hashedPassword", new { email = cmd.Email, hashedPassword });
 
-            if (author.Any())
-                return new LoginCommandResult() { Author = author.FirstOrDefault() };
+            if (author != null)
+                return new LoginCommandResult() { Author = author };
 
             return new LoginCommandResult(errorMessage: "用户名或密码不正确");
         }

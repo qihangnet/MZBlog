@@ -1,5 +1,7 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
@@ -24,26 +26,26 @@ namespace MZBlog.Core.ViewProjections.Admin
 
     public class AllStatisticsViewProjection : RequestHandler<AllStatisticsBindingModel, AllStatisticsViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public AllStatisticsViewProjection(DB.AutoBox db)
+        public AllStatisticsViewProjection(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override AllStatisticsViewModel Handle(AllStatisticsBindingModel request)
         {
-            var postCount = _db.SelectCount("from " + DBTableNames.BlogPosts);
+            var postCount = _conn.ExecuteScalar<int>("select count(1) from BlogPost");
             if (postCount == 0)
                 return new AllStatisticsViewModel();
 
             var stat = new AllStatisticsViewModel
             {
                 PostsCount = postCount,
-                CommentsCount = _db.SelectCount("from " + DBTableNames.BlogComments)
+                CommentsCount = _conn.ExecuteScalar<int>("select count(1) from BlogComment")
             };
 
-            stat.TagsCount = (int)_db.SelectCount("from " + DBTableNames.Tags);
+            stat.TagsCount = _conn.ExecuteScalar<int>("select count(1) from Tag");
 
             return stat;
         }

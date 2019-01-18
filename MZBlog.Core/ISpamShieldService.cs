@@ -1,8 +1,10 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core
 {
@@ -26,11 +28,11 @@ namespace MZBlog.Core
 
     public class SpamShieldService : ISpamShieldService
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public SpamShieldService(DB.AutoBox db)
+        public SpamShieldService(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         public string CreateTick(string key)
@@ -42,7 +44,7 @@ namespace MZBlog.Core
                 PostKey = key,
                 CreatedTime = DateTime.UtcNow
             };
-            _db.Insert(DBTableNames.SpamHashes, spamHash);
+            _conn.Insert(spamHash);
             return tick;
         }
 
@@ -52,13 +54,13 @@ namespace MZBlog.Core
             if (tick.IsNullOrWhitespace())
                 return nonhash;
 
-            var spamHash = _db.SelectKey<SpamHash>(DBTableNames.SpamHashes, tick);
+            var spamHash = _conn.Get<SpamHash>(tick);
 
             if (spamHash == null || spamHash.Pass || !spamHash.Hash.IsNullOrWhitespace())
                 return nonhash;
 
             spamHash.Hash = new Random().NextDouble().ToString();
-            _db.Update(DBTableNames.SpamHashes, spamHash);
+            _conn.Update(spamHash);
 
             return spamHash.Hash;
         }
@@ -68,13 +70,13 @@ namespace MZBlog.Core
             if (command.Tick.IsNullOrWhitespace() || command.Hash.IsNullOrWhitespace())
                 return true;
 
-            var spamHash = _db.SelectKey<SpamHash>(DBTableNames.SpamHashes, command.Tick);
+            var spamHash = _conn.Get<SpamHash>(command.Tick);
 
             if (spamHash == null || spamHash.Pass || spamHash.Hash != command.Hash)
                 return true;
 
             spamHash.Pass = true;
-            _db.Update(DBTableNames.SpamHashes, spamHash);
+            _conn.Update(spamHash);
             return false;
         }
     }

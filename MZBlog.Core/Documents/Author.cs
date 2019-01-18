@@ -1,3 +1,4 @@
+using System;
 using Dapper.Extensions;
 
 namespace MZBlog.Core.Documents
@@ -18,6 +19,6 @@ namespace MZBlog.Core.Documents
 
         public string DisplayName { get; set; }
 
-        public string[] Roles { get; set; }
+        public DateTime CreatedUTC { get; set; }
     }
 }

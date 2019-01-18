@@ -1,10 +1,12 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using Markdig;
 using MediatR;
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
 using System.Linq;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.Commands.Posts
 {
@@ -27,11 +29,11 @@ namespace MZBlog.Core.Commands.Posts
 
     public class NewPostCommandInvoker : RequestHandler<NewPostCommand, CommandResult>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public NewPostCommandInvoker(DB.AutoBox db)
+        public NewPostCommandInvoker(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override CommandResult Handle(NewPostCommand cmd)
@@ -58,7 +60,7 @@ namespace MZBlog.Core.Commands.Posts
                 foreach (var tag in tags)
                 {
                     var slug = tag.ToSlug();
-                    var tagEntry = _db.SelectKey<Tag>(DBTableNames.Tags, slug);
+                    var tagEntry = _conn.Get<Tag>(slug);
                     if (tagEntry == null)
                     {
                         tagEntry = new Tag
@@ -67,20 +69,27 @@ namespace MZBlog.Core.Commands.Posts
                             Name = tag,
                             PostCount = 1
                         };
-                        _db.Insert(DBTableNames.Tags, tagEntry);
+                        _conn.Insert(tagEntry);
                     }
                     else
                     {
                         tagEntry.PostCount++;
-                        _db.Update(DBTableNames.Tags, tagEntry);
+                        _conn.Update(tagEntry);
                     }
                 }
             }
             else
                 post.Tags = new string[] { };
 
-            var result = _db.Insert(DBTableNames.BlogPosts, post);
-
+            var result = _conn.Insert(post);
+            foreach (var t in post.Tags)
+            {
+                _conn.Insert(new BlogPostTags
+                {
+                    BlogPostId = post.Id,
+                    TagSlug = t
+                });
+            }
             return CommandResult.SuccessResult;
         }
     }

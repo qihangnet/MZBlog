@@ -1,6 +1,8 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.Commands.Accounts
 {
@@ -17,23 +19,23 @@ namespace MZBlog.Core.Commands.Accounts
 
     public class ChangePasswordCommandInvoker : RequestHandler<ChangePasswordCommand, CommandResult>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public ChangePasswordCommandInvoker(DB.AutoBox db)
+        public ChangePasswordCommandInvoker(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override CommandResult Handle(ChangePasswordCommand cmd)
         {
-            var author = _db.SelectKey<Author>(DBTableNames.Authors, cmd.AuthorId);
+            var author = _conn.Get<Author>(cmd.AuthorId);
             if (Hasher.GetMd5Hash(cmd.OldPassword) != author.HashedPassword)
             {
                 return new CommandResult("旧密码不正确!");
             }
 
             author.HashedPassword = Hasher.GetMd5Hash(cmd.NewPassword);
-            _db.Update(DBTableNames.Authors, author);
+            _conn.Update(author);
             return CommandResult.SuccessResult;
         }
     }

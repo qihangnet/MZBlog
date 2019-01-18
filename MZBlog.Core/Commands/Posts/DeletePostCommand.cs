@@ -1,7 +1,9 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
 using System.Linq;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.Commands.Posts
 {
@@ -12,23 +14,30 @@ namespace MZBlog.Core.Commands.Posts
 
     public class DeletePostCommandInvoker : RequestHandler<DeletePostCommand, CommandResult>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public DeletePostCommandInvoker(DB.AutoBox db)
+        public DeletePostCommandInvoker(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override CommandResult Handle(DeletePostCommand cmd)
         {
-            var comments = _db.Select<BlogComment>("from " + DBTableNames.BlogComments + " where PostId==?", cmd.PostId);
-
-            if (comments.Count() > 0)
+            _conn.Open();
+            using (var tran = _conn.BeginTransaction())
             {
-                var commentKeys = comments.Select(s => s.Id).ToArray();
-                _db.Delete(DBTableNames.BlogComments, commentKeys);
+                var comments = _conn.Query<string>("select Id from BlogComment where PostId=@PostId", new { cmd.PostId }, tran);
+
+                if (comments.Count() > 0)
+                {
+                    var commentKeys = comments.ToArray();
+                    _conn.Execute("delete from BlogComments where Id in @commentKeys", new { commentKeys }, tran);
+                }
+                _conn.Execute("delete from BlogPost where Id=@PostId", new { cmd.PostId }, tran);
+                tran.Commit();
             }
-            _db.Delete(DBTableNames.BlogPosts, cmd.PostId);
+            _conn.Close();
+
             return CommandResult.SuccessResult;
         }
     }

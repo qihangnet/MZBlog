@@ -1,9 +1,10 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.Commands.Posts
 {
@@ -38,12 +39,12 @@ namespace MZBlog.Core.Commands.Posts
 
     public class NewCommentCommandInvoker : RequestHandler<NewCommentCommand, CommandResult>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
         private readonly ISpamShieldService _spamShield;
 
-        public NewCommentCommandInvoker(DB.AutoBox db, ISpamShieldService spamShield)
+        public NewCommentCommandInvoker(SqliteConnection conn, ISpamShieldService spamShield)
         {
-            _db = db;
+            _conn = conn;
             _spamShield = spamShield;
         }
 
@@ -66,7 +67,7 @@ namespace MZBlog.Core.Commands.Posts
                 CreatedTime = DateTime.UtcNow
             };
 
-            var result = _db.Insert(DBTableNames.BlogComments, comment);
+            var result = _conn.Insert(comment);
 
             return CommandResult.SuccessResult;
         }

@@ -1,5 +1,8 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
+using Dapper;
+using Dapper.Extensions;
+using MZBlog.Core.Documents;
 
 namespace MZBlog.Core.Commands.Posts
 {
@@ -10,17 +13,16 @@ namespace MZBlog.Core.Commands.Posts
 
     public class DeleteCommentCommandInvoker : RequestHandler<DeleteCommentCommand, CommandResult>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public DeleteCommentCommandInvoker(DB.AutoBox db)
+        public DeleteCommentCommandInvoker(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override CommandResult Handle(DeleteCommentCommand cmd)
         {
-            _db.Delete(DBTableNames.BlogComments, cmd.CommentId);
-
+            _conn.Execute("delete from BlogComment where Id =@id", new { id = cmd.CommentId });
             return CommandResult.SuccessResult;
         }
     }

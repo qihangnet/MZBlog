@@ -1,4 +1,3 @@
-using iBoxDB.LocalServer;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,7 +39,6 @@ namespace MZBlog.Web
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin,
                     UnicodeRanges.CjkUnifiedIdeographs));
             services.AddSqliteDb();
-            services.AddiBoxDB();
             services.AddIpIpDotNet();
             services.AddMediatR();
             services.AddMvc()
@@ -73,32 +71,6 @@ namespace MZBlog.Web
             {
                 return Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "App_Data");
             }
-        }
-
-        public static void AddiBoxDB(this IServiceCollection services, string dbFolderName = "ibox")
-        {
-            var dbPath = Path.Combine(RuntimeAppDataPath, dbFolderName);
-            if (!Directory.Exists(dbPath))
-            {
-                Directory.CreateDirectory(dbPath);
-            }
-
-            var server = new DB(dbPath);
-            var config = server.GetConfig();
-
-            config.EnsureTable<Author>(DBTableNames.Authors, "Id");
-            //config.EnsureIndex<Author>(DBTableNames.Authors, "Email");
-            config.EnsureTable<BlogPost>(DBTableNames.BlogPosts, "Id");
-            //config.EnsureIndex<BlogPost>(DBTableNames.BlogPosts, "TitleSlug", "Status", "PubDate", "DateUTC");
-            config.EnsureTable<BlogComment>(DBTableNames.BlogComments, "Id");
-            //config.EnsureIndex<BlogComment>(DBTableNames.BlogComments, "PostId");
-            config.EnsureTable<SpamHash>(DBTableNames.SpamHashes, "Id");
-            config.EnsureTable<Tag>(DBTableNames.Tags, "Slug");
-
-            var db = server.Open();
-            services.AddSingleton(db);
-
-            Core.Extensions.TagExtension.SetupDb(db);
         }
 
         public static void AddSqliteDb(this IServiceCollection services, string dbFile = "mzblog.db")

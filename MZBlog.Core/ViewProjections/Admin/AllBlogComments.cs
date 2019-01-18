@@ -1,8 +1,9 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
@@ -38,22 +39,20 @@ namespace MZBlog.Core.ViewProjections.Admin
 
     public class BlogCommentsViewProjection : RequestHandler<AllBlogCommentsBindingModel, AllBlogCommentsViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public BlogCommentsViewProjection(DB.AutoBox db)
+        public BlogCommentsViewProjection(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override AllBlogCommentsViewModel Handle(AllBlogCommentsBindingModel request)
         {
             var skip = (request.Page - 1) * request.Take;
+            var list = _conn.Query<BlogComment>($"select * from BlogComment order by CreatedTime desc limit {request.Take + 1} OFFSET {skip}");
 
-            var comments = _db.Select<BlogComment>("from " + DBTableNames.BlogComments + " order by CreatedTime desc limit " + skip + "," + request.Take + 1)
-                .ToList().AsReadOnly();
-
-            var pagedComments = comments.Take(request.Take);
-            var hasNextPage = comments.Count > request.Take;
+            var pagedComments = list.Take(request.Take);
+            var hasNextPage = list.Count() > request.Take;
 
             return new AllBlogCommentsViewModel
             {

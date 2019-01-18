@@ -1,10 +1,12 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using Markdig;
 using MediatR;
 using MZBlog.Core.Documents;
 using MZBlog.Core.Extensions;
 using System;
 using System.Linq;
+using Dapper.Extensions;
+using Dapper;
 
 namespace MZBlog.Core.Commands.Posts
 {
@@ -29,30 +31,30 @@ namespace MZBlog.Core.Commands.Posts
 
     public class EditPostCommandInvoker : RequestHandler<EditPostCommand, CommandResult>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public EditPostCommandInvoker(DB.AutoBox db)
+        public EditPostCommandInvoker(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override CommandResult Handle(EditPostCommand cmd)
         {
-            var post = _db.SelectKey<BlogPost>(DBTableNames.BlogPosts, cmd.PostId);
+            var post = _conn.Get<BlogPost>(cmd.PostId);
 
             if (post == null)
                 throw new ApplicationException("Post with id: {0} was not found".FormatWith(cmd.PostId));
-            
+
             if (post.Tags != null)
             {
                 foreach (var tag in post.Tags)
                 {
                     var slug = tag.ToSlug();
-                    var tagEntry = _db.SelectKey<Tag>(DBTableNames.Tags, slug);
+                    var tagEntry = _conn.Get<Tag>(slug);
                     if (tagEntry != null)
                     {
                         tagEntry.PostCount--;
-                        _db.Update(DBTableNames.Tags, tagEntry);
+                        _conn.Update(tagEntry);
                     }
                 }
             }
@@ -73,7 +75,7 @@ namespace MZBlog.Core.Commands.Posts
                 foreach (var tag in tags)
                 {
                     var slug = tag.ToSlug();
-                    var tagEntry = _db.SelectKey<Tag>(DBTableNames.Tags, slug);
+                    var tagEntry = _conn.Get<Tag>(slug);
                     if (tagEntry == null)
                     {
                         tagEntry = new Tag
@@ -82,18 +84,35 @@ namespace MZBlog.Core.Commands.Posts
                             Name = tag,
                             PostCount = 1
                         };
-                        _db.Insert(DBTableNames.Tags, tagEntry);
+                        _conn.Insert(tagEntry);
                     }
                     else
                     {
                         tagEntry.PostCount++;
-                        _db.Update(DBTableNames.Tags, tagEntry);
+                        _conn.Update(tagEntry);
                     }
                 }
             }
             else
+            {
                 post.Tags = new string[] { };
-            _db.Update(DBTableNames.BlogPosts, post);
+            }
+            _conn.Open();
+            using (var tran = _conn.BeginTransaction())
+            {
+                _conn.Update(post, tran);
+                _conn.Execute("delete from BlogPostTags where PostId = @PostId", new { cmd.PostId }, tran);
+                foreach (var t in post.Tags)
+                {
+                    _conn.Insert(new BlogPostTags
+                    {
+                        BlogPostId = cmd.PostId,
+                        TagSlug = t
+                    }, tran);
+                }
+                tran.Commit();
+            }
+            _conn.Close();
 
             return CommandResult.SuccessResult;
         }
