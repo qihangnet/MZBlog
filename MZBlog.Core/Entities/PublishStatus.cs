@@ -1,4 +1,4 @@
-﻿namespace MZBlog.Core.Documents
+﻿namespace MZBlog.Core.Entities
 {
     public enum PublishStatus
     {

@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MZBlog.Core.Documents
+namespace MZBlog.Core.Entities
 {
     public class BlogComment
     {

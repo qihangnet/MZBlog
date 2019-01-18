@@ -2,7 +2,7 @@
 using MediatR;
 using Dapper;
 using Dapper.Extensions;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 
 namespace MZBlog.Core.Commands.Posts
 {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Data.Sqlite;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using Dapper;

@@ -7,7 +7,7 @@ using Dapper;
 using Dapper.Extensions;
 using Microsoft.Data.Sqlite;
 using Mapster;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 
 namespace iBoxToSqlite
 {

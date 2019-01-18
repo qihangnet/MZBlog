@@ -1,7 +1,7 @@
 ﻿using Shouldly;
 using MediatR;
 using MZBlog.Core.Commands.Accounts;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 using Xunit;
 using System.Threading.Tasks;
 using System.Threading;

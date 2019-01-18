@@ -1,7 +1,7 @@
 ﻿using Dapper.Extensions;
 using System;
 
-namespace MZBlog.Core.Documents
+namespace MZBlog.Core.Entities
 {
     public class SpamHash
     {

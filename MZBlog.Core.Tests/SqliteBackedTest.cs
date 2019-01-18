@@ -1,5 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 using System;
 using System.IO;
 using Dapper;

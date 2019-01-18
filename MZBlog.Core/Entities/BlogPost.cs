@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
-namespace MZBlog.Core.Documents
+namespace MZBlog.Core.Entities
 {
     public class BlogPost
     {

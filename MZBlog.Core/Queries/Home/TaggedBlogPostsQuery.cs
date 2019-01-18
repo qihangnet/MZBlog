@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Dapper;

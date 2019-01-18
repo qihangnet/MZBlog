@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using Markdig;
 using MediatR;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 using MZBlog.Core.Extensions;
 using System;
 using System.Linq;

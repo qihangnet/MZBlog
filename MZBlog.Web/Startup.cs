@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.WebEncoders;
 using MZBlog.Core;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;

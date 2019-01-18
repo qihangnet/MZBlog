@@ -1,7 +1,7 @@
 using System;
 using Dapper.Extensions;
 
-namespace MZBlog.Core.Documents
+namespace MZBlog.Core.Entities
 {
     public class Author
     {

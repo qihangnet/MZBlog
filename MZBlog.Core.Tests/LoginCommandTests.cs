@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using MediatR;
 using MZBlog.Core.Commands.Accounts;
-using MZBlog.Core.Documents;
+using MZBlog.Core.Entities;
 using Xunit;
 using Dapper;
 using Dapper.Extensions;
