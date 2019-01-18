@@ -166,7 +166,7 @@ namespace iBoxToSqlite
         static SqliteConnection GetSqliteConnection(string dbFile)
         {
             var dbPath = Path.Combine(RuntimeAppDataPath, dbFile);
-            var connString = new SqliteConnectionStringBuilder { DataSource = ":memory:" }.ToString();
+            var connString = new SqliteConnectionStringBuilder { DataSource = dbPath }.ToString();
             return new SqliteConnection(connString);
         }
 
