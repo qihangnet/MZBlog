@@ -36,7 +36,11 @@ namespace MZBlog.Core.Queries.Home
 
         protected override RecentBlogPostSummaryViewModel Handle(RecentBlogPostSummaryQuery request)
         {
-            var list = _conn.Query<BlogPost>($"select Title from BlogPost where PublishUTC<@utcNow order by PublishUTC desc limit {request.Page}", new { utcNow = DateTime.UtcNow });
+            var list = _conn.Query<BlogPost>($@"SELECT Title FROM BlogPost 
+                                                WHERE [Status]=@status 
+                                                    AND PublishUTC<@utcNow 
+                                                ORDER BY PublishUTC desc 
+                                                LIMIT {request.Page}", new { utcNow = DateTime.UtcNow, status = PublishStatus.Published });
             var titles = (from p in list
                           select new BlogPostSummary
                           {

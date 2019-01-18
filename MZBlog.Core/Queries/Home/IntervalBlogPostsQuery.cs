@@ -23,6 +23,7 @@ namespace MZBlog.Core.Queries.Home
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
+        public PublishStatus Status { get; set; } = PublishStatus.Published;
     }
 
     public class IntervalBlogPostsViewProjection : RequestHandler<IntervalBlogPostsQuery, IntervalBlogPostsViewModel>
@@ -36,7 +37,18 @@ namespace MZBlog.Core.Queries.Home
 
         protected override IntervalBlogPostsViewModel Handle(IntervalBlogPostsQuery request)
         {
-            var list = _conn.Query<BlogPost>("select * from BlogPost where PublishUTC>@FromDate and PublishUTC<@ToDate order by PublishUTC desc",request);
+            var list = _conn.Query<BlogPost>(@"SELECT * FROM BlogPost 
+                                               WHERE [Status]=@Status 
+                                                  AND PublishUTC<@utcNow 
+                                                  AND PublishUTC>@FromDate 
+                                                  AND PublishUTC<@ToDate 
+                                                ORDER BY PublishUTC DESC", new
+                                                {
+                                                    utcNow = DateTime.UtcNow,
+                                                    request.Status,
+                                                    request.FromDate,
+                                                    request.ToDate
+                                                });
 
             return new IntervalBlogPostsViewModel
             {

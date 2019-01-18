@@ -30,14 +30,14 @@ namespace MZBlog.Core.Queries.Home
 
         protected override BlogPostDetailsViewModel Handle(BlogPostDetailsQuery request)
         {
-            var post = _conn.QuerySingle<BlogPost>("select * from BlogPost where TitleSlug=@Permalink", request);
+            var post = _conn.QueryFirstOrDefault<BlogPost>("SELECT * FROM BlogPost WHERE TitleSlug=@Permalink", request);
             if (post == null)
                 return null;
 
             post.ViewCount++;
             _conn.Update(post);
 
-            var comments = _conn.Query<BlogComment>("select * from BlogComment where PostId=@Id order by CreatedTime", new { post.Id })
+            var comments = _conn.Query<BlogComment>("SELECT * FROM BlogComment WHERE PostId=@Id ORDER BY CreatedTime", new { post.Id })
                                     .ToArray();
 
             var tags = _conn.Query<string>("SELECT t.Name FROM BlogPostTags p INNER JOIN Tag t ON t.Slug=p.TagSlug WHERE p.BlogPostId=@Id", new { post.Id });

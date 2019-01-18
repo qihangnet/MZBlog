@@ -21,6 +21,9 @@ CREATE TABLE BlogPost (
     AuthorEmail varchar(100) NOT NULL
 );
 
+CREATE INDEX ix_BlogPost_PublishUTC On BlogPost ([Status],PublishUTC);
+CREATE INDEX ix_BlogPost_TitleSlug On BlogPost (TitleSlug);
+
 CREATE TABLE Tag (
     Slug varchar(50) PRIMARY KEY NOT NULL,
     [Name] nvarchar(50) NOT NULL,
@@ -43,6 +46,8 @@ CREATE TABLE BlogComment (
     PostId varchar(24) NOT NULL,
     IPAddress varchar(100)
 );
+
+CREATE INDEX ix_BlogComment_PostId On BlogComment (PostId,CreatedTime);
 
 CREATE TABLE SpamHash (
     Id varchar(24) PRIMARY KEY NOT NULL,

@@ -36,7 +36,7 @@ namespace MZBlog.Core.Queries.Home
         protected override TagCloudViewModel Handle(TagCloudQuery request)
         {
             var result = new Dictionary<Tag, int>();
-            var tags = _conn.Query<Tag>("select * from Tag order by PostCount desc");
+            var tags = _conn.Query<Tag>("SELECT * FROM Tag ORDER BY PostCount DESC");
 
             return new TagCloudViewModel
             {
