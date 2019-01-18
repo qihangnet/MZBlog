@@ -25,6 +25,10 @@
     {
       "library": "highlight.js@9.13.1",
       "destination": "wwwroot/lib/highlight"
+    },
+    {
+      "library": "simplemde@1.11.2",
+      "destination": "wwwroot/lib/simplemde"
     }
   ]
 }
