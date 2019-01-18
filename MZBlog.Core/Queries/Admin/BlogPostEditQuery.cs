@@ -6,7 +6,7 @@ using Dapper.Extensions;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
-    public class BlogPostEditBindingModel : IRequest<BlogPostEditViewModel>
+    public class BlogPostEditQuery : IRequest<BlogPostEditViewModel>
     {
         public string PostId { get; set; }
     }
@@ -16,7 +16,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         public BlogPost BlogPost { get; set; }
     }
 
-    public class BlogPostEditViewProjection : RequestHandler<BlogPostEditBindingModel, BlogPostEditViewModel>
+    public class BlogPostEditViewProjection : RequestHandler<BlogPostEditQuery, BlogPostEditViewModel>
     {
         private readonly SqliteConnection _conn;
 
@@ -25,7 +25,7 @@ namespace MZBlog.Core.ViewProjections.Admin
             _conn = conn;
         }
 
-        protected override BlogPostEditViewModel Handle(BlogPostEditBindingModel request)
+        protected override BlogPostEditViewModel Handle(BlogPostEditQuery request)
         {
             var post = _conn.Get<BlogPost>(request.PostId);
 

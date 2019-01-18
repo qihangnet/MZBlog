@@ -6,13 +6,13 @@ using Dapper;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
-    public class TagCloudBindingModel : IRequest<TagCloudViewModel>
+    public class TagCloudQuery : IRequest<TagCloudViewModel>
     {
         public int Threshold { get; set; }
 
         public int Take { get; set; }
 
-        public TagCloudBindingModel()
+        public TagCloudQuery()
         {
             Threshold = 1;
             Take = int.MaxValue;
@@ -24,7 +24,7 @@ namespace MZBlog.Core.ViewProjections.Home
         public IEnumerable<Tag> Tags { get; set; }
     }
 
-    public class TagCloudViewProjection : RequestHandler<TagCloudBindingModel, TagCloudViewModel>
+    public class TagCloudViewProjection : RequestHandler<TagCloudQuery, TagCloudViewModel>
     {
         private readonly SqliteConnection _conn;
 
@@ -33,7 +33,7 @@ namespace MZBlog.Core.ViewProjections.Home
             _conn = conn;
         }
 
-        protected override TagCloudViewModel Handle(TagCloudBindingModel request)
+        protected override TagCloudViewModel Handle(TagCloudQuery request)
         {
             var result = new Dictionary<Tag, int>();
             var tags = _conn.Query<Tag>("select * from Tag order by PostCount desc");

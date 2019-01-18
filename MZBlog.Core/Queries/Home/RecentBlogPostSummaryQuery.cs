@@ -20,12 +20,12 @@ namespace MZBlog.Core.ViewProjections.Home
         public string Link { get; set; }
     }
 
-    public class RecentBlogPostSummaryBindingModel : IRequest<RecentBlogPostSummaryViewModel>
+    public class RecentBlogPostSummaryQuery : IRequest<RecentBlogPostSummaryViewModel>
     {
         public int Page { get; set; }
     }
 
-    public class RecentBlogPostSummaryViewProjection : RequestHandler<RecentBlogPostSummaryBindingModel, RecentBlogPostSummaryViewModel>
+    public class RecentBlogPostSummaryViewProjection : RequestHandler<RecentBlogPostSummaryQuery, RecentBlogPostSummaryViewModel>
     {
         private readonly SqliteConnection _conn;
 
@@ -34,7 +34,7 @@ namespace MZBlog.Core.ViewProjections.Home
             _conn = conn;
         }
 
-        protected override RecentBlogPostSummaryViewModel Handle(RecentBlogPostSummaryBindingModel request)
+        protected override RecentBlogPostSummaryViewModel Handle(RecentBlogPostSummaryQuery request)
         {
             var list = _conn.Query<BlogPost>($"select Title from BlogPost where PublishUTC<@utcNow order by PublishUTC desc limit {request.Page}", new { utcNow = DateTime.UtcNow });
             var titles = (from p in list

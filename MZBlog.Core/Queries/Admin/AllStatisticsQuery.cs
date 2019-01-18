@@ -14,9 +14,9 @@ namespace MZBlog.Core.ViewProjections.Admin
         public int TagsCount { get; set; }
     }
 
-    public class AllStatisticsBindingModel : IRequest<AllStatisticsViewModel>
+    public class AllStatisticsQuery : IRequest<AllStatisticsViewModel>
     {
-        public AllStatisticsBindingModel()
+        public AllStatisticsQuery()
         {
             TagThreshold = 1;
         }
@@ -24,7 +24,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         public int TagThreshold { get; set; }
     }
 
-    public class AllStatisticsViewProjection : RequestHandler<AllStatisticsBindingModel, AllStatisticsViewModel>
+    public class AllStatisticsViewProjection : RequestHandler<AllStatisticsQuery, AllStatisticsViewModel>
     {
         private readonly SqliteConnection _conn;
 
@@ -33,7 +33,7 @@ namespace MZBlog.Core.ViewProjections.Admin
             _conn = conn;
         }
 
-        protected override AllStatisticsViewModel Handle(AllStatisticsBindingModel request)
+        protected override AllStatisticsViewModel Handle(AllStatisticsQuery request)
         {
             var postCount = _conn.ExecuteScalar<int>("select count(1) from BlogPost");
             if (postCount == 0)

@@ -7,9 +7,9 @@ using Dapper;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
-    public class AllBlogCommentsBindingModel : IRequest<AllBlogCommentsViewModel>
+    public class AllBlogCommentsQuery : IRequest<AllBlogCommentsViewModel>
     {
-        public AllBlogCommentsBindingModel()
+        public AllBlogCommentsQuery()
         {
             Page = 1;
             Take = 20;
@@ -37,7 +37,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         public int Page { get; set; }
     }
 
-    public class BlogCommentsViewProjection : RequestHandler<AllBlogCommentsBindingModel, AllBlogCommentsViewModel>
+    public class BlogCommentsViewProjection : RequestHandler<AllBlogCommentsQuery, AllBlogCommentsViewModel>
     {
         private readonly SqliteConnection _conn;
 
@@ -46,7 +46,7 @@ namespace MZBlog.Core.ViewProjections.Admin
             _conn = conn;
         }
 
-        protected override AllBlogCommentsViewModel Handle(AllBlogCommentsBindingModel request)
+        protected override AllBlogCommentsViewModel Handle(AllBlogCommentsQuery request)
         {
             var skip = (request.Page - 1) * request.Take;
             var list = _conn.Query<BlogComment>($"select * from BlogComment order by CreatedTime desc limit {request.Take + 1} OFFSET {skip}");

@@ -24,9 +24,9 @@ namespace MZBlog.Core.ViewProjections.Admin
         }
     }
 
-    public class AllBlogPostsBindingModel : IRequest<AllBlogPostsViewModel>
+    public class AllBlogPostsQuery : IRequest<AllBlogPostsViewModel>
     {
-        public AllBlogPostsBindingModel()
+        public AllBlogPostsQuery()
         {
             Page = 1;
             Take = 10;
@@ -37,7 +37,7 @@ namespace MZBlog.Core.ViewProjections.Admin
         public int Take { get; set; }
     }
 
-    public class AllBlogPostViewProjection : RequestHandler<AllBlogPostsBindingModel, AllBlogPostsViewModel>
+    public class AllBlogPostViewProjection : RequestHandler<AllBlogPostsQuery, AllBlogPostsViewModel>
     {
         private readonly SqliteConnection _conn;
 
@@ -46,7 +46,7 @@ namespace MZBlog.Core.ViewProjections.Admin
             _conn = conn;
         }
 
-        protected override AllBlogPostsViewModel Handle(AllBlogPostsBindingModel request)
+        protected override AllBlogPostsViewModel Handle(AllBlogPostsQuery request)
         {
             var skip = (request.Page - 1) * request.Take;
             var list = _conn.Query<BlogPost>($"select * from BlogPost order by CreatedUTC desc limit {request.Take + 1} OFFSET {skip}");

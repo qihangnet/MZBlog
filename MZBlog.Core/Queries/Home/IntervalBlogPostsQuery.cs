@@ -18,14 +18,14 @@ namespace MZBlog.Core.ViewProjections.Home
         public DateTime ToDate { get; set; }
     }
 
-    public class IntervalBlogPostsBindingModel : IRequest<IntervalBlogPostsViewModel>
+    public class IntervalBlogPostsQuery : IRequest<IntervalBlogPostsViewModel>
     {
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
     }
 
-    public class IntervalBlogPostsViewProjection : RequestHandler<IntervalBlogPostsBindingModel, IntervalBlogPostsViewModel>
+    public class IntervalBlogPostsViewProjection : RequestHandler<IntervalBlogPostsQuery, IntervalBlogPostsViewModel>
     {
         private readonly SqliteConnection _conn;
 
@@ -34,7 +34,7 @@ namespace MZBlog.Core.ViewProjections.Home
             _conn = conn;
         }
 
-        protected override IntervalBlogPostsViewModel Handle(IntervalBlogPostsBindingModel request)
+        protected override IntervalBlogPostsViewModel Handle(IntervalBlogPostsQuery request)
         {
             var list = _conn.Query<BlogPost>("select * from BlogPost where PublishUTC>@FromDate and PublishUTC<@ToDate order by PublishUTC desc",request);
 
