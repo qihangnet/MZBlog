@@ -3,7 +3,7 @@ using MediatR;
 using MZBlog.Core.Documents;
 using Dapper.Extensions;
 
-namespace MZBlog.Core.ViewProjections.Account
+namespace MZBlog.Core.Queries.Account
 {
     public class AuthorDetailQuery : IRequest<Author>
     {

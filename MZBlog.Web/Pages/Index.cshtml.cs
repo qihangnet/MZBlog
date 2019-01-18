@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MZBlog.Core.ViewProjections.Home;
+using MZBlog.Core.Queries.Home;
 
 namespace MZBlog.Web.Pages
 {

@@ -5,7 +5,7 @@ using Microsoft.Data.Sqlite;
 using Dapper;
 using Dapper.Extensions;
 
-namespace MZBlog.Core.ViewProjections.Home
+namespace MZBlog.Core.Queries.Home
 {
     public class TaggedBlogPostsViewModel
     {

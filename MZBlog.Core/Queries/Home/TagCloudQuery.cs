@@ -4,7 +4,7 @@ using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using Dapper;
 
-namespace MZBlog.Core.ViewProjections.Home
+namespace MZBlog.Core.Queries.Home
 {
     public class TagCloudQuery : IRequest<TagCloudViewModel>
     {

@@ -40,7 +40,7 @@ namespace MZBlog.Web
                     UnicodeRanges.CjkUnifiedIdeographs));
             services.AddSqliteDb();
             services.AddIpIpDotNet();
-            services.AddMediatR();
+            services.AddMediatR(typeof(ObjectId).Assembly);
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

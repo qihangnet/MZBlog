@@ -6,7 +6,7 @@ using System.Linq;
 using Dapper;
 using System;
 
-namespace MZBlog.Core.ViewProjections.Home
+namespace MZBlog.Core.Queries.Home
 {
     public class RecentBlogPostSummaryViewModel
     {

@@ -4,7 +4,7 @@ using MZBlog.Core.Documents;
 using Dapper;
 using Dapper.Extensions;
 
-namespace MZBlog.Core.ViewProjections.Admin
+namespace MZBlog.Core.Queries.Admin
 {
     public class BlogPostEditQuery : IRequest<BlogPostEditViewModel>
     {

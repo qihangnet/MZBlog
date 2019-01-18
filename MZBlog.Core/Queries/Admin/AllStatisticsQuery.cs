@@ -3,7 +3,7 @@ using MediatR;
 using Dapper;
 using Dapper.Extensions;
 
-namespace MZBlog.Core.ViewProjections.Admin
+namespace MZBlog.Core.Queries.Admin
 {
     public class AllStatisticsViewModel
     {

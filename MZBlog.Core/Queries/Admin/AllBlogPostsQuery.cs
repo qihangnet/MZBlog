@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 
-namespace MZBlog.Core.ViewProjections.Admin
+namespace MZBlog.Core.Queries.Admin
 {
     public class AllBlogPostsViewModel
     {

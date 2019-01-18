@@ -5,7 +5,7 @@ using System.Linq;
 using Dapper;
 using Dapper.Extensions;
 
-namespace MZBlog.Core.ViewProjections.Home
+namespace MZBlog.Core.Queries.Home
 {
     public class BlogPostDetailsQuery : IRequest<BlogPostDetailsViewModel>
     {

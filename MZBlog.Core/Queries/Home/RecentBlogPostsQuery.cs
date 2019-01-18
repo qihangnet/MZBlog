@@ -7,7 +7,7 @@ using Dapper;
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace MZBlog.Core.ViewProjections.Home
+namespace MZBlog.Core.Queries.Home
 {
     public class RecentBlogPostsViewModel
     {
