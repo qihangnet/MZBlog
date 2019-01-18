@@ -1,10 +1,7 @@
-﻿using Dapper.Extensions;
-
-namespace MZBlog.Core.Documents
+﻿namespace iBoxToSqlite.Old
 {
     public class Tag
     {
-        [ExplicitKey]
         public string Slug { get; set; }
 
         public string Name { get; set; }

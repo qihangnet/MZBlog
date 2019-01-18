@@ -4,7 +4,6 @@ namespace IPIP.Net
 {
     public class IDCInfo
     {
-
         private readonly string[] data;
 
         public IDCInfo(string[] data)
@@ -85,5 +84,4 @@ namespace IPIP.Net
             return sb.ToString();
         }
     }
-
 }

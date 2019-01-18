@@ -1,8 +1,12 @@
-﻿using iBoxDB.LocalServer;
+﻿using MediatR;
+using Microsoft.Data.Sqlite;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
-using MediatR;
+using Dapper;
+using System;
+using Microsoft.Extensions.Logging;
+
 namespace MZBlog.Core.ViewProjections.Home
 {
     public class RecentBlogPostsViewModel
@@ -22,7 +26,7 @@ namespace MZBlog.Core.ViewProjections.Home
         }
     }
 
-    public class RecentBlogPostsQuery: IRequest<RecentBlogPostsViewModel>
+    public class RecentBlogPostsQuery : IRequest<RecentBlogPostsViewModel>
     {
         public RecentBlogPostsQuery()
         {
@@ -37,27 +41,28 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class RecentBlogPostsQueryHandler : RequestHandler<RecentBlogPostsQuery, RecentBlogPostsViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
+        private readonly ILogger<RecentBlogPostsQueryHandler> _logger;
 
-        public RecentBlogPostsQueryHandler(DB.AutoBox db)
+        public RecentBlogPostsQueryHandler(SqliteConnection conn, ILogger<RecentBlogPostsQueryHandler> logger)
         {
-            _db = db;
+            _conn = conn;
+            _logger = logger;
         }
 
         protected override RecentBlogPostsViewModel Handle(RecentBlogPostsQuery request)
         {
             var skip = (request.Page - 1) * request.Take;
-            var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
-                         where p.IsPublished
-                         orderby p.PubDate descending
-                         select p)
-                         .Skip(skip)
-                         .Take(request.Take + 1)
-                         .ToList()
-                         .AsReadOnly();
+            var sql = $"SELECT * FROM BlogPost WHERE PublishUTC<@utcNow ORDER BY PublishUTC DESC LIMIT {request.Take + 1} OFFSET {skip}";
+            var list = _conn.Query<BlogPost>(sql, new { utcNow = DateTime.UtcNow });
+            foreach (var item in list)
+            {
+                var tags = _conn.Query<string>("SELECT t.Name FROM BlogPostTags p INNER JOIN Tag t ON t.Slug=p.TagSlug WHERE p.BlogPostId=@Id", new { item.Id });
+                item.Tags=tags;
+            }
 
-            var pagedPosts = posts.Take(request.Take).ToList();
-            var hasNextPage = posts.Count > request.Take;
+            var pagedPosts = list.Take(request.Take);
+            var hasNextPage = list.Count() > request.Take;
 
             return new RecentBlogPostsViewModel
             {

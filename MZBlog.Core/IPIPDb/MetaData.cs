@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace IPIP.Net
 {
     /**
      * @copyright IPIP.net
      */
+
     public class MetaData
     {
         [JsonProperty("build")]
@@ -22,7 +23,7 @@ namespace IPIP.Net
 
         [JsonProperty("fields")]
         public string[] Fields { get; set; }
-        
+
         [JsonProperty("total_size")]
         public int TotalSize { get; set; }
     }

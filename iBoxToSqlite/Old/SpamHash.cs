@@ -1,11 +1,9 @@
-﻿using Dapper.Extensions;
-using System;
+﻿using System;
 
-namespace MZBlog.Core.Documents
+namespace iBoxToSqlite.Old
 {
     public class SpamHash
     {
-        [ExplicitKey]
         public string Id { get; set; }
 
         public string PostKey { get; set; }

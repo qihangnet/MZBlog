@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace IPIP.Net
 {
@@ -19,7 +19,6 @@ namespace IPIP.Net
 
         public Reader(string name)
         {
-
             var file = new FileInfo(name);
             fileSize = (int)file.Length;
 
@@ -68,7 +67,6 @@ namespace IPIP.Net
 
         public string[] Find(string addr, string language)
         {
-
             int off;
             try
             {
@@ -96,7 +94,6 @@ namespace IPIP.Net
                 {
                     throw new IPFormatException("no support ipv6");
                 }
-
             }
             else if (addr.IndexOf(".") > 0)
             {
@@ -137,7 +134,6 @@ namespace IPIP.Net
 
         private int FindNode(byte[] binary)
         {
-
             var node = 0;
 
             var bit = binary.Length * 8;
@@ -241,5 +237,4 @@ namespace IPIP.Net
             }
         }
     }
-
 }

@@ -1,12 +1,11 @@
-﻿using Dapper.Extensions;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MZBlog.Core;
 
-namespace MZBlog.Core.Documents
+namespace iBoxToSqlite.Old
 {
     public class BlogComment
     {
-        [ExplicitKey]
         public string Id { get; set; }
 
         [Required]
@@ -25,7 +24,7 @@ namespace MZBlog.Core.Documents
         public string PostId { get; set; }
 
         public string IPAddress { get; set; }
-        [Computed]
+
         public string Avatar
         {
             get

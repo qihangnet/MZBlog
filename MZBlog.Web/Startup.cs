@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.WebEncoders;
@@ -38,7 +39,7 @@ namespace MZBlog.Web
             services.Configure<WebEncoderOptions>(options =>
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin,
                     UnicodeRanges.CjkUnifiedIdeographs));
-
+            services.AddSqliteDb();
             services.AddiBoxDB();
             services.AddIpIpDotNet();
             services.AddMediatR();
@@ -66,9 +67,17 @@ namespace MZBlog.Web
 
     public static class IServiceCollectionExtensions
     {
+        static string RuntimeAppDataPath
+        {
+            get
+            {
+                return Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "App_Data");
+            }
+        }
+
         public static void AddiBoxDB(this IServiceCollection services, string dbFolderName = "ibox")
         {
-            var dbPath = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location), "App_Data", dbFolderName);
+            var dbPath = Path.Combine(RuntimeAppDataPath, dbFolderName);
             if (!Directory.Exists(dbPath))
             {
                 Directory.CreateDirectory(dbPath);
@@ -92,14 +101,21 @@ namespace MZBlog.Web
             Core.Extensions.TagExtension.SetupDb(db);
         }
 
+        public static void AddSqliteDb(this IServiceCollection services, string dbFile = "mzblog.db")
+        {
+            var dbPath = Path.Combine(RuntimeAppDataPath, dbFile);
+            var connString = new SqliteConnectionStringBuilder { DataSource = dbPath }.ToString();
+            services.AddTransient(typeof(SqliteConnection), _ => new SqliteConnection(connString));
+        }
+
         public static void AddIpIpDotNet(this IServiceCollection services)
         {
-            var dbDir = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location), "App_Data");
+            var dbDir = Path.Combine(RuntimeAppDataPath);
             if (!Directory.Exists(dbDir))
             {
                 Directory.CreateDirectory(dbDir);
             }
-            var ipDbPath =Path.Combine(dbDir,"ipipfree.ipdb");
+            var ipDbPath = Path.Combine(dbDir, "ipipfree.ipdb");
             var ipCity = new IPIP.Net.City(ipDbPath);
             services.AddSingleton(ipCity);
         }

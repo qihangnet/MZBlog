@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace MZBlog.Core.ViewProjections.Admin
 {
-    public class AllBlogCommentsBindingModel:IRequest<AllBlogCommentsViewModel>
+    public class AllBlogCommentsBindingModel : IRequest<AllBlogCommentsViewModel>
     {
         public AllBlogCommentsBindingModel()
         {

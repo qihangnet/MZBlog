@@ -5,7 +5,6 @@ namespace MZBlog.Core.Extensions
 {
     public static class StringExtensions
     {
-
         static StringExtensions()
         {
         }

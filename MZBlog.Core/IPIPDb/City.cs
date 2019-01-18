@@ -14,12 +14,12 @@ namespace IPIP.Net
             reader = new Reader(name);
         }
 
-        public string[] Find(string addr, string language="CN")
+        public string[] Find(string addr, string language = "CN")
         {
             return reader.Find(addr, language);
         }
 
-        public Dictionary<string, string> FindMap(string addr, string language="CN")
+        public Dictionary<string, string> FindMap(string addr, string language = "CN")
         {
             var data = reader.Find(addr, language);
             if (data == null)
@@ -36,9 +36,8 @@ namespace IPIP.Net
             return m;
         }
 
-        public CityInfo FindInfo(string addr, string language="CN")
+        public CityInfo FindInfo(string addr, string language = "CN")
         {
-
             var data = reader.Find(addr, language);
             if (data == null)
             {

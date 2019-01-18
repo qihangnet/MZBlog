@@ -1,6 +1,6 @@
-using Dapper.Extensions;
+using MZBlog.Core;
 
-namespace MZBlog.Core.Documents
+namespace iBoxToSqlite.Old
 {
     public class Author
     {
@@ -9,7 +9,6 @@ namespace MZBlog.Core.Documents
             Id = ObjectId.NewId();
         }
 
-        [ExplicitKey]
         public string Id { get; set; }
 
         public string HashedPassword { get; set; }

@@ -1,7 +1,8 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
+using Dapper;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
@@ -25,17 +26,17 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class TagCloudViewProjection : RequestHandler<TagCloudBindingModel, TagCloudViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public TagCloudViewProjection(DB.AutoBox db)
+        public TagCloudViewProjection(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override TagCloudViewModel Handle(TagCloudBindingModel request)
         {
             var result = new Dictionary<Tag, int>();
-            var tags = _db.Select<Tag>("from " + DBTableNames.Tags + " order by PostCount desc");
+            var tags = _conn.Query<Tag>("select * from Tag order by PostCount desc");
 
             return new TagCloudViewModel
             {

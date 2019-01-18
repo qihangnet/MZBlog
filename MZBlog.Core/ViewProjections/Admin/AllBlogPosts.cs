@@ -50,7 +50,7 @@ namespace MZBlog.Core.ViewProjections.Admin
             var skip = (request.Page - 1) * request.Take;
 
             var posts = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
-                         orderby p.DateUTC descending
+                         orderby p.CreatedUTC descending
                          select p)
                         .Skip(skip)
                         .Take(request.Take + 1)

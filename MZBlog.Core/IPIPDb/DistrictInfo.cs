@@ -2,10 +2,8 @@
 
 namespace IPIP.Net
 {
-
     public class DistrictInfo
     {
-
         private readonly string[] data;
 
         public DistrictInfo(string[] data)
@@ -108,5 +106,4 @@ namespace IPIP.Net
             return sb.ToString();
         }
     }
-
 }

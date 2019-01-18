@@ -1,22 +1,18 @@
-﻿using Dapper.Extensions;
-using MZBlog.Core.Extensions;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
+using MZBlog.Core.Extensions;
 
-namespace MZBlog.Core.Documents
+namespace iBoxToSqlite.Old
 {
     public class BlogPost
     {
-        [ExplicitKey]
         public string Id { get; set; }
 
         public string Title { get; set; }
 
         public string TitleSlug { get; set; }
 
-        [Computed]
         public string Description
         {
             get
@@ -38,26 +34,24 @@ namespace MZBlog.Core.Documents
 
         public PublishStatus Status { get; set; }
 
-        public DateTime PublishUTC { get; set; }
+        public DateTime PubDate { get; set; }
 
-        public DateTime CreatedUTC { get; set; }
+        public DateTime DateUTC { get; set; }
 
-        [Computed]
-        public IEnumerable<string> Tags { get; set; }
+        public string[] Tags { get; set; }
 
         public string AuthorDisplayName { get; set; }
 
         public string AuthorEmail { get; set; }
 
-        [Computed]
         public bool IsPublished
         {
-            get { return PublishUTC <= DateTime.UtcNow && Status == PublishStatus.Published; }
+            get { return PubDate <= DateTime.UtcNow && Status == PublishStatus.Published; }
         }
 
         public string GetLink()
         {
-            return "/{0}/{1}".FormatWith(PublishUTC.ToString("yyyy/MM", CultureInfo.InvariantCulture), TitleSlug);
+            return "/{0}/{1}".FormatWith(PubDate.ToString("yyyy/MM", CultureInfo.InvariantCulture), TitleSlug);
         }
     }
 
@@ -65,7 +59,7 @@ namespace MZBlog.Core.Documents
     {
         public static BlogPost ToPublishedBlogPost(this BlogPost blogPost)
         {
-            blogPost.PublishUTC = DateTime.UtcNow.AddDays(-1);
+            blogPost.PubDate = DateTime.UtcNow.AddDays(-1);
             blogPost.Status = PublishStatus.Published;
             return blogPost;
         }

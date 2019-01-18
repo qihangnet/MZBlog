@@ -12,7 +12,7 @@
             <div class="text-muted text-right">
                 <span class="author">@post.AuthorDisplayName</span>
                 发表于
-                <time datetime="@post.PubDate" pubdate>@post.PubDate.ToChineseTime().ToString("yyyy-MM-dd HH:mm")</time>
+                <time datetime="@post.PublishUTC" pubdate>@post.PublishUTC.ToChineseTime().ToString("yyyy-MM-dd HH:mm")</time>
                 , 阅读
                 (<span class="viewcount">@post.ViewCount</span>)
             </div>
@@ -24,7 +24,7 @@
             {
                 foreach (var tag in post.Tags)
                 {
-                    <text> [ <a href="~/tag/@tag">@tag.AsTag().Name</a> ]</text>
+                    <text> [ <a href="~/tag/@tag.ToSlug()">@tag</a> ]</text>
                 }
             }
         </div>

@@ -1,7 +1,9 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
+using MediatR;
 using MZBlog.Core.Documents;
 using System.Linq;
-using MediatR;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
@@ -19,25 +21,28 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class BlogPostDetailsViewProjection : RequestHandler<BlogPostDetailsQuery, BlogPostDetailsViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public BlogPostDetailsViewProjection(DB.AutoBox db)
+        public BlogPostDetailsViewProjection(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override BlogPostDetailsViewModel Handle(BlogPostDetailsQuery request)
         {
-            var post = _db.Select<BlogPost>("from " + DBTableNames.BlogPosts + " where TitleSlug==?", request.Permalink).FirstOrDefault();
+            var post = _conn.QuerySingle<BlogPost>("select * from BlogPost where TitleSlug=@Permalink", request);
             if (post == null)
                 return null;
-            post.ViewCount++;
-            _db.Update(DBTableNames.BlogPosts, post);
 
-            var comments = _db.Select<BlogComment>("from " + DBTableNames.BlogComments + " where PostId ==?", post.Id)
-                                    .OrderBy(o => o.CreatedTime)
+            post.ViewCount++;
+            _conn.Update(post);
+
+            var comments = _conn.Query<BlogComment>("select * from BlogComment where PostId=@Id order by CreatedTime", new { post.Id })
                                     .ToArray();
 
+            var tags = _conn.Query<string>("SELECT t.Name FROM BlogPostTags p INNER JOIN Tag t ON t.Slug=p.TagSlug WHERE p.BlogPostId=@Id", new { post.Id });
+            post.Tags = tags;
+            
             return new BlogPostDetailsViewModel
             {
                 BlogPost = post,

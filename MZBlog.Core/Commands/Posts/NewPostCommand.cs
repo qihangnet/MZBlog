@@ -45,11 +45,11 @@ namespace MZBlog.Core.Commands.Posts
                 AuthorDisplayName = cmd.Author.DisplayName,
                 MarkDown = cmd.MarkDown,
                 Content = Markdown.ToHtml(cmd.MarkDown, pipeline),
-                PubDate = cmd.PubDate.CloneToUtc(),
+                PublishUTC = cmd.PubDate.CloneToUtc(),
                 Status = cmd.Published ? PublishStatus.Published : PublishStatus.Draft,
                 Title = cmd.Title,
                 TitleSlug = cmd.TitleSlug.IsNullOrWhitespace() ? cmd.Title.Trim().ToSlug() : cmd.TitleSlug.Trim().ToSlug(),
-                DateUTC = DateTime.UtcNow
+                CreatedUTC = DateTime.UtcNow
             };
             if (!cmd.Tags.IsNullOrWhitespace())
             {

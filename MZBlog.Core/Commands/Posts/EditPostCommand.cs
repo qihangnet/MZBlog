@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MZBlog.Core.Commands.Posts
 {
-    public class EditPostCommand:IRequest<CommandResult>
+    public class EditPostCommand : IRequest<CommandResult>
     {
         public string PostId { get; set; }
 
@@ -42,6 +42,7 @@ namespace MZBlog.Core.Commands.Posts
 
             if (post == null)
                 throw new ApplicationException("Post with id: {0} was not found".FormatWith(cmd.PostId));
+            
             if (post.Tags != null)
             {
                 foreach (var tag in post.Tags)
@@ -61,7 +62,7 @@ namespace MZBlog.Core.Commands.Posts
 
             post.MarkDown = cmd.MarkDown;
             post.Content = Markdown.ToHtml(cmd.MarkDown, pipeline);
-            post.PubDate = cmd.PubDate.CloneToUtc();
+            post.PublishUTC = cmd.PubDate.CloneToUtc();
             post.Status = cmd.Published ? PublishStatus.Published : PublishStatus.Draft;
             post.Title = cmd.Title;
             post.TitleSlug = cmd.TitleSlug.Trim().ToSlug();

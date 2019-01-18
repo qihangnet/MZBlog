@@ -2,10 +2,8 @@
 
 namespace IPIP.Net
 {
-
     public class CityInfo
     {
-
         private readonly string[] data;
 
         public CityInfo(string[] data)
@@ -175,7 +173,6 @@ namespace IPIP.Net
 
         public override string ToString()
         {
-
             var sb = new StringBuilder();
 
             sb.Append("country_name:");
@@ -252,8 +249,6 @@ namespace IPIP.Net
             sb.Append(Anycast);
 
             return sb.ToString();
-
         }
     }
-
 }

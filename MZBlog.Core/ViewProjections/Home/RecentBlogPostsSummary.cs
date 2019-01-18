@@ -1,8 +1,10 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
+using System;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
@@ -25,18 +27,17 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class RecentBlogPostSummaryViewProjection : RequestHandler<RecentBlogPostSummaryBindingModel, RecentBlogPostSummaryViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public RecentBlogPostSummaryViewProjection(DB.AutoBox db)
+        public RecentBlogPostSummaryViewProjection(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override RecentBlogPostSummaryViewModel Handle(RecentBlogPostSummaryBindingModel request)
         {
-            var titles = (from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
-                          where p.IsPublished
-                          orderby p.PubDate descending
+            var list = _conn.Query<BlogPost>($"select Title from BlogPost where PublishUTC<@utcNow order by PublishUTC desc limit {request.Page}", new { utcNow = DateTime.UtcNow });
+            var titles = (from p in list
                           select new BlogPostSummary
                           {
                               Title = p.Title,

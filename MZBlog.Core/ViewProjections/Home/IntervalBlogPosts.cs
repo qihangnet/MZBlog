@@ -1,9 +1,11 @@
-﻿using iBoxDB.LocalServer;
+﻿using Microsoft.Data.Sqlite;
 using MediatR;
 using MZBlog.Core.Documents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
+using Dapper.Extensions;
 
 namespace MZBlog.Core.ViewProjections.Home
 {
@@ -16,7 +18,7 @@ namespace MZBlog.Core.ViewProjections.Home
         public DateTime ToDate { get; set; }
     }
 
-    public class IntervalBlogPostsBindingModel:IRequest<IntervalBlogPostsViewModel>
+    public class IntervalBlogPostsBindingModel : IRequest<IntervalBlogPostsViewModel>
     {
         public DateTime FromDate { get; set; }
 
@@ -25,23 +27,20 @@ namespace MZBlog.Core.ViewProjections.Home
 
     public class IntervalBlogPostsViewProjection : RequestHandler<IntervalBlogPostsBindingModel, IntervalBlogPostsViewModel>
     {
-        private readonly DB.AutoBox _db;
+        private readonly SqliteConnection _conn;
 
-        public IntervalBlogPostsViewProjection(DB.AutoBox db)
+        public IntervalBlogPostsViewProjection(SqliteConnection conn)
         {
-            _db = db;
+            _conn = conn;
         }
 
         protected override IntervalBlogPostsViewModel Handle(IntervalBlogPostsBindingModel request)
         {
-            var posts = from p in _db.Select<BlogPost>("from " + DBTableNames.BlogPosts)
-                        where p.IsPublished && p.PubDate < request.ToDate && p.PubDate > request.FromDate
-                        orderby p.PubDate descending
-                        select p;
+            var list = _conn.Query<BlogPost>("select * from BlogPost where PublishUTC>@FromDate and PublishUTC<@ToDate order by PublishUTC desc",request);
 
             return new IntervalBlogPostsViewModel
             {
-                Posts = posts,
+                Posts = list,
                 FromDate = request.FromDate,
                 ToDate = request.ToDate
             };
