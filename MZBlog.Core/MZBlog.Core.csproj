@@ -7,12 +7,12 @@
     <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="Markdig" Version="0.15.7" />
     <PackageReference Include="MediatR" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="2.2.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
-    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="packages.config" />
+    <ProjectReference Include="..\NPinyin\NPinyin.csproj" />
+    <ProjectReference Include="..\Dapper.Extensions\Dapper.Extensions.csproj" />
   </ItemGroup>
 </Project>

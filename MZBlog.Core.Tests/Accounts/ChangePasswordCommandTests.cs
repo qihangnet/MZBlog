@@ -15,7 +15,7 @@ namespace MZBlog.Core.Tests.Accounts
     {
         private string authorId = "mzyi";
 
-        // [Fact]
+        [Fact]
         public async Task change_password_fail_if_old_password_does_not_match()
         {
             var conn = GetMemorySqliteConnection();

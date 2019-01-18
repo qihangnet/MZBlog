@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MZBlog.Core\MZBlog.Core.csproj" />
+    <ProjectReference Include="..\IPIPDb\IPIPDb.csproj" />
   </ItemGroup>
 
 </Project>
