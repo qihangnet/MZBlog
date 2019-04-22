@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MZBlog.Core.Queries.Home;
@@ -19,9 +20,9 @@ namespace MZBlog.Web.Pages
 
         public TaggedBlogPostsViewModel Data { get; set; }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            Data = _mediator.Send(new TaggedBlogPostsQuery() { Tag = Tag }).Result;
+            Data = await _mediator.Send(new TaggedBlogPostsQuery() { Tag = Tag }).ConfigureAwait(false);
         }
     }
 }
