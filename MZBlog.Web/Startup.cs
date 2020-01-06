@@ -40,6 +40,7 @@ namespace MZBlog.Web
             services.AddSqliteDb();
             services.AddIpIpDotNet();
             services.AddMediatR(typeof(ObjectId).Assembly);
+            services.AddTransient<ISpamShieldService,SpamShieldService>();
             services.AddRazorPages();
         }
 
@@ -57,7 +58,7 @@ namespace MZBlog.Web
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
