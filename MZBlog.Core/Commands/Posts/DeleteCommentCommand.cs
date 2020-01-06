@@ -1,8 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Dapper;
 using MediatR;
-using Dapper;
-using Dapper.Extensions;
-using MZBlog.Core.Entities;
+using Microsoft.Data.Sqlite;
 
 namespace MZBlog.Core.Commands.Posts
 {

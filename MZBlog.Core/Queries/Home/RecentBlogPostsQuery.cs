@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using Dapper;
+using MediatR;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Logging;
 using MZBlog.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dapper;
-using System;
-using Microsoft.Extensions.Logging;
 
 namespace MZBlog.Core.Queries.Home
 {
@@ -53,17 +53,17 @@ namespace MZBlog.Core.Queries.Home
         protected override RecentBlogPostsViewModel Handle(RecentBlogPostsQuery request)
         {
             var skip = (request.Page - 1) * request.Take;
-            var sql = $@"SELECT * FROM BlogPost 
-                         WHERE [Status]=@status 
-                            AND PublishUTC<@utcNow 
-                         ORDER BY PublishUTC DESC 
-                         LIMIT {request.Take + 1} 
+            var sql = $@"SELECT * FROM BlogPost
+                         WHERE [Status]=@status
+                            AND PublishUTC<@utcNow
+                         ORDER BY PublishUTC DESC
+                         LIMIT {request.Take + 1}
                          OFFSET {skip}";
             var list = _conn.Query<BlogPost>(sql, new { utcNow = DateTime.UtcNow, status = PublishStatus.Published });
             foreach (var item in list)
             {
-                var tags = _conn.Query<string>(@"SELECT t.Name FROM BlogPostTags p 
-                                                    INNER JOIN Tag t ON t.Slug=p.TagSlug 
+                var tags = _conn.Query<string>(@"SELECT t.Name FROM BlogPostTags p
+                                                    INNER JOIN Tag t ON t.Slug=p.TagSlug
                                                  WHERE p.BlogPostId=@Id", new { item.Id });
                 item.Tags = tags;
             }

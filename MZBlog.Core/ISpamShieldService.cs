@@ -1,10 +1,9 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Dapper.Extensions;
+using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
 using MZBlog.Core.Extensions;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Dapper;
-using Dapper.Extensions;
 
 namespace MZBlog.Core
 {

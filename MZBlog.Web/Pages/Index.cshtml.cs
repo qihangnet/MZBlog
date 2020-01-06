@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MZBlog.Core.Queries.Home;
+using System.Threading.Tasks;
 
 namespace MZBlog.Web.Pages
 {

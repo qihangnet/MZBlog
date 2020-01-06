@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MZBlog.Core.Commands.Accounts;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace MZBlog.Web.Pages
 {
     public class Admin_LoginModel : PageModel
     {
-
         private readonly IMediator _mediator;
+
         public Admin_LoginModel(IMediator mediator)
         {
             _mediator = mediator;

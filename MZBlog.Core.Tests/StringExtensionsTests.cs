@@ -6,7 +6,7 @@ namespace MZBlog.Core.Extensions.Tests
     public class StringExtensionsTests
     {
         [Fact]
-        public void string_with_chinese_or_sharp_to_slug()
+        public void String_with_chinese_or_sharp_to_slug()
         {
             "slug".ToSlug()
                 .ShouldBe("slug");

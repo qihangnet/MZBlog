@@ -25,6 +25,7 @@ namespace MZBlog.Core.Entities
         public string PostId { get; set; }
 
         public string IPAddress { get; set; }
+
         [Computed]
         public string Avatar
         {

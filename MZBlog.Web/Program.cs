@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
+using System.IO;
 
 namespace MZBlog.Web
 {
@@ -26,9 +26,7 @@ namespace MZBlog.Web
             try
             {
                 Log.Information("Starting web host");
-                WebHost.CreateDefaultBuilder(args)
-                        .UseStartup<Startup>().UseConfiguration(configuration)
-                        .UseSerilog().Build().Run();
+                CreateHostBuilder(configuration, args).Build().Run();
             }
             catch (Exception ex)
             {
@@ -40,6 +38,15 @@ namespace MZBlog.Web
                 Log.CloseAndFlush();
             }
         }
+
+        public static IHostBuilder CreateHostBuilder(IConfiguration configuration, string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseConfiguration(configuration);
+                webBuilder.UseStartup<Startup>();
+                webBuilder.UseSerilog();
+            });
 
     }
 }

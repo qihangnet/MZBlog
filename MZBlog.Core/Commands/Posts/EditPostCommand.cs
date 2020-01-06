@@ -1,12 +1,12 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Dapper;
+using Dapper.Extensions;
 using Markdig;
 using MediatR;
+using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
 using MZBlog.Core.Extensions;
 using System;
 using System.Linq;
-using Dapper.Extensions;
-using Dapper;
 
 namespace MZBlog.Core.Commands.Posts
 {

@@ -1,11 +1,9 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Dapper;
 using MediatR;
+using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Dapper;
-using Dapper.Extensions;
 
 namespace MZBlog.Core.Queries.Home
 {
@@ -37,18 +35,18 @@ namespace MZBlog.Core.Queries.Home
 
         protected override IntervalBlogPostsViewModel Handle(IntervalBlogPostsQuery request)
         {
-            var list = _conn.Query<BlogPost>(@"SELECT * FROM BlogPost 
-                                               WHERE [Status]=@Status 
-                                                  AND PublishUTC<@utcNow 
-                                                  AND PublishUTC>@FromDate 
-                                                  AND PublishUTC<@ToDate 
+            var list = _conn.Query<BlogPost>(@"SELECT * FROM BlogPost
+                                               WHERE [Status]=@Status
+                                                  AND PublishUTC<@utcNow
+                                                  AND PublishUTC>@FromDate
+                                                  AND PublishUTC<@ToDate
                                                 ORDER BY PublishUTC DESC", new
-                                                {
-                                                    utcNow = DateTime.UtcNow,
-                                                    request.Status,
-                                                    request.FromDate,
-                                                    request.ToDate
-                                                });
+            {
+                utcNow = DateTime.UtcNow,
+                request.Status,
+                request.FromDate,
+                request.ToDate
+            });
 
             return new IntervalBlogPostsViewModel
             {

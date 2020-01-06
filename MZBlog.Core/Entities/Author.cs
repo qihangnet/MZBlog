@@ -1,5 +1,5 @@
-using System;
 using Dapper.Extensions;
+using System;
 
 namespace MZBlog.Core.Entities
 {

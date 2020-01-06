@@ -1,10 +1,10 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Dapper;
 using MediatR;
+using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dapper;
-using System;
 
 namespace MZBlog.Core.Queries.Home
 {
@@ -36,10 +36,10 @@ namespace MZBlog.Core.Queries.Home
 
         protected override RecentBlogPostSummaryViewModel Handle(RecentBlogPostSummaryQuery request)
         {
-            var list = _conn.Query<BlogPost>($@"SELECT Title FROM BlogPost 
-                                                WHERE [Status]=@status 
-                                                    AND PublishUTC<@utcNow 
-                                                ORDER BY PublishUTC desc 
+            var list = _conn.Query<BlogPost>($@"SELECT Title FROM BlogPost
+                                                WHERE [Status]=@status
+                                                    AND PublishUTC<@utcNow
+                                                ORDER BY PublishUTC desc
                                                 LIMIT {request.Page}", new { utcNow = DateTime.UtcNow, status = PublishStatus.Published });
             var titles = (from p in list
                           select new BlogPostSummary

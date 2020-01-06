@@ -1,9 +1,9 @@
 ﻿using Dapper.Extensions;
 using MZBlog.Core.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
 
 namespace MZBlog.Core.Entities
 {

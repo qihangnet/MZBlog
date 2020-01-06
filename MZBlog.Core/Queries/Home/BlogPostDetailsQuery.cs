@@ -1,9 +1,9 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Dapper;
+using Dapper.Extensions;
 using MediatR;
+using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
 using System.Linq;
-using Dapper;
-using Dapper.Extensions;
 
 namespace MZBlog.Core.Queries.Home
 {
@@ -42,7 +42,7 @@ namespace MZBlog.Core.Queries.Home
 
             var tags = _conn.Query<string>("SELECT t.Name FROM BlogPostTags p INNER JOIN Tag t ON t.Slug=p.TagSlug WHERE p.BlogPostId=@Id", new { post.Id });
             post.Tags = tags;
-            
+
             return new BlogPostDetailsViewModel
             {
                 BlogPost = post,

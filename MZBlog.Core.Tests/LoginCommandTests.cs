@@ -15,7 +15,7 @@ namespace MZBlog.Core.Tests.Accounts
     public class LoginCommandTests : SqliteBackedTest
     {
         [Fact]
-        public async Task login_should_success_if_user_in_database()
+        public async Task Login_should_success_if_user_in_database()
         {
             var conn = GetMemorySqliteConnection();
             (await CreateAuthorTable(conn)).ShouldBe(1);
@@ -40,7 +40,7 @@ namespace MZBlog.Core.Tests.Accounts
         }
 
         [Fact]
-        public async Task login_should_fail_if_invalid_password_provided()
+        public async Task Login_should_fail_if_invalid_password_provided()
         {
             var conn = GetMemorySqliteConnection();
             await CreateAuthorTable(conn);

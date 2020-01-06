@@ -1,10 +1,10 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Dapper.Extensions;
 using MediatR;
+using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using Dapper.Extensions;
 
 namespace MZBlog.Core.Commands.Posts
 {

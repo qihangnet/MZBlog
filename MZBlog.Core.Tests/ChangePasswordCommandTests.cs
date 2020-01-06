@@ -13,10 +13,10 @@ namespace MZBlog.Core.Tests.Accounts
 {
     public class ChangePasswordCommandTests : SqliteBackedTest
     {
-        private string authorId = "mzyi";
+        private readonly string authorId = "mzyi";
 
         [Fact]
-        public async Task change_password_fail_if_old_password_does_not_match()
+        public async Task Change_password_fail_if_old_password_does_not_match()
         {
             var conn = GetMemorySqliteConnection();
             await CreateAuthorTable(conn);
@@ -43,7 +43,7 @@ namespace MZBlog.Core.Tests.Accounts
         }
 
         [Fact]
-        public async Task change_password()
+        public async Task Change_password()
         {
             var conn = GetMemorySqliteConnection();
             await CreateAuthorTable(conn);

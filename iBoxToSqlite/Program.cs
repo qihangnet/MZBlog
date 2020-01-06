@@ -15,7 +15,7 @@ namespace iBoxToSqlite
     {
         static DB.AutoBox db;
         static IPIP.Net.City ipCity;
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("准备IP数据库 ...");
             ipCity = GetIpDb("ipipfree.ipdb");

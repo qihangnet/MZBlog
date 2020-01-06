@@ -1,6 +1,7 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MZBlog.Core", "MZBlog.Core\MZBlog.Core.csproj", "{D6DB6C53-3F52-4850-9FA1-80127CE45BB4}"
 EndProject
@@ -8,15 +9,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MZBlog.Core.Tests", "MZBlog
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{131EA229-EBF3-4B11-9B70-170752A3966D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MZBlog.Web", "MZBlog.Web\MZBlog.Web.csproj", "{6059231A-E290-4510-A081-CE5088DA998B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MZBlog.Web", "MZBlog.Web\MZBlog.Web.csproj", "{6059231A-E290-4510-A081-CE5088DA998B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iBoxToSqlite", "iBoxToSqlite\iBoxToSqlite.csproj", "{F819F9A8-0D0E-43D0-A6B3-62368202150F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iBoxToSqlite", "iBoxToSqlite\iBoxToSqlite.csproj", "{F819F9A8-0D0E-43D0-A6B3-62368202150F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPIPDb", "IPIPDb\IPIPDb.csproj", "{64F08F20-B9F8-4BA3-9350-2E20BAEEDFAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPIPDb", "IPIPDb\IPIPDb.csproj", "{64F08F20-B9F8-4BA3-9350-2E20BAEEDFAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPinyin", "NPinyin\NPinyin.csproj", "{F5D1F9E7-0029-4694-83AC-B72C129F5DE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPinyin", "NPinyin\NPinyin.csproj", "{F5D1F9E7-0029-4694-83AC-B72C129F5DE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dapper.Extensions", "Dapper.Extensions\Dapper.Extensions.csproj", "{01786E71-5E4F-42EF-AB66-3E9C6E931030}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapper.Extensions", "Dapper.Extensions\Dapper.Extensions.csproj", "{01786E71-5E4F-42EF-AB66-3E9C6E931030}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{125F8FE7-A0E4-4B09-A0BF-2B25AEBB36AB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

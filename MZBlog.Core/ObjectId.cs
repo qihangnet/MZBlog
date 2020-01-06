@@ -10,10 +10,10 @@ namespace MZBlog.Core
     public struct ObjectId : IComparable<ObjectId>, IEquatable<ObjectId>
     {
         // private static fields
-        private static ObjectId __emptyInstance = default(ObjectId);
+        private static readonly ObjectId __emptyInstance = default;
 
-        private static int __staticMachine;
-        private static short __staticPid;
+        private static readonly int __staticMachine;
+        private static readonly short __staticPid;
         private static int __staticIncrement; // high byte will be masked out when generating new ObjectId
         private static readonly DateTime __unixEpoch;
 
@@ -21,11 +21,11 @@ namespace MZBlog.Core
         // we're using 14 bytes instead of 12 to hold the ObjectId in memory but unlike a byte[] there is no additional object on the heap
         // the extra two bytes are not visible to anyone outside of this class and they buy us considerable simplification
         // an additional advantage of this representation is that it will serialize to JSON without any 64 bit overflow problems
-        private int _timestamp;
+        private readonly int _timestamp;
 
-        private int _machine;
-        private short _pid;
-        private int _increment;
+        private readonly int _machine;
+        private readonly short _pid;
+        private readonly int _increment;
 
         // static constructor
         static ObjectId()
@@ -293,7 +293,7 @@ namespace MZBlog.Core
                 }
             }
 
-            objectId = default(ObjectId);
+            objectId = default;
             return false;
         }
 
