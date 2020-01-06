@@ -1,4 +1,5 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine
+RUN apk add --no-cache tzdata
 ENV TZ Asia/Shanghai
 ARG source
 WORKDIR /app
