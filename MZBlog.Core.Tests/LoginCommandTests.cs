@@ -1,14 +1,12 @@
-﻿using System.Linq;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Shouldly;
+using Dapper.Extensions;
 using MediatR;
 using MZBlog.Core.Commands.Accounts;
 using MZBlog.Core.Entities;
+using FluentAssertions;
 using Xunit;
-using Dapper;
-using Dapper.Extensions;
-using System;
 
 namespace MZBlog.Core.Tests.Accounts
 {
@@ -18,7 +16,7 @@ namespace MZBlog.Core.Tests.Accounts
         public async Task Login_should_success_if_user_in_database()
         {
             var conn = GetMemorySqliteConnection();
-            (await CreateAuthorTable(conn)).ShouldBe(1);
+            (await CreateAuthorTable(conn)).Should().Be(1);
 
             conn.Insert(new Author()
             {
@@ -36,7 +34,7 @@ namespace MZBlog.Core.Tests.Accounts
                 Password = "test"
             }, new CancellationToken());
 
-            result.Success.ShouldBeTrue();
+            result.Success.Should().BeTrue();
         }
 
         [Fact]
@@ -63,7 +61,7 @@ namespace MZBlog.Core.Tests.Accounts
                 Password = "psw2"
             }, new CancellationToken());
 
-            result.Success.ShouldBeFalse();
+            result.Success.Should().BeFalse();
         }
     }
 }

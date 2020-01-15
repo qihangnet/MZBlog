@@ -19,11 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPinyin", "NPinyin\NPinyin.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapper.Extensions", "Dapper.Extensions\Dapper.Extensions.csproj", "{01786E71-5E4F-42EF-AB66-3E9C6E931030}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{125F8FE7-A0E4-4B09-A0BF-2B25AEBB36AB}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

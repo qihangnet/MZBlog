@@ -4,9 +4,6 @@
     <RootNamespace>MZBlog.Core</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Markdig" Version="0.18.0" />
     <PackageReference Include="MediatR" Version="8.0.0" />

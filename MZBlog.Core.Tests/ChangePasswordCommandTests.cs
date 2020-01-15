@@ -1,13 +1,12 @@
-﻿using Shouldly;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper.Extensions;
 using MediatR;
 using MZBlog.Core.Commands.Accounts;
 using MZBlog.Core.Entities;
+using FluentAssertions;
 using Xunit;
-using System.Threading.Tasks;
-using System.Threading;
-using Dapper;
-using Dapper.Extensions;
-using System;
 
 namespace MZBlog.Core.Tests.Accounts
 {
@@ -39,7 +38,7 @@ namespace MZBlog.Core.Tests.Accounts
                 NewPasswordConfirm = "pswtest"
             }, new CancellationToken());
             result.Success
-                  .ShouldBeFalse();
+                  .Should().BeFalse();
         }
 
         [Fact]
@@ -67,10 +66,10 @@ namespace MZBlog.Core.Tests.Accounts
             }, new CancellationToken());
 
             result.Success
-                  .ShouldBeTrue();
+                  .Should().BeTrue();
 
             conn.Get<Author>(author.Id).HashedPassword
-                                       .ShouldBe(Hasher.GetMd5Hash("pswtest"));
+                                       .Should().Be(Hasher.GetMd5Hash("pswtest"));
         }
     }
 }

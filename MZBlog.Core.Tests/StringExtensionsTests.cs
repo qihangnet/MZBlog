@@ -1,4 +1,4 @@
-﻿using Shouldly;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace MZBlog.Core.Extensions.Tests
@@ -9,28 +9,28 @@ namespace MZBlog.Core.Extensions.Tests
         public void String_with_chinese_or_sharp_to_slug()
         {
             "slug".ToSlug()
-                .ShouldBe("slug");
+                .Should().Be("slug");
 
             "C#".ToSlug()
-                .ShouldBe("c-sharp");
+                .Should().Be("c-sharp");
 
             "中国".ToSlug()
-                .ShouldBe("zhong-guo");
+                .Should().Be("zhong-guo");
 
             "Visual Studio".ToSlug()
-                .ShouldBe("visual-studio");
+                .Should().Be("visual-studio");
 
             "Visual Studio中国版".ToSlug()
-                .ShouldBe("visual-studio-zhong-guo-ban");
+                .Should().Be("visual-studio-zhong-guo-ban");
 
             "<html>".ToSlug()
-                .ShouldBe("html");
+                .Should().Be("html");
 
             "《书名》".ToSlug()
-                .ShouldBe("shu-ming");
+                .Should().Be("shu-ming");
 
             " 《书名》 是 ，、ViSual     STUdio 中国版！@￥%……&*（）——+【】[]$';,.".ToSlug()
-                .ShouldBe("shu-ming-shi-visual-studio-zhong-guo-ban-at-percent-and-dollar");
+                .Should().Be("shu-ming-shi-visual-studio-zhong-guo-ban-at-percent-and-dollar");
         }
     }
 }
