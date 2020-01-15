@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MZBlog.Core.Extensions;
 using MZBlog.Core.Queries.Home;
-using System.Threading.Tasks;
 
 namespace MZBlog.Web.Pages
 {
@@ -20,9 +21,14 @@ namespace MZBlog.Web.Pages
 
         public TaggedBlogPostsViewModel Data { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             Data = await _mediator.Send(new TaggedBlogPostsQuery() { Tag = Tag }).ConfigureAwait(false);
+            if (Data.Tag.IsNullOrWhitespace())
+            {
+                return NotFound();
+            }
+            return Page();
         }
     }
 }

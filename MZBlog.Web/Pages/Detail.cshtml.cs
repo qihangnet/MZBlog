@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using System.Net;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MZBlog.Core.Queries.Home;
-using System.Threading.Tasks;
 
 namespace MZBlog.Web.Pages
 {
@@ -26,10 +27,15 @@ namespace MZBlog.Web.Pages
 
         public BlogPostDetailsViewModel Detail { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             var query = new BlogPostDetailsQuery { Permalink = Slug };
             Detail = await _mediator.Send(query).ConfigureAwait(false);
+            if (Detail == null || Detail.BlogPost==null)
+            {
+                return this.NotFound();
+            }
+            return Page();
         }
     }
 }

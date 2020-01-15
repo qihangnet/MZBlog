@@ -55,7 +55,8 @@ namespace MZBlog.Web
             {
                 app.UseExceptionHandler("/Error");
             }
-
+            
+            app.UseStatusCodePagesWithReExecute("/NotFound");
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
