@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,14 +34,15 @@ namespace MZBlog.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
             // got help from https://www.cnblogs.com/dudu/p/5879913.html
             services.Configure<WebEncoderOptions>(options =>
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin,
                     UnicodeRanges.CjkUnifiedIdeographs));
             services.AddSqliteDb();
-            services.AddIpIpDotNet();
             services.AddMediatR(typeof(ObjectId).Assembly);
-            services.AddTransient<ISpamShieldService,SpamShieldService>();
+            services.AddTransient<ISpamShieldService, SpamShieldService>();
             services.AddRazorPages();
         }
 
@@ -55,11 +57,13 @@ namespace MZBlog.Web
             {
                 app.UseExceptionHandler("/Error");
             }
-            
+
             app.UseStatusCodePagesWithReExecute("/NotFound");
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
@@ -69,7 +73,7 @@ namespace MZBlog.Web
 
     public static class IServiceCollectionExtensions
     {
-        static string RuntimeAppDataPath
+        private static string RuntimeAppDataPath
         {
             get
             {
@@ -82,18 +86,6 @@ namespace MZBlog.Web
             var dbPath = Path.Combine(RuntimeAppDataPath, dbFile);
             var connString = new SqliteConnectionStringBuilder { DataSource = dbPath }.ToString();
             services.AddTransient(typeof(SqliteConnection), _ => new SqliteConnection(connString));
-        }
-
-        public static void AddIpIpDotNet(this IServiceCollection services)
-        {
-            var dbDir = Path.Combine(RuntimeAppDataPath);
-            if (!Directory.Exists(dbDir))
-            {
-                Directory.CreateDirectory(dbDir);
-            }
-            var ipDbPath = Path.Combine(dbDir, "ipipfree.ipdb");
-            var ipCity = new IPIP.Net.City(ipDbPath);
-            services.AddSingleton(ipCity);
         }
     }
 }

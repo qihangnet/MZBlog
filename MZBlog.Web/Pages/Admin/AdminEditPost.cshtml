@@ -1,0 +1,59 @@
+﻿@page "/admin/posts/edit/{id}"
+@model MZBlog.Web.Pages.Admin.AdminEditPostModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+
+@section Headers{
+    <link rel="stylesheet" asp-append-version="true" href="~/lib/simplemde/simplemde.min.css" />
+}
+
+<h1>博客文章</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">标题</label>
+        <input type="text" class="form-control" id="title" name="title" aria-describedby="titleHelp" placeholder="输入标题" value="@Model.Title" required>
+        <small id="titleHelp" class="form-text text-muted">前端显示的文章标题</small>
+    </div>
+    <div class="form-group">
+        <label for="titleSlug">Slug</label>
+        <input type="text" class="form-control" id="titleSlug" name="titleSlug" aria-describedby="slugHelp" placeholder="Slug" value="@Model.TitleSlug" required>
+        <small id="slugHelp" class="form-text text-muted">前端页面路由的slug</small>
+    </div>
+    <div class="form-group">
+        <label for="tags">标签</label>
+        <input type="text" class="form-control" id="tags" name="tags" placeholder="请输入标签（用逗号分隔）" value="@Model.Tags" required>
+    </div>
+    <div class="form-group">
+        <label for="markdown">正文</label>
+        <textarea class="form-control" id="markdown" name="markdown" rows="15">@Model.MarkDown</textarea>
+    </div>
+    <div class="form-group">
+        <label for="pubDate">发布日期</label>
+        <input type="date" class="form-control" id="pubDate" name="pubDate" style="width:200px" value="@Model.PubDate" />
+    </div>
+    <div class="form-group form-check">
+        @if (Model.Published)
+        {
+            <input type="checkbox" class="form-check-input" name="published" id="published" value="true" checked>
+        }
+        else
+        {
+            <input type="checkbox" class="form-check-input" name="published" id="published" value="true">
+        }
+        <label class="form-check-label" for="published">公开发布</label>
+    </div>
+    <button type="submit" class="btn btn-primary">
+        <i class="fa fa-save"></i>
+        更新
+    </button>
+</form>
+@section Scripts {
+    <script src="~/lib/simplemde/simplemde.min.js" asp-append-version="true"></script>
+    <script>
+        var simplemde = new SimpleMDE({ element: $("#content")[0] });
+    </script>
+}
+

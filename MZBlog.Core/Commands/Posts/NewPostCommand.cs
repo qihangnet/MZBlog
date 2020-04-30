@@ -78,7 +78,7 @@ namespace MZBlog.Core.Commands.Posts
                 }
             }
             else
-                post.Tags = new string[] { };
+                post.Tags = Array.Empty<string>();
 
             var result = _conn.Insert(post);
             foreach (var t in post.Tags)

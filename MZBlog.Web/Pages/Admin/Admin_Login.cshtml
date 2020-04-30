@@ -1,0 +1,51 @@
+﻿@page  "/admin/login"
+@model Admin_LoginModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "登录";
+}
+
+<div class="row mb-3">
+    <div class="card post-card">
+        <h5 class="card-header">登录</h5>
+        <div class="card-body pt-2">
+            <form method="post">
+                <div class="form-group">
+                    <label for="account">账号</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa fa-user"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" placeholder="请输入账号" id="account" name="account" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="account">密码</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                        </div>
+                        <input type="password" class="form-control" placeholder="请输入密码" id="password" name="password" required />
+                    </div>
+                </div>
+                @if (ViewData["error-msg"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewData["error-msg"]
+                    </div>
+                }
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-sign-in"></i>
+                        登录
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

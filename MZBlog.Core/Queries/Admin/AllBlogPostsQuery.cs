@@ -50,7 +50,11 @@ namespace MZBlog.Core.Queries.Admin
         {
             var skip = (request.Page - 1) * request.Take;
             var list = _conn.Query<BlogPost>($"select * from BlogPost order by CreatedUTC desc limit {request.Take + 1} OFFSET {skip}");
-
+            foreach (var item in list)
+            {
+                var tags = _conn.Query<string>("SELECT t.Name FROM BlogPostTags p INNER JOIN Tag t ON t.Slug=p.TagSlug WHERE p.BlogPostId=@Id", new { item.Id });
+                item.Tags = tags;
+            }
             var pagedPosts = list.Take(request.Take);
             var hasNextPage = list.Count() > request.Take;
 

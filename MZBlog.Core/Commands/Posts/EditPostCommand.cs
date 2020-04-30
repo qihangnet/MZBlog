@@ -101,7 +101,7 @@ namespace MZBlog.Core.Commands.Posts
             using (var tran = _conn.BeginTransaction())
             {
                 _conn.Update(post, tran);
-                _conn.Execute("delete from BlogPostTags where PostId = @PostId", new { cmd.PostId }, tran);
+                _conn.Execute("delete from BlogPostTags where BlogPostId = @PostId", new { cmd.PostId }, tran);
                 foreach (var t in post.Tags)
                 {
                     _conn.Insert(new BlogPostTags
