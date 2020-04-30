@@ -1,15 +1,17 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MZBlog.Core.Queries.Admin;
 using System.Threading.Tasks;
 
 namespace MZBlog.Web.Pages.Admin
 {
-    public class AdminBlogPostsModel : PageModel
+    [Authorize(Roles = "admin")]
+    public class BlogPostsModel : PageModel
     {
         private readonly IMediator _mediator;
 
-        public AdminBlogPostsModel(IMediator mediator)
+        public BlogPostsModel(IMediator mediator)
         {
             _mediator = mediator;
         }

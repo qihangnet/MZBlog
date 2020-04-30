@@ -11,14 +11,17 @@ using System.Threading.Tasks;
 
 namespace MZBlog.Web.Pages.Admin
 {
-    public class Admin_LoginModel : PageModel
+    public class LoginModel : PageModel
     {
         private readonly IMediator _mediator;
 
-        public Admin_LoginModel(IMediator mediator)
+        public LoginModel(IMediator mediator)
         {
             _mediator = mediator;
         }
+
+        [BindProperty(SupportsGet = true)]
+        public string ReturnUrl { get; set; }
 
         [BindProperty]
         [Required]
@@ -27,10 +30,6 @@ namespace MZBlog.Web.Pages.Admin
         [BindProperty]
         [Required]
         public string Password { get; set; }
-
-        public void OnGet()
-        {
-        }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -63,7 +62,7 @@ namespace MZBlog.Web.Pages.Admin
 
                 await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
 
-                return Redirect("/admin");
+                return Redirect(string.IsNullOrWhiteSpace(ReturnUrl) ? "/admin" : ReturnUrl);
             }
             else
             {

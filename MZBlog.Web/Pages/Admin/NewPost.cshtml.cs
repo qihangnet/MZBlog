@@ -1,8 +1,8 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using MZBlog.Core.Commands.Posts;
 using MZBlog.Core.Queries.Account;
 using System;
@@ -13,19 +13,14 @@ using System.Threading.Tasks;
 
 namespace MZBlog.Web.Pages.Admin
 {
-    public class AdminNewPostModel : PageModel
+    [Authorize(Roles = "admin")]
+    public class NewPostModel : PageModel
     {
         private readonly IMediator _mediator;
-        private readonly ILogger<AdminNewPostModel> _logger;
 
-        public AdminNewPostModel(IMediator mediator, ILogger<AdminNewPostModel> logger)
+        public NewPostModel(IMediator mediator)
         {
             _mediator = mediator;
-            _logger = logger;
-        }
-
-        public void OnGet()
-        {
         }
 
         [BindProperty]

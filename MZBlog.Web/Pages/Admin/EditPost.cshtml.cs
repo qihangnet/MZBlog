@@ -1,8 +1,8 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using MZBlog.Core.Commands.Posts;
 using MZBlog.Core.Queries.Account;
 using MZBlog.Core.Queries.Admin;
@@ -14,19 +14,17 @@ using System.Threading.Tasks;
 
 namespace MZBlog.Web.Pages.Admin
 {
-    public class AdminEditPostModel : PageModel
+    [Authorize(Roles = "admin")]
+    public class EditPostModel : PageModel
     {
         private readonly IMediator _mediator;
-        private readonly ILogger<AdminEditPostModel> _logger;
 
-        public AdminEditPostModel(IMediator mediator, ILogger<AdminEditPostModel> logger)
+        public EditPostModel(IMediator mediator)
         {
             _mediator = mediator;
-            _logger = logger;
         }
 
-
-        [BindProperty(SupportsGet =true)]
+        [BindProperty(SupportsGet = true)]
         [Required]
         public string Id { get; set; }
 
@@ -57,7 +55,7 @@ namespace MZBlog.Web.Pages.Admin
             {
                 return NotFound();
             }
-            var postQueryById = new BlogPostEditQuery { PostId=Id };
+            var postQueryById = new BlogPostEditQuery { PostId = Id };
             var data = await _mediator.Send(postQueryById);
             data.BlogPost.Adapt(this);
             this.Tags = string.Join(",", data.BlogPost.Tags);

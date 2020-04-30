@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +35,8 @@ namespace MZBlog.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options=>options.LoginPath="/admin/login");
 
             // got help from https://www.cnblogs.com/dudu/p/5879913.html
             services.Configure<WebEncoderOptions>(options =>
@@ -67,6 +69,11 @@ namespace MZBlog.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapGet("/logout", async ctx =>
+               {
+                   await ctx.SignOutAsync();
+                   ctx.Response.Redirect("/");
+               });
             });
         }
     }

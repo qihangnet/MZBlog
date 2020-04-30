@@ -1,9 +1,8 @@
 ﻿@page "/admin/posts/edit/{id}"
-@model MZBlog.Web.Pages.Admin.AdminEditPostModel
+@model MZBlog.Web.Pages.Admin.EditPostModel
 @{
     ViewData["Title"] = Model.Title;
 }
-
 
 @section Headers{
     <link rel="stylesheet" asp-append-version="true" href="~/lib/simplemde/simplemde.min.css" />
@@ -56,4 +55,3 @@
         var simplemde = new SimpleMDE({ element: $("#content")[0] });
     </script>
 }
-
