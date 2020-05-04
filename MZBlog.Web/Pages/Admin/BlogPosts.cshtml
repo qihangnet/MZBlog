@@ -29,11 +29,25 @@
             <tr>
                 <td><a href="/admin/posts/edit/@item.Id"> @item.Title</a></td>
                 <td>@item.Status</td>
-                <td>@item.CreatedUTC</td>
+                <td>@item.CreatedUTC.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>@string.Join(",", item.Tags)</td>
                 <td>@item.AuthorDisplayName</td>
                 <td>@item.ViewCount</td>
             </tr>
         }
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                @if(Model.BlogPosts.HasPrevPage)
+                {
+                <a href="?page=@(Model.BlogPosts.Page-1)" class="btn btn-primary pull-left"><i class="fa fa-arrow-left" aria-hidden="true"></i> 上一页</a>
+                }
+                @if(Model.BlogPosts.HasNextPage)
+                {
+                <a href="?page=@(Model.BlogPosts.Page+1)" class="btn btn-primary pull-right">下一页 <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                }
+            </td>
+        </tr>
+    </tfoot>
 </table>

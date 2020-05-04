@@ -5,7 +5,7 @@
 }
 
 @section Headers{
-    <link rel="stylesheet" asp-append-version="true" href="~/lib/simplemde/simplemde.min.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/lib/editor.md/css/editormd.min.css" />
 }
 
 <h1>博客文章</h1>
@@ -27,11 +27,13 @@
     </div>
     <div class="form-group">
         <label for="markdown">正文</label>
-        <textarea class="form-control" id="markdown" name="markdown" rows="15">@Model.MarkDown</textarea>
+        <div id="editor">
+            <textarea class="editormd-markdown-textarea" id="markdown" name="markdown" rows="15">@Model.MarkDown</textarea>
+        </div>
     </div>
     <div class="form-group">
         <label for="pubDate">发布日期</label>
-        <input type="date" class="form-control" id="pubDate" name="pubDate" style="width:200px" value="@Model.PubDate" />
+        <input type="date" class="form-control" id="pubDate" name="pubDate" style="width:200px" value="@Model.PubDate.ToString("yyyy-MM-dd")" />
     </div>
     <div class="form-group form-check">
         @if (Model.Published)
@@ -50,8 +52,12 @@
     </button>
 </form>
 @section Scripts {
-    <script src="~/lib/simplemde/simplemde.min.js" asp-append-version="true"></script>
-    <script>
-        var simplemde = new SimpleMDE({ element: $("#content")[0] });
+    <script src="~/lib/editor.md/editormd.min.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        $(function() {
+            var editor = editormd("editor", {
+                path : "/lib/editor.md/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
+            });
+        });
     </script>
 }

@@ -60,6 +60,7 @@ namespace MZBlog.Web.Pages.Admin
             data.BlogPost.Adapt(this);
             this.Tags = string.Join(",", data.BlogPost.Tags);
             this.Published = data.BlogPost.IsPublished;
+            this.PubDate = data.BlogPost.PublishUTC;
             return Page();
         }
 

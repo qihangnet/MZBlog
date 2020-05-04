@@ -27,8 +27,9 @@
       "destination": "wwwroot/lib/highlight"
     },
     {
-      "library": "simplemde@1.11.2",
-      "destination": "wwwroot/lib/simplemde"
+      "provider": "unpkg",
+      "library": "editor.md@1.5.0",
+      "destination": "wwwroot/lib/editor.md"
     }
   ]
 }
