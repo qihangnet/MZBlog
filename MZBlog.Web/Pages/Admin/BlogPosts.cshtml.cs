@@ -25,7 +25,7 @@ namespace MZBlog.Web.Pages.Admin
             {
                 int.TryParse(Request.Query["page"], out pageNo);
             }
-            var query = new AllBlogPostsQuery() { Page = pageNo, Take = 10 };
+            var query = new AllBlogPostsQuery() { Page = pageNo, Take = 15 };
             BlogPosts = await _mediator.Send(query);
         }
     }
