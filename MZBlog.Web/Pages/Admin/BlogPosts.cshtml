@@ -29,7 +29,10 @@
         @foreach (var item in Model.BlogPosts.Posts)
         {
             <tr>
-                <td><a href="/admin/posts/edit/@item.Id"> @item.Title</a></td>
+                <td>
+                    <a href="/admin/posts/edit/@item.Id"> @item.Title</a>
+                    <a href="@item.GetLink()" target="_blank" title="前端预览" class="text-dark"><i class="fa fa-play-circle-o" aria-hidden="true"></i> </a>
+                </td>
                 <td class="text-center">
                     @switch (item.Status)
                     {
