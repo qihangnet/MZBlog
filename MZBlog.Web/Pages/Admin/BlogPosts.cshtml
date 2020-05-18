@@ -22,7 +22,7 @@
             <th>时间</th>
             <th>标签</th>
             <th>作者</th>
-            <th>阅读</th>
+            <th class="text-right">阅读</th>
         </tr>
     </thead>
     <tbody>
@@ -41,10 +41,10 @@
                             break;
                     }
                 </td>
-                <td>@item.CreatedUTC.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td class="same-width-nums">@item.CreatedUTC.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>@string.Join(",", item.Tags)</td>
                 <td>@item.AuthorDisplayName</td>
-                <td>@item.ViewCount</td>
+                <td class="text-right same-width-nums">@item.ViewCount</td>
             </tr>
         }
     </tbody>
