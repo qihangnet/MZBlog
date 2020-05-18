@@ -3,6 +3,7 @@ using Markdig;
 using MediatR;
 using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
+using MZBlog.Core.Enums;
 using MZBlog.Core.Extensions;
 using System;
 using System.Linq;

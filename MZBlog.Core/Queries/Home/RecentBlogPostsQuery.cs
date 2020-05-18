@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using MZBlog.Core.Entities;
+using MZBlog.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

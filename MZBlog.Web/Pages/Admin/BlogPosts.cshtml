@@ -1,22 +1,24 @@
 ﻿@page "/admin/posts"
 @model MZBlog.Web.Pages.Admin.BlogPostsModel
+@namespace MZBlog.Core.Enums
+
 @{
-    ViewData["Title"] = "AdminBlogPosts";
+    ViewData["Title"] = "文章管理";
 }
-
-<h2>
-    <i class="fa fa-list" aria-hidden="true"></i> 文章管理
-    <a class="pull-right btn btn-success" style="font-size:12px;" href="/admin/posts/new">
-        <i class="fa fa-edit"></i>
-        新建
-    </a>
-</h2>
-
+<div style="margin-top:10px;">
+    <h2>
+        <i class="fa fa-list" aria-hidden="true"></i> 文章管理
+        <a class="pull-right btn btn-success" style="font-size:12px;" href="/admin/posts/new">
+            <i class="fa fa-edit"></i>
+            新建
+        </a>
+    </h2>
+</div>
 <table class=" table table-hover table-bordered">
     <thead>
         <tr>
             <th>标题</th>
-            <th>状态</th>
+            <th class="text-center">状态</th>
             <th>时间</th>
             <th>标签</th>
             <th>作者</th>
@@ -28,7 +30,17 @@
         {
             <tr>
                 <td><a href="/admin/posts/edit/@item.Id"> @item.Title</a></td>
-                <td>@item.Status</td>
+                <td class="text-center">
+                    @switch (item.Status)
+                    {
+                        case PublishStatus.Published:
+                            <i class="fa fa-check-circle-o text-success" aria-hidden="true"></i>
+                            break;
+                        default:
+                            <i class="fa fa-file-text-o text-warning" aria-hidden="true"></i>
+                            break;
+                    }
+                </td>
                 <td>@item.CreatedUTC.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>@string.Join(",", item.Tags)</td>
                 <td>@item.AuthorDisplayName</td>
@@ -36,18 +48,33 @@
             </tr>
         }
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="6">
-                @if(Model.BlogPosts.HasPrevPage)
-                {
-                <a href="?page=@(Model.BlogPosts.Page-1)" class="btn btn-primary pull-left"><i class="fa fa-arrow-left" aria-hidden="true"></i> 上一页</a>
-                }
-                @if(Model.BlogPosts.HasNextPage)
-                {
-                <a href="?page=@(Model.BlogPosts.Page+1)" class="btn btn-primary pull-right">下一页 <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                }
-            </td>
-        </tr>
-    </tfoot>
 </table>
+
+<nav aria-label="博客分页">
+    <ul class="pagination justify-content-center">
+        @if (Model.BlogPosts.HasPrevPage)
+        {
+            <li class="page-item">
+                <a href="?page=@(Model.BlogPosts.Page - 1)" class="page-link"><i class="fa fa-angle-left" aria-hidden="true"></i> 上一页</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i class="fa fa-angle-left" aria-hidden="true"></i> 上一页</a>
+            </li>
+        }
+        @if (Model.BlogPosts.HasNextPage)
+        {
+            <li class="page-item">
+                <a href="?page=@(Model.BlogPosts.Page+1)" class="page-link">下一页 <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true"> 下一页 <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+            </li>
+        }
+    </ul>
+</nav>

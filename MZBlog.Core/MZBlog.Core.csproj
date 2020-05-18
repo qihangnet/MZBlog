@@ -7,12 +7,15 @@
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="Markdig" Version="0.20.0" />
     <PackageReference Include="MediatR" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.4" />
     <PackageReference Include="NPinyin.Core" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dapper.Extensions\Dapper.Extensions.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
   </ItemGroup>
 </Project>

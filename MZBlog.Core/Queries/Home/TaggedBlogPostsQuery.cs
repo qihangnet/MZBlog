@@ -3,6 +3,7 @@ using Dapper.Extensions;
 using MediatR;
 using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
+using MZBlog.Core.Enums;
 using System.Collections.Generic;
 
 namespace MZBlog.Core.Queries.Home

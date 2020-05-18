@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Data.Sqlite;
 using MZBlog.Core.Entities;
+using MZBlog.Core.Enums;
 using System;
 using System.Collections.Generic;
 
